@@ -1,0 +1,11 @@
+{
+  "name": "js_educational_library",
+  "version": "0.0.1",
+  "description": "code testing platform...",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {},
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {}
+}
