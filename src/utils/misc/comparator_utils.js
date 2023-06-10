@@ -7,7 +7,7 @@ import {
     COMPARATOR_LESS_THAN,
     COMPARATOR_GREATER_THAN,
     COMPARATOR_EQUAL,
-} from './../../constants/comparator_constants';
+} from './../../constants/comparator_constants.js';
 
 // implementation
 function defaultCompare(first, second) {
