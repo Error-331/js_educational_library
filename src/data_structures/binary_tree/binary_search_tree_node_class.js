@@ -1,5 +1,10 @@
 'use strict';
 
+// external imports
+
+// internal imports
+
+// implementation
 class BinarySearchTreeNodeClass {
     #key = null;
     #parent = null;
@@ -37,4 +42,5 @@ class BinarySearchTreeNodeClass {
     }
 }
 
-module.exports = BinarySearchTreeNodeClass;
+// exports
+export default BinarySearchTreeNodeClass;
