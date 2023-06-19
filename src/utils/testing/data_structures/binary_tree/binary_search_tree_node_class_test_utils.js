@@ -24,12 +24,6 @@ function checkNode(node, parent, key, left, right) {
 }
 
 function checkNodeValues(node, parentKey, key, leftKey, rightKey) {
-    console.log(node.parent?.key ?? null, parentKey);
-    console.log(node.key, key);
-    console.log(node.left?.key ?? null, leftKey);
-    console.log(node.right?.key ?? null, rightKey);
-    console.log('---');
-
     assert.deepStrictEqual(node.parent?.key ?? null, parentKey);
     assert.deepStrictEqual(node.key, key);
     assert.deepStrictEqual(node.left?.key ?? null, leftKey);
