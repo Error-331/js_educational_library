@@ -43,6 +43,14 @@ class BinarySearchTreeClass {
         return this.#root;
     }
 
+    get min() {
+        return !isNil(this.#root) ? this.#root.min : null;
+    }
+
+    get max() {
+        return !isNil(this.#root) ? this.#root.max : null;
+    }
+
     constructor(comparator) {
         if (!isNil(comparator)) {
             this.#comparator = comparator;
