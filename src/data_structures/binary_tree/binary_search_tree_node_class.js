@@ -23,6 +23,28 @@ class BinarySearchTreeNodeClass {
         return currentNode;
     }
 
+    detach() {
+        this.#parent = null;
+        this.#left = null;
+        this.#right = null;
+    }
+
+    clean() {
+        this.#key = null;
+        this.detach();
+    }
+
+    destroy() {
+        this.#left?.destroy();
+        this.#right?.destroy();
+
+        this.clean();
+    }
+
+    toString() {
+        return `Key: ${this.#key}, parent: ${this.#parent?.key}, left: ${this.#left?.key}, right: ${this.#right?.key}`
+    }
+
     get key() {
         return this.#key;
     }
@@ -45,6 +67,14 @@ class BinarySearchTreeNodeClass {
 
     get max() {
         return this.#findNodeBySide(this, 'right');
+    }
+
+    set key(key) {
+        this.#key = key;
+    }
+
+    set parent(parent) {
+        this.#parent = parent;
     }
 
     set left(left) {
