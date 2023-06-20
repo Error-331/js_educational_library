@@ -3,7 +3,7 @@
 // external imports
 
 // internal imports
-import { COMPARATOR_LESS_THAN } from './../../constants/comparator_constants.js';
+import { COMPARATOR_LESS_THAN, COMPARATOR_GREATER_THAN } from './../../constants/comparator_constants.js';
 
 import { isNil } from './../../utils/misc/logic_utils.js';
 import { defaultCompare } from './../../utils/misc/comparator_utils.js';
@@ -31,12 +31,76 @@ class BinarySearchTreeClass {
         }
     }
 
+    #searchNode(node, key) {
+        if (isNil(node)) {
+            return null;
+        }
+
+        if (this.#comparator(key, node.key) === COMPARATOR_LESS_THAN) {
+            return this.#searchNode(node.left, key);
+        } else if (this.#comparator(key, node.key) === COMPARATOR_GREATER_THAN) {
+            return this.#searchNode(node.right, key);
+        } else {
+            return node;
+        }
+    }
+
+    #removeNode(node, key) {
+        if (isNil(node)) {
+            return null;
+        }
+
+        if (this.#comparator(key, node.key) === COMPARATOR_LESS_THAN) {
+            node.left = this.#removeNode(node.left, key)
+            return node;
+        } else if (this.#comparator(key, node.key) === COMPARATOR_GREATER_THAN) {
+            node.right = this.#removeNode(node.right, key);
+            return node;
+        } else {
+            if (isNil(node.left) && isNil(node.right)) {
+                node.destroy();
+                return null;
+            }
+
+            if (isNil(node.left)) {
+                const currentNode = node.right;
+
+                currentNode.parent = node.parent;
+                node.clean();
+
+                return currentNode;
+            } else if (isNil(node.right)) {
+                const currentNode = node.left;
+
+                currentNode.parent = node.parent;
+                node.clean();
+
+                return currentNode;
+            }
+
+            const tempNode = node.right.min;
+
+            node.key = tempNode.key;
+            node.right = this.#removeNode(node.right, tempNode.key);
+
+            return node;
+        }
+    }
+
     insert(key) {
         if (this.#root === null) {
             this.#root = new BinarySearchTreeNodeClass(key);
         } else {
             this.#insertNode(this.#root, key);
         }
+    }
+
+    search(key) {
+        return this.#searchNode(this.#root, key)
+    }
+
+    remove(key) {
+        this.#root = this.#removeNode(this.#root, key);
     }
 
     get root() {

@@ -28,6 +28,10 @@ function checkTree(tree, testSeq) {
     const nodeQueue = [tree.root];
     let parentIdx = 0;
 
+    if (isNil(testSeq[0]) && !isNil(tree.root)) {
+        assert.fail('Testing sequence root is null but tree root is not null');
+    }
+
     for (let testSeqIdx = 0; testSeqIdx < testSeq.length; testSeqIdx++) {
         const currentNodeTestKey = testSeq[testSeqIdx];
         const currentNodeParentTestKey = testSeqIdx === 0 ? null : testSeq[parentIdx];
@@ -53,6 +57,7 @@ function checkTree(tree, testSeq) {
         const currentNodeTestRightKey = testSeq[testSeqIdx + testSeqIdx + 2] ?? null;
 
         // check
+        console.log('***', currentNode.toString(), '&&',  currentNodeParentTestKey, currentNodeTestKey, currentNodeTestLeftKey, currentNodeTestRightKey);
         checkNodeValues(currentNode, currentNodeParentTestKey, currentNodeTestKey, currentNodeTestLeftKey, currentNodeTestRightKey);
     }
 }
