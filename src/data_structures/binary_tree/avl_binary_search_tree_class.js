@@ -58,6 +58,22 @@ class AVLBinarySearchTreeClass extends BinarySearchTreeNodeClass {
 
         return tempNode;
     }
+
+    static rotateRightRight(node) {
+        const tempNode = node.right;
+        node.right = tempNode.left;
+
+        if (!isNil(tempNode.left)) {
+            tempNode.left.parent = node;
+        }
+
+        tempNode.left = node;
+        tempNode.parent = node.parent;
+
+        node.parent = tempNode
+
+        return tempNode;
+    }
 }
 
 // exports

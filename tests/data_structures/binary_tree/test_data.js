@@ -10,7 +10,10 @@ const binarySearchTreeKeys2 = [8, 3, 10, 1, 6, 4, 7, 14, 13];
 const binarySearchTreeKeys3 = [11, 7, 15, 5, 3, 9, 8, 10, 13, 12, 14, 20, 18, 25];
 
 const unbalancedAVLBinarySearchTreeKeys1 = [3, 2, 1];
-const unbalancedAVLBinarySearchTreeKeys2 = [50, 30, 70, 10, 40, 5]
+const unbalancedAVLBinarySearchTreeKeys2 = [50, 30, 70, 10, 40, 5];
+
+const unbalancedAVLBinarySearchTreeKeys3 = [1, 2, 3];
+const unbalancedAVLBinarySearchTreeKeys4 = [50, 30, 70, 60, 80, 90];
 
 // exports
 export {
@@ -20,4 +23,7 @@ export {
 
     unbalancedAVLBinarySearchTreeKeys1,
     unbalancedAVLBinarySearchTreeKeys2,
+
+    unbalancedAVLBinarySearchTreeKeys3,
+    unbalancedAVLBinarySearchTreeKeys4,
 }

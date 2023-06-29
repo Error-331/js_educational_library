@@ -11,6 +11,9 @@ import {
 
     unbalancedAVLBinarySearchTreeKeys1,
     unbalancedAVLBinarySearchTreeKeys2,
+
+    unbalancedAVLBinarySearchTreeKeys3,
+    unbalancedAVLBinarySearchTreeKeys4,
 } from './test_data.js';
 
 import AVLBinarySearchTreeClass from './../../../src/data_structures/binary_tree/avl_binary_search_tree_class.js';
@@ -42,7 +45,7 @@ test('AVLBinarySearchTreeClass tests...', async (t) => {
     });
 
     await t.test('rotateLeftLeft() method tests tests...', async (t) => {
-        await t.test('Should correctly rotate a tree to the left - case 1', () => {
+        await t.test('Should correctly rotate a tree to the right - case 1', () => {
             const treeInstance = convertArrayToTree(unbalancedAVLBinarySearchTreeKeys1);
             checkTree(treeInstance, [3, 2, null, 1, null]);
 
@@ -50,12 +53,30 @@ test('AVLBinarySearchTreeClass tests...', async (t) => {
             checkTree(treeInstance, [2, 1, 3]);
         });
 
-        await t.test('Should correctly rotate a tree to the left - case 2', () => {
+        await t.test('Should correctly rotate a tree to the right - case 2', () => {
             const treeInstance = convertArrayToTree(unbalancedAVLBinarySearchTreeKeys2);
             checkTree(treeInstance, [50, 30, 70, 10, 40, null, null, 5, null, null, null, null, null]);
 
             treeInstance.root = AVLBinarySearchTreeClass.rotateLeftLeft(treeInstance.root);
             checkTree(treeInstance, [30, 10, 50, 5, null, 40, 70]);
+        });
+    });
+
+    await t.test('rotateRightRight() method tests tests...', async (t) => {
+        await t.test('Should correctly rotate a tree to the left - case 1', () => {
+            const treeInstance = convertArrayToTree(unbalancedAVLBinarySearchTreeKeys3);
+            checkTree(treeInstance, [1, null, 2, null, null, null, 3]);
+
+            treeInstance.root = AVLBinarySearchTreeClass.rotateRightRight(treeInstance.root);
+            checkTree(treeInstance, [2, 1, 3]);
+        });
+
+        await t.test('Should correctly rotate a tree to the left - case 2', () => {
+            const treeInstance = convertArrayToTree(unbalancedAVLBinarySearchTreeKeys4);
+            checkTree(treeInstance, [50, 30, 70, null, null, 60, 80, null, null, null, null, null, null, null, 90]);
+
+            treeInstance.root = AVLBinarySearchTreeClass.rotateRightRight(treeInstance.root);
+            checkTree(treeInstance, [70, 50, 80, 30, 60, null, 90]);
         });
     });
 });
