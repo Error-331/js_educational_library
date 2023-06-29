@@ -115,6 +115,10 @@ class BinarySearchTreeClass {
         return !isNil(this.#root) ? this.#root.max : null;
     }
 
+    set root(node) {
+        this.#root = node;
+    }
+
     constructor(comparator) {
         if (!isNil(comparator)) {
             this.#comparator = comparator;
