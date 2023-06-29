@@ -10,8 +10,8 @@ import { isNil } from './../../../misc/logic_utils.js';
 import { checkNodeValues } from './binary_search_tree_node_class_test_utils.js';
 
 // implementation
-function convertArrayToTree(treeArray) {
-    const treeInstance = new BinarySearchTreeNodeClass();
+function convertArrayToTree(treeArray, TreeClass = BinarySearchTreeNodeClass) {
+    const treeInstance = new TreeClass();
 
     for (const key of treeArray) {
         treeInstance.insert(key);
