@@ -3,7 +3,6 @@
 // external imports
 
 // internal imports
-
 import {
     AVL_BINARY_SEARCH_TREE_UNBALANCED_RIGHT,
     AVL_BINARY_SEARCH_TREE_SLIGHTLY_UNBALANCED_RIGHT,
@@ -42,6 +41,22 @@ class AVLBinarySearchTreeClass extends BinarySearchTreeNodeClass {
             default:
                 return AVL_BINARY_SEARCH_TREE_BALANCED;
         }
+    }
+
+    static rotateLeftLeft(node) {
+        const tempNode = node.left;
+        node.left = tempNode.right;
+
+        if (!isNil(tempNode.right)) {
+            tempNode.right.parent = node;
+        }
+
+        tempNode.right = node;
+        tempNode.parent = node.parent;
+
+        node.parent = tempNode
+
+        return tempNode;
     }
 }
 
