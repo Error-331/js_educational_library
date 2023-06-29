@@ -57,7 +57,6 @@ function checkTree(tree, testSeq) {
         const currentNodeTestRightKey = testSeq[testSeqIdx + testSeqIdx + 2] ?? null;
 
         // check
-        console.log('***', currentNode.toString(), '&&',  currentNodeParentTestKey, currentNodeTestKey, currentNodeTestLeftKey, currentNodeTestRightKey);
         checkNodeValues(currentNode, currentNodeParentTestKey, currentNodeTestKey, currentNodeTestLeftKey, currentNodeTestRightKey);
     }
 }
