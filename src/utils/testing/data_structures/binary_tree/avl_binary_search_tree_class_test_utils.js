@@ -9,10 +9,8 @@ import BinarySearchTreePreOrderTraverseClass from './../../../../data_structures
 
 function checkNodeHeightsPreOrder(treeInstance, testSequence) {
     const traversedKeys = [];
-    const c = [];
 
     BinarySearchTreePreOrderTraverseClass.traverse(treeInstance, (node) => {
-        c.push(node.key);
         traversedKeys.push(AVLBinarySearchTreeClass.calcNodeHeight(node));
     });
 
