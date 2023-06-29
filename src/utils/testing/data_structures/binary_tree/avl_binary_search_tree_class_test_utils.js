@@ -15,7 +15,7 @@ function checkNodeHeightsPreOrder(treeInstance, testSequence) {
         c.push(node.key);
         traversedKeys.push(AVLBinarySearchTreeClass.calcNodeHeight(node));
     });
-console.log('trav', traversedKeys, c);
+
     assert.deepStrictEqual(traversedKeys, testSequence);
 }
 
