@@ -11,6 +11,8 @@ import {
     binarySearchTreeKeys3,
 } from './test_data.js';
 
+import BinarySearchTreeClass from './../../../src/data_structures/binary_tree/binary_search_tree_class.js';
+
 import { convertArrayToTree, checkTree } from './../../../src/utils/testing/data_structures/binary_tree/binary_search_tree_class_test_utils.js';
 import { checkNodeValues } from './../../../src/utils/testing/data_structures/binary_tree/binary_search_tree_node_class_test_utils.js';
 
@@ -171,6 +173,24 @@ test('BinarySearchTreeClass tests...', async (t) => {
 
             treeInstance.remove(8);
             checkTree(treeInstance, [10, 3, 14, 1, 7, 13, null, null, null, 4, null, null, null]);
+        });
+    });
+
+
+    await t.test('Node rotation tests...', async (t) => {
+        await t.test('Should rotate root node to the left - case 1', () => {
+            const treeInstance = convertArrayToTree(binarySearchTreeKeys3);
+            BinarySearchTreeClass.rotateLeft(treeInstance.root);
+
+            checkTree(treeInstance, [15, 11, 20, 7, 13, 18, 25, 5, 9, 12, 14, null, null, null, null, 3, null, 8, 10]);
+        });
+
+        await t.test('Should rotate root node to the left - case 2', () => {
+            const treeInstance = convertArrayToTree(binarySearchTreeKeys3);
+            BinarySearchTreeClass.rotateLeft(treeInstance.root.right);
+
+            checkTree(treeInstance, [11, 7, 20, 5, 9, 15, 25, 3, null, 8, 10, 13, 18, null, null, null, null, null, null, null, null, null, null, 12, 14]);
+            console.log('-----2');
         });
     });
 });

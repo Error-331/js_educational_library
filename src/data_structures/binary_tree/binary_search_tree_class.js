@@ -15,6 +15,24 @@ class BinarySearchTreeClass {
     #root = null;
     #comparator = defaultCompare;
 
+    static rotateLeft(node) {
+        const tempNode = node.left;
+        const tmpKey = node.key;
+
+        node.left = node.right;
+        node.key = node.right.key;
+
+        node.right = node.left.right;
+        node.left.right.parent = node;
+
+        node.left.right = node.left.left;
+        node.left.left = tempNode;
+        node.left.left.parent = node.left;
+        node.left.key = tmpKey;
+
+        return node;
+    }
+
     #insertNode(parent, key) {
         if (this.#comparator(key, parent.key) === COMPARATOR_LESS_THAN) {
             if (parent.left === null) {
@@ -101,6 +119,10 @@ class BinarySearchTreeClass {
 
     remove(key) {
         this.#root = this.#removeNode(this.#root, key);
+    }
+
+    get comparator() {
+        return this.#comparator;
     }
 
     get root() {
