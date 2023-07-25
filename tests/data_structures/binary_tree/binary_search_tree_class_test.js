@@ -176,7 +176,6 @@ test('BinarySearchTreeClass tests...', async (t) => {
         });
     });
 
-
     await t.test('Node rotation tests...', async (t) => {
         await t.test('Should rotate root node to the left - case 1', () => {
             const treeInstance = convertArrayToTree(binarySearchTreeKeys3);
@@ -190,7 +189,6 @@ test('BinarySearchTreeClass tests...', async (t) => {
             BinarySearchTreeClass.rotateLeft(treeInstance.root.right);
 
             checkTree(treeInstance, [11, 7, 20, 5, 9, 15, 25, 3, null, 8, 10, 13, 18, null, null, null, null, null, null, null, null, null, null, 12, 14]);
-            console.log('-----2');
         });
     });
 });
