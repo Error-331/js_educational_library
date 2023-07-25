@@ -14,6 +14,16 @@ import {
 
     unbalancedAVLBinarySearchTreeKeys3,
     unbalancedAVLBinarySearchTreeKeys4,
+
+    unbalancedAVLBinarySearchTreeKeys5,
+
+    unbalancedAVLBinarySearchTreeKeys1LLRotation,
+    unbalancedAVLBinarySearchTreeKeys2LLRotation,
+
+    unbalancedAVLBinarySearchTreeKeys3RRRotation,
+    unbalancedAVLBinarySearchTreeKeys4RRRotation,
+
+    unbalancedAVLBinarySearchTreeKeys5LLRRRotation,
 } from './test_data.js';
 
 import AVLBinarySearchTreeClass from './../../../src/data_structures/binary_tree/avl_binary_search_tree_class.js';
@@ -50,7 +60,7 @@ test('AVLBinarySearchTreeClass tests...', async (t) => {
             checkTree(treeInstance, [3, 2, null, 1, null]);
 
             treeInstance.root = AVLBinarySearchTreeClass.rotateLeftLeft(treeInstance.root);
-            checkTree(treeInstance, [2, 1, 3]);
+            checkTree(treeInstance, unbalancedAVLBinarySearchTreeKeys1LLRotation);
         });
 
         await t.test('Should correctly rotate a tree to the right - case 2', () => {
@@ -58,7 +68,7 @@ test('AVLBinarySearchTreeClass tests...', async (t) => {
             checkTree(treeInstance, [50, 30, 70, 10, 40, null, null, 5, null, null, null, null, null]);
 
             treeInstance.root = AVLBinarySearchTreeClass.rotateLeftLeft(treeInstance.root);
-            checkTree(treeInstance, [30, 10, 50, 5, null, 40, 70]);
+            checkTree(treeInstance, unbalancedAVLBinarySearchTreeKeys2LLRotation);
         });
     });
 
@@ -68,7 +78,7 @@ test('AVLBinarySearchTreeClass tests...', async (t) => {
             checkTree(treeInstance, [1, null, 2, null, null, null, 3]);
 
             treeInstance.root = AVLBinarySearchTreeClass.rotateRightRight(treeInstance.root);
-            checkTree(treeInstance, [2, 1, 3]);
+            checkTree(treeInstance, unbalancedAVLBinarySearchTreeKeys3RRRotation);
         });
 
         await t.test('Should correctly rotate a tree to the left - case 2', () => {
@@ -76,7 +86,17 @@ test('AVLBinarySearchTreeClass tests...', async (t) => {
             checkTree(treeInstance, [50, 30, 70, null, null, 60, 80, null, null, null, null, null, null, null, 90]);
 
             treeInstance.root = AVLBinarySearchTreeClass.rotateRightRight(treeInstance.root);
-            checkTree(treeInstance, [70, 50, 80, 30, 60, null, 90]);
+            checkTree(treeInstance, unbalancedAVLBinarySearchTreeKeys4RRRotation);
+        });
+    });
+
+    await t.test('rotateLeftRight() method tests tests...', async (t) => {
+        await t.test('Should correctly rotate a tree to the left and then to the right - case 1', () => {
+            const treeInstance = convertArrayToTree(unbalancedAVLBinarySearchTreeKeys5);
+            checkTree(treeInstance, [3, 1, 4, 0.5, 2, null, null, null, null, 1.5, 2.5]);
+
+            treeInstance.root = AVLBinarySearchTreeClass.rotateLeftRight(treeInstance.root);
+            checkTree(treeInstance, unbalancedAVLBinarySearchTreeKeys5LLRRRotation);
         });
     });
 });
