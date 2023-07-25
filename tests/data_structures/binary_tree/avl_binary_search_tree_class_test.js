@@ -2,6 +2,7 @@
 
 // external imports
 import test from 'node:test';
+import assert from 'node:assert/strict';
 
 // internal imports
 import {
@@ -51,6 +52,170 @@ test('AVLBinarySearchTreeClass tests...', async (t) => {
         await t.test('Should correctly calculate node heights - case 3', () => {
             const treeInstance = convertArrayToTree(binarySearchTreeKeys3);
             checkNodeHeightsPreOrder(treeInstance, testSequence3);
+        });
+    });
+
+    await t.test('calcBalanceFactorRaw() method tests tests...', async (t) => {
+        await t.test('Binary search tree 1 tests...', async (t) => {
+            await t.test('Should correctly calculate balance factor (raw) - case 1', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys1);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 2', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys1);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.left);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 3', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys1);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.right);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 4', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys1);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.left.left);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 5', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys1);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.left.right);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 6', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys1);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.right.left);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 7', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys1);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.right.right);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+        });
+
+        await t.test('Binary search tree 2 tests...', async (t) => {
+            await t.test('Should correctly calculate balance factor (raw) - case 1', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys2);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 2', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys2);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.left);
+
+                assert.deepStrictEqual(rawBalanceFactor, -1);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 3', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys2);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.right);
+
+                assert.deepStrictEqual(rawBalanceFactor, -2);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 4', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys2);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.left.left);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 5', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys2);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.left.right);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 6', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys2);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.left.right.left);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 7', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys2);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.left.right.right);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 8', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys2);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.right.right);
+
+                assert.deepStrictEqual(rawBalanceFactor, 1);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 9', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys2);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.right.right.left);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+        });
+
+        await t.test('Binary search tree 3 tests...', async (t) => {
+            await t.test('Should correctly calculate balance factor (raw) - case 1', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys3);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 2', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys3);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.left);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 3', () => {
+                const treeInstance = convertArrayToTree(binarySearchTreeKeys3);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.left.left);
+
+                assert.deepStrictEqual(rawBalanceFactor, 1);
+            });
+        });
+
+        await t.test('Binary search tree 1 (unbalanced) tests...', async (t) => {
+            await t.test('Should correctly calculate balance factor (raw) - case 1', () => {
+                const treeInstance = convertArrayToTree(unbalancedAVLBinarySearchTreeKeys1);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root);
+
+                assert.deepStrictEqual(rawBalanceFactor, 2);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 2', () => {
+                const treeInstance = convertArrayToTree(unbalancedAVLBinarySearchTreeKeys1);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.left);
+
+                assert.deepStrictEqual(rawBalanceFactor, 1);
+            });
+
+            await t.test('Should correctly calculate balance factor (raw) - case 3', () => {
+                const treeInstance = convertArrayToTree(unbalancedAVLBinarySearchTreeKeys1);
+                const rawBalanceFactor = AVLBinarySearchTreeClass.calcBalanceFactorRaw(treeInstance.root.left.left);
+
+                assert.deepStrictEqual(rawBalanceFactor, 0);
+            });
         });
     });
 
