@@ -9,6 +9,9 @@ import {
     binarySearchTreeKeys1,
     binarySearchTreeKeys2,
     binarySearchTreeKeys3,
+
+    binarySearchTreeKeys3RotationLeft1,
+    binarySearchTreeKeys3RotationLeft2,
 } from './test_data.js';
 
 import BinarySearchTreeClass from './../../../src/data_structures/binary_tree/binary_search_tree_class.js';
@@ -181,14 +184,14 @@ test('BinarySearchTreeClass tests...', async (t) => {
             const treeInstance = convertArrayToTree(binarySearchTreeKeys3);
             BinarySearchTreeClass.rotateLeft(treeInstance.root);
 
-            checkTree(treeInstance, [15, 11, 20, 7, 13, 18, 25, 5, 9, 12, 14, null, null, null, null, 3, null, 8, 10]);
+            checkTree(treeInstance, binarySearchTreeKeys3RotationLeft1);
         });
 
         await t.test('Should rotate root node to the left - case 2', () => {
             const treeInstance = convertArrayToTree(binarySearchTreeKeys3);
             BinarySearchTreeClass.rotateLeft(treeInstance.root.right);
 
-            checkTree(treeInstance, [11, 7, 20, 5, 9, 15, 25, 3, null, 8, 10, 13, 18, null, null, null, null, null, null, null, null, null, null, 12, 14]);
+            checkTree(treeInstance, binarySearchTreeKeys3RotationLeft2);
         });
     });
 });

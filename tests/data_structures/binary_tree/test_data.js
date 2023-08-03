@@ -25,6 +25,9 @@ const unbalancedAVLBinarySearchTreeKeys4RRRotation = [70, 50, 80, 30, 60, null, 
 
 const unbalancedAVLBinarySearchTreeKeys5LLRRRotation = [2, 1, 3, 0.5, 1.5, 2.5, 4];
 
+const binarySearchTreeKeys3RotationLeft1 = [15, 11, 20, 7, 13, 18, 25, 5, 9, 12, 14, null, null, null, null, 3, null, 8, 10];
+const binarySearchTreeKeys3RotationLeft2 = [11, 7, 20, 5, 9, 15, 25, 3, null, 8, 10, 13, 18, null, null, null, null, null, null, null, null, null, null, 12, 14];
+
 // exports
 export {
     binarySearchTreeKeys1,
@@ -46,4 +49,7 @@ export {
     unbalancedAVLBinarySearchTreeKeys4RRRotation,
 
     unbalancedAVLBinarySearchTreeKeys5LLRRRotation,
+
+    binarySearchTreeKeys3RotationLeft1,
+    binarySearchTreeKeys3RotationLeft2,
 }
