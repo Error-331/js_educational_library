@@ -84,8 +84,12 @@ function setPropValueByPath(path = [], propValue, obj) {
 
         if (isObject(prop) || isArray(prop)) {
             if (keyCnt + 1 === pathLength) {
-                prop[key] = propValue;
-                return true;
+                if (!isUndefined(prop[key])) {
+                    prop[key] = propValue;
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
             prop = prop[key];
