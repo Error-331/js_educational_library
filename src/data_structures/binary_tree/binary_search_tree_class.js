@@ -7,6 +7,7 @@ import { COMPARATOR_LESS_THAN, COMPARATOR_GREATER_THAN } from './../../constants
 
 import { isNil } from './../../utils/misc/logic_utils.js';
 import { defaultCompare } from './../../utils/misc/comparator_utils.js';
+import { setPropValueByPath } from './../../utils/primitives/object_utils.js';
 
 import BinarySearchTreeNodeClass from './binary_search_tree_node_class.js';
 
@@ -23,12 +24,13 @@ class BinarySearchTreeClass {
         node.key = node.right.key;
 
         node.right = node.left.right;
-        node.left.right.parent = node;
+        setPropValueByPath(node, ['left', 'right', 'parent'], node);
 
-        node.left.right = node.left.left;
+        setPropValueByPath(node, ['left', 'right'], node.left.left);
         node.left.left = tempNode;
-        node.left.left.parent = node.left;
-        node.left.key = tmpKey;
+
+        setPropValueByPath(node, ['left', 'left', 'parent'], node.left);
+        setPropValueByPath(node, ['left', 'key'], tmpKey);
 
         return node;
     }
