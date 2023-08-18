@@ -1,20 +1,32 @@
 'use strict';
 
-const { isNil } = require('./logic_utils');
+// external imports
 
+// internal imports
+import { isNil } from './logic_utils.js';
+import { extractPropValueByPath, setPropValueByPath } from './../primitives/object_utils';
+
+// implementation
 const lens = (getter, setter) => {
     return ({
         get: obj => getter(obj),
-        set: (val, obj) => setter(val, obj)
+        set: (val, obj) => setter(val, obj),
+    })
+};
+
+const lensPath = (path = []) => {
+    return ({
+        get: obj => extractPropValueByPath(obj, path),
+        set: (val, obj) => setPropValueByPath(obj, path, val),
     })
 };
 
 const view = (lens, obj) => {
-    return lens.get(obj)
+    return lens.get(obj);
 };
 
 const set = (lens, val, obj) => {
-    return lens.set(val, obj)
+    return lens.set(val, obj);
 };
 
 const curry = (func) => {
@@ -47,9 +59,14 @@ const oneTimeMemoizer = (functionToMemoize) => {
     return functionWrapper;
 };
 
-module.exports.lens = lens;
-module.exports.view = view;
-module.exports.set = set;
+// exports
+export {
+    lens,
+    lensPath,
 
-module.exports.curry = curry;
-module.exports.oneTimeMemoizer = oneTimeMemoizer;
+    view,
+    set,
+
+    curry,
+    oneTimeMemoizer,
+}
