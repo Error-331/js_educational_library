@@ -17,14 +17,15 @@ function checkObjectsNotEqualByLinkDeep(actualObject, testObject) {
     }
 
     assert.notEqual(actualObject, testObject);
+    assert.equal(Object.keys(actualObject).length, Object.keys(testObject).length);
 
     for (const prop in testObject) {
         const actualProp = actualObject[prop];
         const testProp = testObject[prop];
 
-        if (isArray(actualProp)) {
+        if (isArray(testProp)) {
             checkArraysNotEqualByLinkDeep(actualProp, testProp);
-        } else if(isObject(actualProp)) {
+        } else if(isObject(testProp)) {
             checkObjectsNotEqualByLinkDeep(actualProp, testProp);
         }
     }
@@ -40,14 +41,15 @@ function checkArraysNotEqualByLinkDeep(actualArray, testArray) {
     }
 
     assert.notEqual(actualArray, testArray);
+    assert.equal(actualArray.length, testArray.length);
 
-    for (let idx = 0; idx < testArray.left; idx++) {
+    for (let idx = 0; idx < testArray.length; idx++) {
         const actualArrayElement = actualArray[idx];
         const testArrayElement = testArray[idx];
 
-        if (isArray(actualArrayElement)) {
+        if (isArray(testArrayElement)) {
             checkArraysNotEqualByLinkDeep(actualArrayElement, testArrayElement);
-        } else if(isObject(actualArrayElement)) {
+        } else if(isObject(testArrayElement)) {
             checkObjectsNotEqualByLinkDeep(actualArrayElement, testArrayElement);
         }
     }
