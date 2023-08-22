@@ -4,9 +4,12 @@
 
 // internal imports
 import { isNil } from './logic_utils.js';
-import { extractPropValueByPath, setPropValueByPath } from './../primitives/object_utils';
+import { extractPropValueByPath, setPropValueByPath } from './../primitives/object_utils.js';
 
 // implementation
+const defaultTo = (defaultValue) => (testValue) => isNil(testValue) ? defaultValue : testValue;
+const defaultToNull = () => defaultTo(null);
+
 const lens = (getter, setter) => {
     return ({
         get: obj => getter(obj),
@@ -17,7 +20,7 @@ const lens = (getter, setter) => {
 const lensPath = (path = []) => {
     return ({
         get: obj => extractPropValueByPath(obj, path),
-        set: (val, obj) => setPropValueByPath(obj, path, val),
+        set: (val, obj) => setPropValueByPath(path, val, obj),
     })
 };
 
@@ -61,6 +64,9 @@ const oneTimeMemoizer = (functionToMemoize) => {
 
 // exports
 export {
+    defaultTo,
+    defaultToNull,
+
     lens,
     lensPath,
 
