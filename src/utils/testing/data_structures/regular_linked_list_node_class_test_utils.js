@@ -1,13 +1,17 @@
+'use strict';
+
 // external imports
-const assert = require('assert').strict;
+import assert from 'node:assert/strict';
 
 // internal imports
 
 // implementation
-function checkRegularLinkedListNodeDestroyed(linkedListNode) {
+function checkLinkedListNodeDestroyed(linkedListNode) {
     assert.strictEqual(linkedListNode.element, null);
     assert.strictEqual(linkedListNode.next, null);
 }
 
 // exports
-module.exports.checkRegularLinkedListNodeDestroyed = checkRegularLinkedListNodeDestroyed;
+export {
+    checkLinkedListNodeDestroyed
+}

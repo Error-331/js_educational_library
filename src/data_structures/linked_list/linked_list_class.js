@@ -1,10 +1,12 @@
+'use strict';
+
 // external imports
 
 // internal imports
-const RegularLinkedListNodeClass = require('./regular_linked_list_node_class');
+import LinkedListNodeClass from './linked_list_node_class.js';
 
 // implementation
-class RegularLinkedListClass {
+class LinkedListClass {
     #head = null;
     #count = 0;
 
@@ -39,7 +41,7 @@ class RegularLinkedListClass {
     }
 
     push(element) {
-        const node = new RegularLinkedListNodeClass(element);
+        const node = new LinkedListNodeClass(element);
 
         if (this.#head == null) {
             this.#head = node;
@@ -58,7 +60,7 @@ class RegularLinkedListClass {
     }
 
     insertBeforeHead(element) {
-        const node = new RegularLinkedListNodeClass(element);
+        const node = new LinkedListNodeClass(element);
         node.next = this.head;
 
         this.#head = node;
@@ -68,7 +70,7 @@ class RegularLinkedListClass {
     }
 
     insertAfterNode(previousNode, element) {
-        const node = new RegularLinkedListNodeClass(element);
+        const node = new LinkedListNodeClass(element);
 
         node.next = previousNode.next;
         previousNode.next = node;
@@ -255,4 +257,4 @@ class RegularLinkedListClass {
 }
 
 // exports
-module.exports = RegularLinkedListClass;
+export default LinkedListClass;

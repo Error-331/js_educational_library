@@ -1,17 +1,19 @@
+'use strict';
+
 // external imports
-const assert = require('assert').strict;
+import assert from 'node:assert/strict';
 
 // internal imports
 
 // implementation
-function checkRegularLinkedListEmpty(linkedList) {
+function checkLinkedListEmpty(linkedList) {
     assert.strictEqual(linkedList.size, 0);
     assert.strictEqual(linkedList.isEmpty, true);
     assert.strictEqual(linkedList.head, null);
     assert.strictEqual(linkedList.lastChild, null);
 }
 
-function checkRegularLinkedListNotEmpty(linkedList, size, head, lastChild) {
+function checkLinkedListNotEmpty(linkedList, size, head, lastChild) {
     assert.strictEqual(linkedList.size, size);
     assert.strictEqual(linkedList.isEmpty, false);
 
@@ -19,36 +21,36 @@ function checkRegularLinkedListNotEmpty(linkedList, size, head, lastChild) {
     assert.deepStrictEqual(linkedList.lastChild.element.serialize?.() ?? linkedList.lastChild.element, lastChild.serialize?.() ?? lastChild);
 }
 
-function checkRegularLinkedListElement(listElement, testElement) {
+function checkLinkedListElement(listElement, testElement) {
     assert.deepStrictEqual(testElement.serialize?.() ?? testElement, listElement.serialize?.() ?? listElement);
 }
 
-function checkRegularLinkedListItem(listNode, testNode) {
-    checkRegularLinkedListElement(testNode.element, listNode.element);
+function checkLinkedListItem(listNode, testNode) {
+    checkLinkedListElement(testNode.element, listNode.element);
 }
 
-function checkRegularLinkedListItemAt(linkedList, itemIndex, testItem) {
+function checkLinkedListItemAt(linkedList, itemIndex, testItem) {
     const linkedListItem = linkedList.getNodeAt(itemIndex);
-    checkRegularLinkedListElement(testItem, linkedListItem.element);
+    checkLinkedListElement(testItem, linkedListItem.element);
 }
 
-function checkRegularLinkedListFind(linkedList, itemIndex, testItemSearch, testItemStored) {
-    checkRegularLinkedListItemAt(linkedList, itemIndex, testItemStored);
+function checkLinkedListFind(linkedList, itemIndex, testItemSearch, testItemStored) {
+    checkLinkedListItemAt(linkedList, itemIndex, testItemStored);
 
     const linkedListItem = linkedList.find(testItemSearch);
     assert.deepStrictEqual(linkedListItem.serialize?.() ?? linkedListItem, testItemStored.serialize?.() ?? testItemStored);
 }
 
-function checkRegularLinkedListIndexOf(linkedList, itemIndex, testItemSearch, testItemStored) {
-    checkRegularLinkedListItemAt(linkedList, itemIndex, testItemStored);
+function checkLinkedListIndexOf(linkedList, itemIndex, testItemSearch, testItemStored) {
+    checkLinkedListItemAt(linkedList, itemIndex, testItemStored);
 
     const linkedListItemIndex = linkedList.indexOf(testItemSearch);
 
     assert.strictEqual(linkedListItemIndex, itemIndex);
-    checkRegularLinkedListItemAt(linkedList, linkedListItemIndex, testItemStored);
+    checkLinkedListItemAt(linkedList, linkedListItemIndex, testItemStored);
 }
 
-function checkRegularLinkedListItems(linkedList, testItems = []) {
+function checkLinkedListItems(linkedList, testItems = []) {
     const testItemsLength = testItems.length;
     assert.strictEqual(linkedList.size, testItemsLength);
 
@@ -60,7 +62,7 @@ function checkRegularLinkedListItems(linkedList, testItems = []) {
     }
 }
 
-function checkRegularLinkedListIterator(linkedList, testItems = []) {
+function checkLinkedListIterator(linkedList, testItems = []) {
     const iteratedLinkedListItems = [];
 
     for (const node of linkedList) {
@@ -71,14 +73,16 @@ function checkRegularLinkedListIterator(linkedList, testItems = []) {
 }
 
 // exports
-module.exports.checkRegularLinkedListEmpty = checkRegularLinkedListEmpty;
-module.exports.checkRegularLinkedListNotEmpty = checkRegularLinkedListNotEmpty;
+export {
+    checkLinkedListEmpty,
+    checkLinkedListNotEmpty,
 
-module.exports.checkRegularLinkedListElement = checkRegularLinkedListElement;
-module.exports.checkRegularLinkedListItem = checkRegularLinkedListItem;
-module.exports.checkRegularLinkedListFind = checkRegularLinkedListFind;
-module.exports.checkRegularLinkedListItemAt = checkRegularLinkedListItemAt;
-module.exports.checkRegularLinkedListIndexOf = checkRegularLinkedListIndexOf;
+    checkLinkedListElement,
+    checkLinkedListItem,
+    checkLinkedListFind,
+    checkLinkedListItemAt,
+    checkLinkedListIndexOf,
 
-module.exports.checkRegularLinkedListItems = checkRegularLinkedListItems;
-module.exports.checkRegularLinkedListIterator = checkRegularLinkedListIterator;
+    checkLinkedListItems,
+    checkLinkedListIterator,
+};

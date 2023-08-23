@@ -1,9 +1,11 @@
+'use strict';
+
 // external imports
 
 // internal imports
 
 // implementation
-class RegularLinkedListNodeClass {
+class LinkedListNodeClass {
     #element = null;
     #next = null;
 
@@ -45,4 +47,4 @@ class RegularLinkedListNodeClass {
 }
 
 // export
-module.exports = RegularLinkedListNodeClass;
+export default LinkedListNodeClass;
