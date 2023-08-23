@@ -16,8 +16,8 @@ import {
     checkLinkedListFind,
     checkLinkedListItems,
     checkLinkedListIterator,
-} from './../../../src/utils/testing/data_structures/regular_linked_list_class_test_utils.js';
-import { checkLinkedListNodeDestroyed } from './../../../src/utils/testing/data_structures/regular_linked_list_node_class_test_utils.js';
+} from './../../../src/utils/testing/data_structures/linked_list/linked_list_class_test_utils.js';
+import { checkLinkedListNodeDestroyed } from './../../../src/utils/testing/data_structures/linked_list/linked_list_node_class_test_utils.js';
 
 // implementation
 test('LinkedListClass tests...', async (t) => {
