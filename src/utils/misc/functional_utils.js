@@ -7,8 +7,22 @@ import { isNil } from './logic_utils.js';
 import { extractPropValueByPath, setPropValueByPath } from './../primitives/object_utils.js';
 
 // implementation
-const defaultTo = (defaultValue) => (testValue) => isNil(testValue) ? defaultValue : testValue;
-const defaultToNull = () => defaultTo(null);
+const curry = (func) => {
+    const curried = (...args) => {
+        if (args.length >= func.length) {
+            return func(...args);
+        } else {
+            return (...args2) => {
+                return curried(...args.concat(args2));
+            }
+        }
+    }
+
+    return curried;
+}
+
+const defaultTo = (defaultValue) => curry((defaultValue, testValue) => isNil(testValue) ? defaultValue : testValue)(defaultValue);
+const defaultToNull = (testValue) => defaultTo(null)(testValue);
 
 const lens = (getter, setter) => {
     return ({
@@ -32,20 +46,6 @@ const set = (lens, val, obj) => {
     return lens.set(val, obj);
 };
 
-const curry = (func) => {
-    const curried = (...args) => {
-        if (args.length >= func.length) {
-            return func(...args);
-        } else {
-            return (...args2) => {
-                return curried(...args.concat(args2));
-            }
-        }
-    }
-
-    return curried;
-}
-
 const oneTimeMemoizer = (functionToMemoize) => {
     let cache = null;
 
@@ -64,6 +64,8 @@ const oneTimeMemoizer = (functionToMemoize) => {
 
 // exports
 export {
+    curry,
+
     defaultTo,
     defaultToNull,
 
@@ -73,6 +75,5 @@ export {
     view,
     set,
 
-    curry,
     oneTimeMemoizer,
 }
