@@ -1,9 +1,11 @@
+'use strict';
+
 // external imports
 
 // internal imports
 
 // implementation
-class RegularStackClass {
+class StackClass {
     #count = 0;
     #items = {};
 
@@ -45,14 +47,14 @@ class RegularStackClass {
         return {
             next: function() {
                 if (stack.size === 0 || nextItemId < 0) {
-                    return {done: true};
+                    return { done: true };
                 } else {
                     const id = nextItemId;
                     const item = stack.#items[nextItemId];
 
                     nextItemId -= 1;
 
-                    return {value: {id, item}, done: false}
+                    return { value: {id, item}, done: false }
                 }
             }
         }
@@ -71,4 +73,4 @@ class RegularStackClass {
 }
 
 // export
-module.exports = RegularStackClass;
+export default StackClass;
