@@ -5,27 +5,43 @@
 // internal imports
 
 // implementation
-class StackClass {
-    #items = [];
+class KeyValueStackClass {
+    #count = 0;
+    #items = {};
 
     push(element) {
-        this.#items.push(element);
+        this.#items[this.#count] = element;
+        this.#count += 1;
     }
 
     pop() {
-        return this.#items.pop();
+        if (this.isEmpty) {
+            return null;
+        }
+
+        this.#count -= 1;
+
+        const result = this.#items[this.#count];
+        delete this.#items[this.#count];
+
+        return result;
     }
 
     peek() {
-        return this.#items[this.#items.length - 1];
+        if (this.isEmpty) {
+            return null;
+        }
+
+        return this.#items[this.#count - 1];
     }
 
     clear() {
-        this.#items = [];
+        this.#items = {};
+        this.#count = 0;
     }
 
     [Symbol.iterator]() {
-        let nextItemId = this.#items.length - 1;
+        let nextItemId = this.#count - 1;
         const stack = this;
 
         return {
@@ -45,11 +61,11 @@ class StackClass {
     }
 
     get isEmpty() {
-        return this.#items.length === 0
+        return this.#count === 0;
     }
 
     get size() {
-        return this.#items.length;
+        return this.#count;
     }
 
     constructor() {
@@ -57,4 +73,4 @@ class StackClass {
 }
 
 // export
-export default StackClass;
+export default KeyValueStackClass;
