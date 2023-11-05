@@ -1,9 +1,11 @@
+'use strict';
+
 // external imports
 
-// local imports
+// internal imports
 
 // implementation
-class RegularQueueClass {
+class QueueClass {
     #itemsCount = 0;
     #nextItemId = 0;
     #items = {};
@@ -80,4 +82,4 @@ class RegularQueueClass {
 }
 
 // export
-module.exports = RegularQueueClass;
+export default QueueClass;

@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-const RegularStackClass = require('./../../../../stack/regular/code/regular_stack_class');
+const RegularStackClass = require('../../../../stack/stack_class.js');
 
 // implementation
 class GraphStackDeepFirstSearchVisitorClass {
