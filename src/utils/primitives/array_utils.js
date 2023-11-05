@@ -1,7 +1,14 @@
 'use strict';
 
-const { isNil } = require('./../misc/logic_utils');
+// external imports
 
+// internal imports
+import { COMPARATOR_LESS_THAN } from './../../constants/comparator_constants.js';
+
+import { isNil } from './../misc/logic_utils.js';
+import { defaultCompare } from './../misc/comparator_utils.js';
+
+// implementation
 function findIdxInObjectsArrayByKeyValue(valueToFind, objectsArray, keyToFind){
     for (let objectIdx = 0; objectIdx < objectsArray.length; objectIdx++) {
         if (objectsArray[objectIdx][keyToFind] === valueToFind) {
@@ -10,6 +17,21 @@ function findIdxInObjectsArrayByKeyValue(valueToFind, objectsArray, keyToFind){
     }
 
     return -1;
+}
+
+function findMinimumValueInArrayList(comparator, ...arraysList) {
+    return arraysList.reduce((accumulator, currentArray, currentArrayIndex) => {
+        accumulator[2] += currentArray.length;
+
+        if (comparator(currentArray[0], accumulator[1]) === COMPARATOR_LESS_THAN) {
+            accumulator[0] = currentArrayIndex;
+            accumulator[1] = currentArray[0];
+
+            return accumulator;
+        } else {
+            return accumulator;
+        }
+    }, [0, arraysList[0][0], 0]);
 }
 
 function removeFieldsFromObjectsArray(objectsArray, fieldsToRemove = []) {
@@ -99,14 +121,67 @@ function uniqueParallelByFirstArray(arraysToFilter) {
     return newArrays;
 }
 
-module.exports.findIdxInObjectsArrayByKeyValue = findIdxInObjectsArrayByKeyValue;
-module.exports.removeFieldsFromObjectsArray = removeFieldsFromObjectsArray;
-module.exports.checkAllArraysEqualSize = checkAllArraysEqualSize;
+function concatSorted(comparator, ...arraysToConcat) {
+    const totalArrayLength = arraysToConcat.reduce((accumulator, currentArray) => { accumulator += currentArray.length; return accumulator}, 0);
 
-module.exports.intersection = intersection;
-module.exports.difference = difference;
-module.exports.pick = pick;
-module.exports.pickTo = pickTo;
-module.exports.unique = unique;
+    const arrayIndexes = new Array(totalArrayLength).fill(0);
+    const resultArray = new Array(totalArrayLength);
 
-module.exports.uniqueParallelByFirstArray = uniqueParallelByFirstArray;
+    let currentMinValue = null;
+    let currentMinValueArrayIdx = null;
+
+    for (let resultElmIndex = 0; resultElmIndex < resultArray.length; resultElmIndex++) {
+        for (let currentArrayIndex = 0; currentArrayIndex < arraysToConcat.length; currentArrayIndex++) {
+            const currentArrayToConcat = arraysToConcat[currentArrayIndex]
+            const currentArrayElmIndex = arrayIndexes[currentArrayIndex];
+
+            if (currentArrayElmIndex >= currentArrayToConcat.length) {
+                continue;
+            }
+
+            const currentValue = arraysToConcat[currentArrayIndex][currentArrayElmIndex];
+
+            if (isNil(currentMinValue)) {
+                currentMinValue = currentValue;
+                currentMinValueArrayIdx = currentArrayIndex;
+            } else {
+                if (comparator(currentValue, currentMinValue) === COMPARATOR_LESS_THAN) {
+                    currentMinValue = currentValue;
+                    currentMinValueArrayIdx = currentArrayIndex;
+                }
+            }
+        }
+
+        resultArray[resultElmIndex] = currentMinValue;
+        arrayIndexes[currentMinValueArrayIdx] += 1;
+
+        currentMinValue = null;
+        currentMinValueArrayIdx = null;
+    }
+
+    return resultArray;
+}
+
+function concatSortedNumbers(...arraysToConcat) {
+    return concatSorted(defaultCompare, ...arraysToConcat);
+}
+
+// exports
+export {
+    findIdxInObjectsArrayByKeyValue,
+    findMinimumValueInArrayList,
+
+    removeFieldsFromObjectsArray,
+    checkAllArraysEqualSize,
+
+    intersection,
+    difference,
+    pick,
+    pickTo,
+    unique,
+
+    uniqueParallelByFirstArray,
+
+    concatSorted,
+    concatSortedNumbers,
+}
