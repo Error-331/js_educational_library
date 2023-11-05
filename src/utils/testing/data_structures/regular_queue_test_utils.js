@@ -1,5 +1,7 @@
+'use strict';
+
 // external imports
-const assert = require('assert').strict;
+import assert from 'node:assert/strict';
 
 // internal imports
 
@@ -36,6 +38,8 @@ function checkRegularQueueItems(queue, testItems = [], idShift = 0) {
 }
 
 // exports
-module.exports.checkRegularQueueEmpty = checkRegularQueueEmpty;
-module.exports.checkRegularQueueNotEmpty = checkRegularQueueNotEmpty;
-module.exports.checkRegularQueueItems = checkRegularQueueItems;
+export {
+    checkRegularQueueEmpty,
+    checkRegularQueueNotEmpty,
+    checkRegularQueueItems,
+}
