@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 
 // internal imports
 import { defaultCompare } from './../../../src/utils/misc/comparator_utils.js';
-import { insertionSort, insertionSortNumbers } from './../../../src/algorithms/sorting/insertion_sort.js';
+import { mergeSort, mergeSortNumbers } from './../../../src/algorithms/sorting/merge_sort.js';
 
 import {
     testIntegerArray1,
@@ -21,40 +21,40 @@ import {
 } from './test_data.js';
 
 // implementation
-test('Insertion sort tests...', async (t) => {
-    await t.test('insertionSort() function tests...', async (t) => {
+test('Merge sort tests...', async (t) => {
+    await t.test('mergeSort() function tests...', async (t) => {
         await t.test('Should correctly sort an array (iteger) - case 1', () => {
-            assert.deepStrictEqual(insertionSort(defaultCompare, testIntegerArray1), testIntegerSortResultArray1);
+            assert.deepStrictEqual(mergeSort(defaultCompare, testIntegerArray1), testIntegerSortResultArray1);
         });
 
         await t.test('Should correctly sort an array (iteger) - case 2', () => {
-            assert.deepStrictEqual(insertionSort(defaultCompare, testIntegerArray2), testIntegerSortResultArray2);
+            assert.deepStrictEqual(mergeSort(defaultCompare, testIntegerArray2), testIntegerSortResultArray2);
         });
 
         await t.test('Should correctly sort an array (iteger) - case 3', () => {
-            assert.deepStrictEqual(insertionSort(defaultCompare, testIntegerArray3), testIntegerSortResultArray3);
+            assert.deepStrictEqual(mergeSort(defaultCompare, testIntegerArray3), testIntegerSortResultArray3);
         });
 
         await t.test('Should correctly sort an array (iteger) - case 4', () => {
-            assert.deepStrictEqual(insertionSort(defaultCompare, testIntegerArray4), testIntegerSortResultArray4);
+            assert.deepStrictEqual(mergeSort(defaultCompare, testIntegerArray4), testIntegerSortResultArray4);
         });
     });
 
-    await t.test('insertionSortNumbers() function tests...', async (t) => {
+    await t.test('mergeSortNumbers() function tests...', async (t) => {
         await t.test('Should correctly sort an array (iteger) - case 1', () => {
-            assert.deepStrictEqual(insertionSortNumbers(testIntegerArray1), testIntegerSortResultArray1);
+            assert.deepStrictEqual(mergeSortNumbers(testIntegerArray1), testIntegerSortResultArray1);
         });
 
         await t.test('Should correctly sort an array (iteger) - case 2', () => {
-            assert.deepStrictEqual(insertionSortNumbers(testIntegerArray2), testIntegerSortResultArray2);
+            assert.deepStrictEqual(mergeSortNumbers(testIntegerArray2), testIntegerSortResultArray2);
         });
 
         await t.test('Should correctly sort an array (iteger) - case 3', () => {
-            assert.deepStrictEqual(insertionSortNumbers(testIntegerArray3), testIntegerSortResultArray3);
+            assert.deepStrictEqual(mergeSortNumbers(testIntegerArray3), testIntegerSortResultArray3);
         });
 
         await t.test('Should correctly sort an array (iteger) - case 4', () => {
-            assert.deepStrictEqual(insertionSortNumbers(testIntegerArray4), testIntegerSortResultArray4);
+            assert.deepStrictEqual(mergeSortNumbers(testIntegerArray4), testIntegerSortResultArray4);
         });
     });
 });
