@@ -13,11 +13,13 @@ import {
     testIntegerArray2,
     testIntegerArray3,
     testIntegerArray4,
+    testIntegerArray5,
 
     testIntegerSortResultArray1,
     testIntegerSortResultArray2,
     testIntegerSortResultArray3,
     testIntegerSortResultArray4,
+    testIntegerSortResultArray5,
 } from './test_data.js';
 
 // implementation
@@ -38,6 +40,10 @@ test('Merge sort tests...', async (t) => {
         await t.test('Should correctly sort an array (iteger) - case 4', () => {
             assert.deepStrictEqual(mergeSort(defaultCompare, testIntegerArray4), testIntegerSortResultArray4);
         });
+
+        await t.test('Should correctly sort an array (iteger) - case 5', () => {
+            assert.deepStrictEqual(mergeSort(defaultCompare, testIntegerArray5), testIntegerSortResultArray5);
+        });
     });
 
     await t.test('mergeSortNumbers() function tests...', async (t) => {
@@ -55,6 +61,10 @@ test('Merge sort tests...', async (t) => {
 
         await t.test('Should correctly sort an array (iteger) - case 4', () => {
             assert.deepStrictEqual(mergeSortNumbers(testIntegerArray4), testIntegerSortResultArray4);
+        });
+
+        await t.test('Should correctly sort an array (iteger) - case 5', () => {
+            assert.deepStrictEqual(mergeSortNumbers(testIntegerArray5), testIntegerSortResultArray5);
         });
     });
 });

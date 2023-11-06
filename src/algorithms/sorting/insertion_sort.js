@@ -12,7 +12,7 @@ import { defaultCompare } from './../../utils/misc/comparator_utils.js';
 // implementation
 function insertionSort(comparator, arrayToSort) {
     if (!isFunction(comparator)) {
-        throw new Error('Cannot sort array - comparator is not a function');
+        throw new Error('Cannot sort an array - comparator is not a function');
     }
 
     if (!isArray(arrayToSort)) {

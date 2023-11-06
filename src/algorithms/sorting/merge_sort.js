@@ -61,11 +61,11 @@ function mergeSortRec(comparator, arrayToSort, startIndex, endIndex) {
 
 function mergeSort(comparator, arrayToSort) {
     if (!isArray(arrayToSort)) {
-        throw new Error('Cannot sort non-array entity');
+        throw new Error('Cannot sort an non-array entity');
     }
 
     if (!isFunction(comparator)) {
-        throw new Error('Cannot sort array - comparator is not a function');
+        throw new Error('Cannot sort an array - comparator is not a function');
     }
 
     const arrayToSortCopy = arrayToSort.slice();
