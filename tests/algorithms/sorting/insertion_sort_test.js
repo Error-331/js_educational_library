@@ -13,6 +13,7 @@ test('Insertion sort tests...', async (t) => {
     const testIntegerArray1 = [5, 2, 1, 10, 3, 7, 0];
     const testIntegerArray2 = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
     const testIntegerArray3 = [0, 1, 2, 3, 4, 5];
+    const testIntegerArray4 = [2, 4, 5, 7, 1, 2, 3, 6];
 
     await t.test('insertionSort() function tests...', async (t) => {
         await t.test('Should correctly sort an array (iteger) - case 1', () => {
@@ -25,6 +26,10 @@ test('Insertion sort tests...', async (t) => {
 
         await t.test('Should correctly sort an array (iteger) - case 3', () => {
             assert.deepStrictEqual(insertionSort(defaultCompare, testIntegerArray3), [0, 1, 2, 3, 4, 5]);
+        });
+
+        await t.test('Should correctly sort an array (iteger) - case 4', () => {
+            assert.deepStrictEqual(insertionSort(defaultCompare, testIntegerArray4), [1, 2, 2, 3, 4, 5, 6, 7]);
         });
     });
 
@@ -39,6 +44,10 @@ test('Insertion sort tests...', async (t) => {
 
         await t.test('Should correctly sort an array (iteger) - case 3', () => {
             assert.deepStrictEqual(insertionSortNumbers(testIntegerArray3), [0, 1, 2, 3, 4, 5]);
+        });
+
+        await t.test('Should correctly sort an array (iteger) - case 4', () => {
+            assert.deepStrictEqual(insertionSortNumbers(testIntegerArray4), [1, 2, 2, 3, 4, 5, 6, 7]);
         });
     });
 });

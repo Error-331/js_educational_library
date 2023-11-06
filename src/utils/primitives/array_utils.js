@@ -5,7 +5,7 @@
 // internal imports
 import { COMPARATOR_LESS_THAN } from './../../constants/comparator_constants.js';
 
-import { isNil } from './../misc/logic_utils.js';
+import { isNil, isArray, isFunction } from './../misc/logic_utils.js';
 import { defaultCompare } from './../misc/comparator_utils.js';
 
 // implementation
@@ -20,6 +20,14 @@ function findIdxInObjectsArrayByKeyValue(valueToFind, objectsArray, keyToFind){
 }
 
 function findMinimumValueInArrayList(comparator, ...arraysList) {
+    if (!isFunction(comparator)) {
+        throw new Error('Cannot find minimum value in arrays list - comparator is not a function');
+    }
+
+    if (!isArray(arraysList)) {
+        throw new Error('Cannot find minimum value in arrays list - provided entity is not an array');
+    }
+
     return arraysList.reduce((accumulator, currentArray, currentArrayIndex) => {
         accumulator[2] += currentArray.length;
 
@@ -122,6 +130,14 @@ function uniqueParallelByFirstArray(arraysToFilter) {
 }
 
 function concatSorted(comparator, ...arraysToConcat) {
+    if (!isFunction(comparator)) {
+        throw new Error('Cannot concat sorted arrays - comparator is not a function');
+    }
+
+    if (!isArray(arraysToConcat)) {
+        throw new Error('Cannot concat sorted arrays - provided entity is not an array');
+    }
+
     const totalArrayLength = arraysToConcat.reduce((accumulator, currentArray) => { accumulator += currentArray.length; return accumulator}, 0);
 
     const arrayIndexes = new Array(totalArrayLength).fill(0);
