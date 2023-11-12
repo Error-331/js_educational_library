@@ -3,11 +3,9 @@
 // external imports
 
 // internal imports
-import { COMPARATOR_EQUAL, COMPARATOR_LESS_THAN } from './../../constants/comparator_constants.js';
-
 import { isArray, isFunction } from './../../utils/misc/logic_utils.js';
 import { curry } from './../../utils/misc/functional_utils.js';
-import { defaultCompare } from './../../utils/misc/comparator_utils.js';
+import { defaultCompare, comparatorIsLte } from './../../utils/misc/comparator_utils.js';
 
 // implementation
 function mergeTwoSortedArrays(comparator, arrayToSort, startIndex, middleIndex, endIndex) {
@@ -37,7 +35,7 @@ function mergeTwoSortedArrays(comparator, arrayToSort, startIndex, middleIndex, 
     for (let elmIndex = startIndex; elmIndex < endIndex + 1; elmIndex++) {
         const compareResult = comparator(leftPart[leftPartIndex], rightPart[rightPartIndex]);
 
-        if (compareResult === COMPARATOR_LESS_THAN || compareResult === COMPARATOR_EQUAL) {
+        if (comparatorIsLte(compareResult)) {
             arrayToSort[elmIndex] = leftPart[leftPartIndex];
             leftPartIndex = leftPartIndex + 1;
         } else {

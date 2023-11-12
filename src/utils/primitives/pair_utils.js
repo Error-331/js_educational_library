@@ -3,10 +3,8 @@
 // external imports
 
 // internal imports
-import { COMPARATOR_GREATER_THAN } from './../../constants/comparator_constants.js';
-
 import { isArray, isFunction, isNil } from './../misc/logic_utils.js';
-import { defaultCompare } from './../misc/comparator_utils.js';
+import { defaultCompare, comparatorIsGt } from './../misc/comparator_utils.js';
 
 // implementation
 function sortPair(comparator, [first, second]) {
@@ -14,7 +12,7 @@ function sortPair(comparator, [first, second]) {
         throw new Error('Cannot sort pair - comparator is not a function');
     }
 
-    if (comparator(first, second) === COMPARATOR_GREATER_THAN) {
+    if (comparatorIsGt(comparator(first, second))) {
         return [second, first];
     } else {
         return [first, second];

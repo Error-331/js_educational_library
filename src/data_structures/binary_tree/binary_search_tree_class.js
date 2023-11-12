@@ -3,10 +3,8 @@
 // external imports
 
 // internal imports
-import { COMPARATOR_LESS_THAN, COMPARATOR_GREATER_THAN } from './../../constants/comparator_constants.js';
-
 import { isNil } from './../../utils/misc/logic_utils.js';
-import { defaultCompare } from './../../utils/misc/comparator_utils.js';
+import { defaultCompare, comparatorIsLt, comparatorIsGt } from './../../utils/misc/comparator_utils.js';
 import { defaultToNull } from './../../utils/misc/functional_utils.js';
 import { setPropValueByPath } from './../../utils/primitives/object_utils.js';
 
@@ -37,7 +35,7 @@ class BinarySearchTreeClass {
     }
 
     #insertNode(parent, key) {
-        if (this.#comparator(key, parent.key) === COMPARATOR_LESS_THAN) {
+        if (comparatorIsLt(this.#comparator(key, parent.key))) {
             if (parent.left === null) {
                 parent.left = new BinarySearchTreeNodeClass(key, parent);
             } else {
@@ -57,9 +55,9 @@ class BinarySearchTreeClass {
             return null;
         }
 
-        if (this.#comparator(key, node.key) === COMPARATOR_LESS_THAN) {
+        if (comparatorIsLt(this.#comparator(key, node.key))) {
             return this.#searchNode(node.left, key);
-        } else if (this.#comparator(key, node.key) === COMPARATOR_GREATER_THAN) {
+        } else if (comparatorIsGt(this.#comparator(key, node.key))) {
             return this.#searchNode(node.right, key);
         } else {
             return node;
@@ -71,10 +69,10 @@ class BinarySearchTreeClass {
             return null;
         }
 
-        if (this.#comparator(key, node.key) === COMPARATOR_LESS_THAN) {
+        if (comparatorIsLt(this.#comparator(key, node.key))) {
             node.left = this.#removeNode(node.left, key)
             return node;
-        } else if (this.#comparator(key, node.key) === COMPARATOR_GREATER_THAN) {
+        } else if (comparatorIsGt(this.#comparator(key, node.key))) {
             node.right = this.#removeNode(node.right, key);
             return node;
         } else {

@@ -3,11 +3,9 @@
 // external imports
 
 // internal imports
-import { COMPARATOR_GREATER_THAN } from './../../constants/comparator_constants.js';
-
 import { isArray, isFunction } from './../../utils/misc/logic_utils.js';
 import { curry } from './../../utils/misc/functional_utils.js';
-import { defaultCompare } from './../../utils/misc/comparator_utils.js';
+import { defaultCompare, comparatorIsGt } from './../../utils/misc/comparator_utils.js';
 
 // implementation
 function bubbleSort(comparator, arrayToSort) {
@@ -27,7 +25,7 @@ function bubbleSort(comparator, arrayToSort) {
             let currentElement = arrayToSortCopy[elmIndex];
             let nextElement = arrayToSortCopy[elmIndex + 1]
 
-            if (comparator(currentElement, nextElement) === COMPARATOR_GREATER_THAN) {
+            if (comparatorIsGt(comparator(currentElement, nextElement))) {
                 arrayToSortCopy[elmIndex] = nextElement;
                 arrayToSortCopy[elmIndex + 1] = currentElement;
             }

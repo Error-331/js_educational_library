@@ -4,12 +4,46 @@
 
 // internal imports
 import {
+    COMPARATOR_NONE_EQUAL,
+    COMPARATOR_EQUAL,
     COMPARATOR_LESS_THAN,
     COMPARATOR_GREATER_THAN,
-    COMPARATOR_EQUAL,
+
+    COMPARATOR_LESS_OR_EQUAL,
+    COMPARATOR_GREATER_OR_EQUAL,
 } from './../../constants/comparator_constants.js';
 
 // implementation
+function comparatorIsNoneEqual(comparatorValue) {
+    return (comparatorValue & COMPARATOR_EQUAL) === COMPARATOR_NONE_EQUAL;
+}
+
+function comparatorIsEqual(comparatorValue) {
+    return comparatorValue === COMPARATOR_EQUAL;
+}
+
+function comparatorIsLt(comparatorValue) {
+    return comparatorValue === COMPARATOR_LESS_THAN;
+}
+
+function comparatorIsGt(comparatorValue) {
+    return comparatorValue === COMPARATOR_GREATER_THAN;
+}
+
+function comparatorIsLte(comparatorValue) {
+    const maskedValue = comparatorValue & COMPARATOR_LESS_OR_EQUAL;
+    return comparatorValue === COMPARATOR_LESS_OR_EQUAL ||
+        maskedValue === COMPARATOR_EQUAL ||
+        maskedValue === COMPARATOR_LESS_THAN;
+}
+
+function comparatorIsGte(comparatorValue) {
+    const maskedValue = comparatorValue & COMPARATOR_GREATER_OR_EQUAL;
+    return comparatorValue === COMPARATOR_GREATER_OR_EQUAL ||
+        maskedValue === COMPARATOR_EQUAL ||
+        maskedValue === COMPARATOR_GREATER_THAN;
+}
+
 function defaultCompare(first, second) {
     if (first === second) {
         return COMPARATOR_EQUAL;
@@ -18,7 +52,24 @@ function defaultCompare(first, second) {
     return first < second ? COMPARATOR_LESS_THAN : COMPARATOR_GREATER_THAN;
 }
 
+function stringSimpleCaseInsensitiveComparator(first, second) {
+    const preparedFirst = first.toLowerCase();
+    const preparedSecond = second.toLowerCase();
+
+    return preparedFirst === preparedSecond ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL;
+}
+
 // exports
 export {
+    comparatorIsNoneEqual,
+    comparatorIsEqual,
+
+    comparatorIsLt,
+    comparatorIsGt,
+
+    comparatorIsLte,
+    comparatorIsGte,
+
     defaultCompare,
+    stringSimpleCaseInsensitiveComparator,
 }

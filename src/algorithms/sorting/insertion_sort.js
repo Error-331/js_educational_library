@@ -3,11 +3,9 @@
 // external imports
 
 // internal imports
-import { COMPARATOR_GREATER_THAN } from './../../constants/comparator_constants.js';
-
 import { isArray, isFunction } from './../../utils/misc/logic_utils.js';
 import { curry } from './../../utils/misc/functional_utils.js';
-import { defaultCompare } from './../../utils/misc/comparator_utils.js';
+import { defaultCompare, comparatorIsGt } from './../../utils/misc/comparator_utils.js';
 
 // implementation
 function insertionSort(comparator, arrayToSort) {
@@ -27,7 +25,7 @@ function insertionSort(comparator, arrayToSort) {
         let currentElement = arrayToSortCopy[arrayIndex];
         let previousElement = arrayToSortCopy[arraySubIndex];
 
-        while(comparator(previousElement, currentElement) === COMPARATOR_GREATER_THAN && arraySubIndex >= 0) {
+        while(comparatorIsGt(comparator(previousElement, currentElement)) && arraySubIndex >= 0) {
             arrayToSortCopy[arraySubIndex + 1] = arrayToSortCopy[arraySubIndex];
 
             arraySubIndex -= 1;

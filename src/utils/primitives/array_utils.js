@@ -3,10 +3,8 @@
 // external imports
 
 // internal imports
-import { COMPARATOR_LESS_THAN } from './../../constants/comparator_constants.js';
-
 import { isNil, isArray, isFunction } from './../misc/logic_utils.js';
-import { defaultCompare } from './../misc/comparator_utils.js';
+import { defaultCompare, comparatorIsLt } from './../misc/comparator_utils.js';
 
 // implementation
 function findIdxInObjectsArrayByKeyValue(valueToFind, objectsArray, keyToFind){
@@ -31,7 +29,7 @@ function findMinimumValueInArrayList(comparator, ...arraysList) {
     return arraysList.reduce((accumulator, currentArray, currentArrayIndex) => {
         accumulator[2] += currentArray.length;
 
-        if (comparator(currentArray[0], accumulator[1]) === COMPARATOR_LESS_THAN) {
+        if (comparatorIsLt(comparator(currentArray[0], accumulator[1]))) {
             accumulator[0] = currentArrayIndex;
             accumulator[1] = currentArray[0];
 
@@ -161,7 +159,7 @@ function concatSorted(comparator, ...arraysToConcat) {
                 currentMinValue = currentValue;
                 currentMinValueArrayIdx = currentArrayIndex;
             } else {
-                if (comparator(currentValue, currentMinValue) === COMPARATOR_LESS_THAN) {
+                if (comparatorIsLt(comparator(currentValue, currentMinValue))) {
                     currentMinValue = currentValue;
                     currentMinValueArrayIdx = currentArrayIndex;
                 }
