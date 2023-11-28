@@ -3,6 +3,9 @@
 // external imports
 
 // internal imports
+import { isNil } from './../../utils/misc/logic_utils.js';
+import { defaultCompare, comparatorIsEqual } from './../../utils/misc/comparator_utils.js';
+
 import LinkedListNodeClass from './linked_list_node_class.js';
 
 // implementation
@@ -10,11 +13,11 @@ class LinkedListClass {
     #head = null;
     #count = 0;
 
-    #comparator = (first, second) => first === second;
+    #comparator = defaultCompare;
 
     findNode(element) {
         for (const node of this) {
-            if (this.#comparator(element, node.element)) {
+            if (comparatorIsEqual(this.#comparator(element, node.element))) {
                 return node;
             }
         }
@@ -30,7 +33,7 @@ class LinkedListClass {
         let current = this.#head;
 
         for (let nodeCounter = 0; nodeCounter < this.#count && current !== null; nodeCounter++) {
-            if (this.#comparator(element, current.element)) {
+            if (comparatorIsEqual(this.#comparator(element, current.element))) {
                 return nodeCounter;
             }
 
@@ -132,7 +135,7 @@ class LinkedListClass {
         let previousNode = null;
 
         for (const node of this) {
-            if (this.#comparator(element, node.element)) {
+            if (comparatorIsEqual(this.#comparator(element, node.element))) {
                 if (previousNode === null) {
                     return this.removeHeadNode();
                 } else {
@@ -248,11 +251,13 @@ class LinkedListClass {
     }
 
     set comparator(comparator) {
-        this.#comparator = comparator;
+        if (!isNil(comparator)) {
+            this.#comparator = comparator;
+        }
     }
 
     constructor(comparator) {
-        this.#comparator = comparator ?? this.#comparator;
+        this.comparator = comparator;
     }
 }
 

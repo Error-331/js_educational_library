@@ -5,7 +5,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 // internal imports
-import LinkedListClass from './../../../src/data_structures/linked_list/linked_list_class.js';
+import { COMPARATOR_EQUAL, COMPARATOR_NONE_EQUAL } from './../../../src/constants/comparator_constants.js';
 
 import {
     checkLinkedListEmpty,
@@ -18,6 +18,8 @@ import {
     checkLinkedListIterator,
 } from './../../../src/utils/testing/data_structures/linked_list/linked_list_class_test_utils.js';
 import { checkLinkedListNodeDestroyed } from './../../../src/utils/testing/data_structures/linked_list/linked_list_node_class_test_utils.js';
+
+import LinkedListClass from './../../../src/data_structures/linked_list/linked_list_class.js';
 
 // implementation
 test('LinkedListClass tests...', async (t) => {
@@ -273,7 +275,7 @@ test('LinkedListClass tests...', async (t) => {
         });
 
         await t.test('Should correctly find node in the linked list by node value - case 2', () => {
-            const comparator = (first, second) => first.value === second.value;
+            const comparator = (first, second) => first.value === second.value ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL;
 
             const linkedListObj = new LinkedListClass(comparator);
 
@@ -291,7 +293,7 @@ test('LinkedListClass tests...', async (t) => {
         });
 
         await t.test('Should correctly find node in the linked list by node value - case 3', () => {
-            const comparator = (first, second) => first.key === second.key;
+            const comparator = (first, second) => first.key === second.key ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL;
 
             const linkedListObj = new LinkedListClass(comparator);
 
@@ -327,7 +329,7 @@ test('LinkedListClass tests...', async (t) => {
         });
 
         await t.test('Should correctly find nodes index in the linked list by node value - case 2', () => {
-            const comparator = (first, second) => first.value === second.value;
+            const comparator = (first, second) => first.value === second.value ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL;
 
             const linkedListObj = new LinkedListClass(comparator);
 
@@ -345,7 +347,7 @@ test('LinkedListClass tests...', async (t) => {
         });
 
         await t.test('Should correctly find nodes index in the linked list by node value - case 3', () => {
-            const comparator = (first, second) => first.key === second.key;
+            const comparator = (first, second) => first.key === second.key ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL;
 
             const linkedListObj = new LinkedListClass(comparator);
 
@@ -551,7 +553,7 @@ test('LinkedListClass tests...', async (t) => {
         });
 
         await t.test('Should correctly remove a node with specific value in the linked list - case 2', () => {
-            const comparator = (first, second) => first.value === second.value;
+            const comparator = (first, second) => first.value === second.value ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL;
 
             const linkedListObj = new LinkedListClass(comparator);
 
@@ -578,7 +580,7 @@ test('LinkedListClass tests...', async (t) => {
         });
 
         await t.test('Should correctly remove a node with specific value in the linked list - case 3', () => {
-            const comparator = (first, second) => first.key === second.key;
+            const comparator = (first, second) => first.key === second.key ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL;
 
             const linkedListObj = new LinkedListClass(comparator);
 
