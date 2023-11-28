@@ -1,6 +1,11 @@
 'use strict';
 
-class RegularGeneralTreeNodeChildrenIteratorClass {
+// external imports
+
+// internal imports
+
+// implementation
+class GenericTreeNodeChildrenIteratorClass {
     #childrenLinkedList = null;
 
     [Symbol.iterator]() {
@@ -40,4 +45,5 @@ class RegularGeneralTreeNodeChildrenIteratorClass {
     }
 }
 
-module.exports = RegularGeneralTreeNodeChildrenIteratorClass;
+// exports
+export default GenericTreeNodeChildrenIteratorClass;

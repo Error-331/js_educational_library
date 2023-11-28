@@ -1,5 +1,7 @@
+'use strict';
+
 // external imports
-const assert = require('assert').strict;
+import assert from 'node:assert/strict';
 
 // internal imports
 
@@ -9,4 +11,6 @@ function checkTree(tree, root) {
 }
 
 // exports
-module.exports.checkTree = checkTree;
+export {
+    checkTree,
+}

@@ -1,9 +1,20 @@
 'use strict';
 
-const RegularLinkedListClass = require('./../../../linked_list/regular/code/regular_linked_list_class');
-const RegularGeneralTreeNodeChildrenIteratorClass = require('./regular_general_tree_node_children_iterator_class');
+// external imports
 
-class RegularGeneralTreeNodeClass {
+// internal imports
+import LinkedListClass from './../linked_list/linked_list_class.js';
+import GenericTreeNodeChildrenIteratorClass from './generic_tree_node_children_iterator_class.js';
+
+/*
+
+    Node *firstChild;
+    Node *nextSibling;
+
+ */
+
+// implementation
+class GenericTreeNodeClass {
     #tree = null;
     #parent = null;
 
@@ -11,7 +22,7 @@ class RegularGeneralTreeNodeClass {
     #childrenLinkedList = null;
 
     addChild(data) {
-        const newNode = new RegularGeneralTreeNodeClass(this.#tree, this, this.#childrenLinkedList.comparator, data);
+        const newNode = new GenericTreeNodeClass(this.#tree, this, this.#childrenLinkedList.comparator, data);
         this.#childrenLinkedList.push(newNode);
 
         return newNode;
@@ -22,7 +33,6 @@ class RegularGeneralTreeNodeClass {
         this.#parent = null;
 
         this.#data?.destroy?.();
-
         this.#data = null;
 
         this.#childrenLinkedList.destroy();
@@ -64,7 +74,7 @@ class RegularGeneralTreeNodeClass {
     }
 
     get children() {
-        return new RegularGeneralTreeNodeChildrenIteratorClass(this.#childrenLinkedList);
+        return new GenericTreeNodeChildrenIteratorClass(this.#childrenLinkedList);
     }
 
     get isLeaf() {
@@ -100,8 +110,9 @@ class RegularGeneralTreeNodeClass {
         this.#parent = parent;
 
         this.#data = data;
-        this.#childrenLinkedList = new RegularLinkedListClass(comparator);
+        this.#childrenLinkedList = new LinkedListClass(comparator);
     }
 }
 
-module.exports = RegularGeneralTreeNodeClass;
+// exports
+export default GenericTreeNodeClass;

@@ -1,5 +1,7 @@
+'use strict';
+
 // external imports
-const assert = require('assert').strict;
+import assert from 'node:assert/strict';
 
 // internal imports
 
@@ -72,7 +74,9 @@ function checkRegularGeneralTreeDestroyedNodeChildrenIterator(parentNode, childN
 }
 
 // exports
-module.exports.prepareDataForIterationTest = prepareDataForIterationTest;
-module.exports.checkNode = checkNode;
-module.exports.checkRegularGeneralTreeNodeChildrenIterator = checkRegularGeneralTreeNodeChildrenIterator;
-module.exports.checkRegularGeneralTreeDestroyedNodeChildrenIterator = checkRegularGeneralTreeDestroyedNodeChildrenIterator;
+export {
+    prepareDataForIterationTest,
+    checkNode,
+    checkRegularGeneralTreeNodeChildrenIterator,
+    checkRegularGeneralTreeDestroyedNodeChildrenIterator,
+}
