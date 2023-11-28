@@ -3,15 +3,10 @@
 // external imports
 
 // internal imports
+import { COMPARATOR_EQUAL, COMPARATOR_NONE_EQUAL } from './../../constants/comparator_constants.js';
+
 import LinkedListClass from './../linked_list/linked_list_class.js';
 import GenericTreeNodeChildrenIteratorClass from './generic_tree_node_children_iterator_class.js';
-
-/*
-
-    Node *firstChild;
-    Node *nextSibling;
-
- */
 
 // implementation
 class GenericTreeNodeClass {
@@ -54,7 +49,7 @@ class GenericTreeNodeClass {
     }
 
     findChildByData(data) {
-        return this.findChildBy((data, treeNode) => data === treeNode.data, data);
+        return this.findChildBy((data, treeNode) => data === treeNode.data ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL, data);
     }
 
     getChildAt(index) {
@@ -96,6 +91,18 @@ class GenericTreeNodeClass {
             return null;
         }
     }
+
+    /*get firstChild() {
+
+    }
+
+    get nextSibling() {
+
+    }
+
+    get previousSibling() {
+
+    }*/
 
     set data(data) {
         this.#data = data;

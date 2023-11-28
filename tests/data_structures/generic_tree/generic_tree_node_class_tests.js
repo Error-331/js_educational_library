@@ -5,15 +5,17 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 // internal imports
-import GenericTreeClass from './../../../src/data_structures/generic_tree/generic_tree_class.js';
-import GenericTreeNodeClass from './../../../src/data_structures/generic_tree/generic_tree_node_class.js';
+import { COMPARATOR_EQUAL, COMPARATOR_NONE_EQUAL } from './../../../src/constants/comparator_constants.js';
 
 import {
     prepareDataForIterationTest,
     checkNode,
     checkRegularGeneralTreeNodeChildrenIterator,
     checkRegularGeneralTreeDestroyedNodeChildrenIterator
-} from './../../../src/utils/testing/data_structures/generic_tree/generic_tree_node_test_utils';
+} from './../../../src/utils/testing/data_structures/generic_tree/generic_tree_node_test_utils.js';
+
+import GenericTreeClass from './../../../src/data_structures/generic_tree/generic_tree_class.js';
+import GenericTreeNodeClass from './../../../src/data_structures/generic_tree/generic_tree_node_class.js';
 
 // implementation
 test('GenericTreeNodeClass tests...', async (t) => {
@@ -300,7 +302,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const parentNode = new GenericTreeNodeClass(tree, null, null, data);
             const [ dataForTest ] = prepareDataForIterationTest(tree, parentNode, childData);
 
-            const requiredNode = parentNode.findChildBy((data, treeNode) => data === treeNode.data, -5);
+            const requiredNode = parentNode.findChildBy((data, treeNode) => data === treeNode.data ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL, -5);
             checkNode(requiredNode, ...dataForTest[2]);
         });
 
@@ -312,7 +314,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const parentNode = new GenericTreeNodeClass(tree, null, null, data);
             const [ dataForTest ] = prepareDataForIterationTest(tree, parentNode, childData);
 
-            const requiredNode = parentNode.findChildBy((data, treeNode) => data === treeNode.data,'test_val1');
+            const requiredNode = parentNode.findChildBy((data, treeNode) => data === treeNode.data ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL,'test_val1');
             checkNode(requiredNode, ...dataForTest[3]);
         });
 
@@ -324,7 +326,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const parentNode = new GenericTreeNodeClass(tree, null, null, data);
             prepareDataForIterationTest(tree, parentNode, childData);
 
-            const requiredNode = parentNode.findChildBy((data, treeNode) => data === treeNode.data, 543);
+            const requiredNode = parentNode.findChildBy((data, treeNode) => data === treeNode.data ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL, 543);
             assert.strictEqual(requiredNode, null);
         });
     });
@@ -373,7 +375,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const childData = [5, 10, -5, 'test_val1'];
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, (data, treeNode) => data === treeNode.data, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, (data, treeNode) => data === treeNode.data ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL, data);
             const [ dataForTest ] = prepareDataForIterationTest(tree, parentNode, childData);
 
             const requiredNode = parentNode.findChild(-5);
@@ -391,10 +393,10 @@ test('GenericTreeNodeClass tests...', async (t) => {
 
             const pathPartTreeComparator = (pathNode, method, path) => {
                 if (pathNode.data.path instanceof RegExp) {
-                    return false;
+                    return COMPARATOR_NONE_EQUAL;
                 }
 
-                return pathNode.data.method === method && pathNode.data.path === path;
+                return (pathNode.data.method === method && pathNode.data.path === path) ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL;
             };
 
             const tree = new GenericTreeClass();
@@ -416,10 +418,10 @@ test('GenericTreeNodeClass tests...', async (t) => {
 
             const pathPartTreeComparator = (pathNode, method, path) => {
                 if (pathNode.data.path instanceof RegExp) {
-                    return false;
+                    return COMPARATOR_NONE_EQUAL;
                 }
 
-                return pathNode.data.method === method && pathNode.data.path === path;
+                return (pathNode.data.method === method && pathNode.data.path === path) ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL;
             };
 
             const tree = new GenericTreeClass();

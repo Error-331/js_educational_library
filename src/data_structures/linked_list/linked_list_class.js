@@ -26,7 +26,7 @@ class LinkedListClass {
     }
 
     find(element) {
-        return this.findNode(element)?.element;
+        return this.findNode(element)?.element ?? null;
     }
 
     indexOf(element) {
