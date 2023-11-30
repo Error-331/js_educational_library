@@ -37,6 +37,10 @@ class LinkedListNodeClass {
         return this.#next;
     }
 
+    set element(element) {
+        this.#element = element;
+    }
+
     set next(node) {
         this.#next = node;
     }
