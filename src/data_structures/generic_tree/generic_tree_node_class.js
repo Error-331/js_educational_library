@@ -14,18 +14,23 @@ class GenericTreeNodeClass {
     #parent = null;
 
     #data = null;
+
     #childrenLinkedList = null;
+    #linkedListNode = null;
 
     addChild(data) {
-        const newNode = new GenericTreeNodeClass(this.#tree, this, this.#childrenLinkedList.comparator, data);
-        this.#childrenLinkedList.push(newNode);
+        const linkedListNode = this.#childrenLinkedList.push({});
+        const treeNode = new GenericTreeNodeClass(this.#tree, this, linkedListNode, this.#childrenLinkedList.comparator, data);
 
-        return newNode;
+        linkedListNode.element = treeNode;
+
+        return treeNode;
     }
 
     destroy() {
         this.#tree = null;
         this.#parent = null;
+        this.#linkedListNode = null;
 
         this.#data?.destroy?.();
         this.#data = null;
@@ -92,29 +97,30 @@ class GenericTreeNodeClass {
         }
     }
 
-    /*get firstChild() {
-
+    get firstChild() {
+        return this.leftmostChild;
     }
 
     get nextSibling() {
-
+        return this.#linkedListNode?.next?.element;
     }
 
-    get previousSibling() {
-
+   /* get previousSibling() {
+        this.#linkedListNode?.next
     }*/
 
     set data(data) {
         this.#data = data;
     }
 
-    constructor(tree, parent = null, comparator = null, data = null) {
+    constructor(tree, parent = null, linkedListNode, comparator = null, data = null) {
         if (tree === null || tree === undefined) {
             throw new Error('RegularGeneralTreeNodeClass: cannot create a node without specifying the tree object');
         }
 
         this.#tree = tree;
         this.#parent = parent;
+        this.#linkedListNode = linkedListNode;
 
         this.#data = data;
         this.#childrenLinkedList = new LinkedListClass(comparator);

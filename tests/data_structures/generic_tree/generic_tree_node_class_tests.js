@@ -27,7 +27,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data = 'test_val1';
 
             try {
-                node = new GenericTreeNodeClass(tree, null, null, data);
+                node = new GenericTreeNodeClass(tree, null, null,null, data);
             } catch (error) {
                 assert.fail(`Cannot create a node; ${error.message}`);
             }
@@ -42,7 +42,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data = 5;
 
             try {
-                node = new GenericTreeNodeClass(tree, null, null, data);
+                node = new GenericTreeNodeClass(tree, null, null, null, data);
             } catch (error) {
                 assert.fail(`Cannot create a node; ${error.message}`);
             }
@@ -60,8 +60,8 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data2 = 'test_val1';
 
             try {
-                parentNode = new GenericTreeNodeClass(tree, null, null, data1);
-                childNode = new GenericTreeNodeClass(tree, parentNode, null, data2);
+                parentNode = new GenericTreeNodeClass(tree, null, null,null, data1);
+                childNode = new GenericTreeNodeClass(tree, parentNode, null, null, data2);
             } catch (error) {
                 assert.fail(`Cannot create a node; ${error.message}`);
             }
@@ -77,7 +77,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data2 = 'test_val1';
 
             const tree = new GenericTreeClass();
-            const node = new GenericTreeNodeClass(tree, null, null, data1);
+            const node = new GenericTreeNodeClass(tree, null, null, null, data1);
 
             checkNode(node, tree, null, data1);
 
@@ -90,7 +90,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data2 = 54;
 
             const tree = new GenericTreeClass();
-            const node = new GenericTreeNodeClass(tree, null, null, data1);
+            const node = new GenericTreeNodeClass(tree, null, null, null, data1);
 
             checkNode(node, tree, null, data1);
 
@@ -106,7 +106,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const testIndex = 2;
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null, null, data);
 
             for (const childDataItem of childData) {
                 parentNode.addChild(childDataItem);
@@ -122,7 +122,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const testIndex = 3;
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data);
 
             for (const childDataItem of childData) {
                 parentNode.addChild(childDataItem);
@@ -138,7 +138,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const testIndex = 6;
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null, null, data);
 
             for (const childDataItem of childData) {
                 parentNode.addChild(childDataItem);
@@ -155,7 +155,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data2 = 'test_val1';
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data1);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data1);
 
             checkNode(parentNode, tree, null, data1);
             assert.strictEqual(parentNode.isLeaf, true);
@@ -172,12 +172,12 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data2 = 'test_val1';
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data1);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data1);
 
             checkNode(parentNode, tree, null, data1);
             assert.strictEqual(parentNode.isLeaf, true);
 
-            const childNode = new GenericTreeNodeClass(tree, parentNode, null, data2);
+            const childNode = new GenericTreeNodeClass(tree, parentNode, null, null, data2);
             assert.strictEqual(parentNode.isLeaf, true);
 
             checkNode(childNode, tree, parentNode, data2);
@@ -192,7 +192,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data3 = 'test_val2';
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data1);
+            const parentNode = new GenericTreeNodeClass(tree, null, null, null, data1);
 
             checkNode(parentNode, tree, null, data1);
 
@@ -212,7 +212,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data3 = 'test_val_7';
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data1);
+            const parentNode = new GenericTreeNodeClass(tree, null, null, null, data1);
 
             checkNode(parentNode, tree, null, data1);
 
@@ -230,7 +230,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data1 = 43;
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data1);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data1);
 
             checkNode(parentNode, tree, null, data1);
 
@@ -246,7 +246,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data3 = 'test_val2';
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data1);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data1);
 
             checkNode(parentNode, tree, null, data1);
 
@@ -266,7 +266,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data3 = 'test_val_7';
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data1);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data1);
 
             checkNode(parentNode, tree, null, data1);
 
@@ -284,12 +284,61 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const data1 = 43;
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data1);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data1);
 
             checkNode(parentNode, tree, null, data1);
 
             const rightmostChild = parentNode.rightmostChild;
             assert.strictEqual(rightmostChild, null);
+        });
+    });
+
+    await t.test('"nextSibling" getter tests...', async (t) => {
+        await t.test('Should correctly get next sibling - case 1', () => {
+            const data1 = 5;
+            const data2 = 'test_val1';
+            const data3 = 'test_val2';
+            const data4 = 'test_val3';
+
+            const tree = new GenericTreeClass();
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data1);
+
+            const childNode1 = parentNode.addChild(data2);
+            const childNode2 = parentNode.addChild(data3);
+            const childNode3 = parentNode.addChild(data4);
+
+            checkNode(parentNode, tree, null, data1);
+            checkNode(childNode1, tree, parentNode, data2);
+
+            let nextSibling = childNode1.nextSibling;
+            checkNode(nextSibling, tree, parentNode, data3);
+            assert.strictEqual(nextSibling, childNode2);
+
+            nextSibling = nextSibling.nextSibling;
+            checkNode(nextSibling, tree, parentNode, data4);
+            assert.strictEqual(nextSibling, childNode3);
+        });
+
+        await t.test('Should correctly get next sibling - case 2', () => {
+            const data1 = 5;
+            const data2 = 'test_val1';
+            const data3 = 'test_val2';
+            const data4 = 'test_val3';
+
+            const tree = new GenericTreeClass();
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data1);
+
+            const childNode1 = parentNode.addChild(data2);
+            const subChildNode1 = childNode1.addChild(data3);
+            const subChildNode2 = childNode1.addChild(data4);
+
+            checkNode(parentNode, tree, null, data1);
+            checkNode(childNode1, tree, parentNode, data2);
+            checkNode(subChildNode1, tree, childNode1, data3);
+
+            const nextSibling = childNode1.firstChild.nextSibling;
+            checkNode(nextSibling, tree, childNode1, data4);
+            assert.strictEqual(nextSibling, subChildNode2);
         });
     });
 
@@ -299,7 +348,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const childData = [5, 10, -5, 'test_val1'];
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data);
             const [ dataForTest ] = prepareDataForIterationTest(tree, parentNode, childData);
 
             const requiredNode = parentNode.findChildBy((data, treeNode) => data === treeNode.data ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL, -5);
@@ -311,7 +360,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const childData = [5, 10, -5, 'test_val1'];
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null, null, data);
             const [ dataForTest ] = prepareDataForIterationTest(tree, parentNode, childData);
 
             const requiredNode = parentNode.findChildBy((data, treeNode) => data === treeNode.data ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL,'test_val1');
@@ -323,7 +372,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const childData = [5, 10, -5, 'test_val1'];
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data);
             prepareDataForIterationTest(tree, parentNode, childData);
 
             const requiredNode = parentNode.findChildBy((data, treeNode) => data === treeNode.data ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL, 543);
@@ -337,7 +386,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const childData = [5, 10, -5, 'test_val1'];
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data);
             const [ dataForTest ] = prepareDataForIterationTest(tree, parentNode, childData);
 
             const requiredNode = parentNode.findChildByData(-5);
@@ -349,7 +398,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const childData = [5, 10, -5, 'test_val1'];
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data);
             const [ dataForTest ] = prepareDataForIterationTest(tree, parentNode, childData);
 
             const requiredNode = parentNode.findChildByData('test_val1');
@@ -361,7 +410,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const childData = [5, 10, -5, 'test_val1'];
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data);
             prepareDataForIterationTest(tree, parentNode, childData);
 
             const requiredNode = parentNode.findChildByData(543);
@@ -375,7 +424,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const childData = [5, 10, -5, 'test_val1'];
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, (data, treeNode) => data === treeNode.data ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null, (data, treeNode) => data === treeNode.data ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL, data);
             const [ dataForTest ] = prepareDataForIterationTest(tree, parentNode, childData);
 
             const requiredNode = parentNode.findChild(-5);
@@ -400,7 +449,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             };
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, ([method, pathPart], childNode) => pathPartTreeComparator(childNode, method, pathPart), data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null, ([method, pathPart], childNode) => pathPartTreeComparator(childNode, method, pathPart), data);
             const [ dataForTest ] = prepareDataForIterationTest(tree, parentNode, childData);
 
             const requiredNode = parentNode.findChild(['post', '/param2/param1']);
@@ -425,7 +474,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             };
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, ([method, pathPart], childNode) => pathPartTreeComparator(childNode, method, pathPart), data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,([method, pathPart], childNode) => pathPartTreeComparator(childNode, method, pathPart), data);
             const [ dataForTest ] = prepareDataForIterationTest(tree, parentNode, childData);
 
             const requiredNode = parentNode.findChild(['put', '/a1/a3']);
@@ -439,7 +488,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const childData = [5, 10, -5, 'test_val1'];
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data);
             const [ dataForTest ] = prepareDataForIterationTest(tree, parentNode, childData);
 
             checkRegularGeneralTreeNodeChildrenIterator(parentNode, dataForTest);
@@ -450,7 +499,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const childData = [{prop1: 'test_sub_prop1'}, 64, null, 'test_val2'];
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data);
             const [ dataForTest ] = prepareDataForIterationTest(tree, parentNode, childData);
 
             checkRegularGeneralTreeNodeChildrenIterator(parentNode, dataForTest);
@@ -463,7 +512,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             const childData = [5, 10, -5, 'test_val1'];
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data);
             const [ dataForTest, childNodes ] = prepareDataForIterationTest(tree, parentNode, childData);
 
             checkRegularGeneralTreeNodeChildrenIterator(parentNode, dataForTest);
@@ -493,7 +542,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
 
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data);
             const [ dataForTest, childNodes, destroyCallTracker ] = prepareDataForIterationTest(tree, parentNode, childData);
 
             checkRegularGeneralTreeNodeChildrenIterator(parentNode, dataForTest);
@@ -557,7 +606,7 @@ test('GenericTreeNodeClass tests...', async (t) => {
             ];
 
             const tree = new GenericTreeClass();
-            const parentNode = new GenericTreeNodeClass(tree, null, null, data);
+            const parentNode = new GenericTreeNodeClass(tree, null, null,null, data);
             const destroyCallTrackers = [];
 
             const subChildNodesStore = [];

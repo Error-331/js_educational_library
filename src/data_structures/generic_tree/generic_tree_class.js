@@ -15,7 +15,7 @@ class GenericTreeClass {
 
     createNewRoot(data = null) {
         this.destroy();
-        this.#root = new GenericTreeNodeClass(this, null, this.#comparator, data);
+        this.#root = new GenericTreeNodeClass(this, null, null, this.#comparator, data);
 
         return this.#root;
     }
