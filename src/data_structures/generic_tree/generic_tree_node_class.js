@@ -4,6 +4,7 @@
 
 // internal imports
 import { COMPARATOR_EQUAL, COMPARATOR_NONE_EQUAL } from './../../constants/comparator_constants.js';
+import { isNil } from './../../utils/misc/logic_utils.js';
 
 import LinkedListClass from './../linked_list/linked_list_class.js';
 import GenericTreeNodeChildrenIteratorClass from './generic_tree_node_children_iterator_class.js';
@@ -19,7 +20,7 @@ class GenericTreeNodeClass {
     #linkedListNode = null;
 
     addChild(data) {
-        const linkedListNode = this.#childrenLinkedList.push({});
+        const linkedListNode = this.#childrenLinkedList.push(null);
         const treeNode = new GenericTreeNodeClass(this.#tree, this, linkedListNode, this.#childrenLinkedList.comparator, data);
 
         linkedListNode.element = treeNode;
@@ -55,6 +56,10 @@ class GenericTreeNodeClass {
 
     findChildByData(data) {
         return this.findChildBy((data, treeNode) => data === treeNode.data ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL, data);
+    }
+
+    hasChild(data) {
+        return !isNil(this.#childrenLinkedList.find(data));
     }
 
     getChildAt(index) {

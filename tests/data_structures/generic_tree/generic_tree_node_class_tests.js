@@ -482,6 +482,67 @@ test('GenericTreeNodeClass tests...', async (t) => {
         });
     });
 
+    await t.test('"hasChild" method tests...', async (t) => {
+        await t.test('Should correctly indicate that child node exist in the tree - case 1', () => {
+            const data = 'test_val1';
+            const childData = [5, 10, -5, 'test_val1'];
+
+            const tree = new GenericTreeClass();
+            const parentNode = new GenericTreeNodeClass(tree, null, null, (data, treeNode) => data === treeNode.data ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL, data);
+
+            prepareDataForIterationTest(tree, parentNode, childData);
+            assert.strictEqual(parentNode.hasChild(-5), true);
+        });
+
+        await t.test('Should correctly indicate that child node exist in the tree - case 2', () => {
+            const data = 'test_val1';
+            const childData = [
+                { method: 'post', path: '/param1/param2', handler: () => {} },
+                { method: 'get', path: '/param1/param2', handler: () => {} },
+                { method: 'post', path: '/param2/param1', handler: () => {} },
+                { method: 'put', path: '/a1/a2', handler: () => {} },
+            ];
+
+            const pathPartTreeComparator = (pathNode, method, path) => {
+                if (pathNode.data.path instanceof RegExp) {
+                    return COMPARATOR_NONE_EQUAL;
+                }
+
+                return (pathNode.data.method === method && pathNode.data.path === path) ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL;
+            };
+
+            const tree = new GenericTreeClass();
+            const parentNode = new GenericTreeNodeClass(tree, null, null, ([method, pathPart], childNode) => pathPartTreeComparator(childNode, method, pathPart), data);
+
+            prepareDataForIterationTest(tree, parentNode, childData);
+            assert.strictEqual(parentNode.hasChild(['post', '/param2/param1']), true);
+        });
+
+        await t.test('Should correctly indicate that child node exist in the tree - case 3', () => {
+            const data = 'test_val1';
+            const childData = [
+                { method: 'post', path: '/param1/param2', handler: () => {} },
+                { method: 'get', path: '/param1/param2', handler: () => {} },
+                { method: 'post', path: '/param2/param1', handler: () => {} },
+                { method: 'put', path: '/a1/a2', handler: () => {} },
+            ];
+
+            const pathPartTreeComparator = (pathNode, method, path) => {
+                if (pathNode.data.path instanceof RegExp) {
+                    return COMPARATOR_NONE_EQUAL;
+                }
+
+                return (pathNode.data.method === method && pathNode.data.path === path) ? COMPARATOR_EQUAL : COMPARATOR_NONE_EQUAL;
+            };
+
+            const tree = new GenericTreeClass();
+            const parentNode = new GenericTreeNodeClass(tree, null, null,([method, pathPart], childNode) => pathPartTreeComparator(childNode, method, pathPart), data);
+
+            prepareDataForIterationTest(tree, parentNode, childData);
+            assert.strictEqual(parentNode.hasChild(['put', '/a1/a3']), false);
+        });
+    });
+
     await t.test('Child iterator tests...', async (t) => {
         await t.test('Should correctly iterate through children of the specific node - case 1', () => {
             const data = 'test_val1';
