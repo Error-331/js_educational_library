@@ -1,7 +1,11 @@
 'use strict';
 
-const { isArray, isNumber, isString } = require('./../misc/logic_utils');
+// external imports
 
+// internal imports
+import { isArray, isNumber, isString } from './../misc/logic_utils.js';
+
+// implementation
 const toSingleValue = (value) => {
     if (isArray(value)) {
         return value[0];
@@ -64,9 +68,12 @@ const toBoolean = (value) => {
     }
 };
 
-module.exports.toSingleValue = toSingleValue;
-module.exports.toInt = toInt;
-module.exports.toStringDefault = toStringDefault;
-module.exports.toString = toString;
-module.exports.toArray = toArray;
-module.exports.toBoolea = toBoolean;
+// exports
+export {
+    toSingleValue,
+    toInt,
+    toStringDefault,
+    toString,
+    toArray,
+    toBoolean,
+}

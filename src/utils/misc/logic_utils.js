@@ -1,5 +1,10 @@
 'use strict';
 
+// external imports
+
+// internal imports
+
+// implementation
 const isBoolean = (input) => {
     return typeof input === 'boolean';
 };
@@ -83,6 +88,7 @@ const defaultTo = (defaultValue, value) => {
     }
 };
 
+// exports
 export {
     isBoolean,
     isNumber,
