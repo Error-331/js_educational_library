@@ -5,17 +5,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 // internal imports
+import { checkSet } from './../../../src/utils/testing/data_structures/set/set_class_test_utils.js';
 import SetClass from './../../../src/data_structures/set/set_class.js';
 
 // implementation
-function checkSet(setObj, values) {
-    assert.strictEqual(setObj.size, values.length);
-
-    for (const value of values) {
-        assert.strictEqual(setObj.items[value], value);
-    }
-}
-
 test('Set class tests...', async (t) => {
     const setValues1 = [1, '2', 'c'];
     const setValues2 = [22, '33', 'zz'];
