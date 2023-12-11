@@ -7,8 +7,8 @@
 // implementation
 const prefixTreeWord1 = 'abound';
 const prefixTreeWord2 = 'abundant';
-const prefixTreeWord3 = 'achieve';
-const prefixTreeWord4 = 'ace';
+const prefixTreeWord3 = 'ace';
+const prefixTreeWord4 = 'achieve';
 const prefixTreeWord5 = 'amiable';
 const prefixTreeWord6 = 'amicable';
 
