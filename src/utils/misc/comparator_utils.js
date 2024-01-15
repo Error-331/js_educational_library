@@ -13,6 +13,8 @@ import {
     COMPARATOR_GREATER_OR_EQUAL,
 } from './../../constants/comparator_constants.js';
 
+import { isNil } from './logic_utils.js';
+
 // implementation
 function comparatorIsNoneEqual(comparatorValue) {
     return (comparatorValue & COMPARATOR_EQUAL) === COMPARATOR_NONE_EQUAL;
