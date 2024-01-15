@@ -1,6 +1,6 @@
 'use strict';
 
-class RegularDictionaryValuePairClass {
+class DictionaryValuePairClass {
     #key = null;
     #value = null;
 
@@ -22,4 +22,4 @@ class RegularDictionaryValuePairClass {
     }
 }
 
-export default RegularDictionaryValuePairClass;
+export default DictionaryValuePairClass;
