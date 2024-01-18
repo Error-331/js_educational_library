@@ -9,6 +9,7 @@ import {
     binarySearchTreeKeys1,
     binarySearchTreeKeys2,
     binarySearchTreeKeys3,
+    binarySearchTreeKeys4,
 
     binarySearchTreeKeys3RotationLeft1,
     binarySearchTreeKeys3RotationLeft2,
@@ -25,6 +26,7 @@ test('BinarySearchTreeClass tests...', async (t) => {
         const testSequence1 = [40, 30, 50, 25, 35, 45, 60];
         const testSequence2 = [8, 3, 10, 1, 6, null, 14, null, null, 4, 7, null, null, 13, null, null, null];
         const testSequence3 = [11, 7, 15, 5, 9, 13, 20, 3, null, 8, 10, 12, 14, 18, 25];
+        const testSequence4 = [15, 10, 20, 8, 12, null, 30, 7, 9, 11, 13, null, null, 25, null, null, null, null, null, null, null, null, null, null, 28, null, null, 27, null];
 
         await t.test('Should create a BinarySearchTree - case 1', () => {
             const treeInstance = convertArrayToTree(binarySearchTreeKeys1);
@@ -39,6 +41,11 @@ test('BinarySearchTreeClass tests...', async (t) => {
         await t.test('Should create a BinarySearchTree - case 3', () => {
             const treeInstance = convertArrayToTree(binarySearchTreeKeys3);
             checkTree(treeInstance, testSequence3);
+        });
+
+        await t.test('Should create a BinarySearchTree - case 4', () => {
+            const treeInstance = convertArrayToTree(binarySearchTreeKeys4);
+            checkTree(treeInstance, testSequence4);
         });
     });
 
