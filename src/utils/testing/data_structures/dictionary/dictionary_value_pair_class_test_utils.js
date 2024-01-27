@@ -12,5 +12,5 @@ function checkValuePair(valuePair, key, value, stringValue) {
 
 // exports
 export {
-    checkValuePair
+    checkValuePair,
 }
