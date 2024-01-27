@@ -10,6 +10,10 @@ import { setPropValueByPath } from './../../utils/primitives/object_utils.js';
 
 import BinarySearchTreeNodeClass from './binary_search_tree_node_class.js';
 
+import BinarySearchTreeInOrderIteratorClass from './traversal/binary_search_tree_in_order_Iterator_class.js';
+import BinarySearchTreePostOrderIteratorClass from './traversal/binary_search_tree_post_order_iterator_class.js';
+import BinarySearchTreePreOrderIteratorClass from './traversal/binary_search_tree_pre_order_iterator_class.js';
+
 // implementation
 class BinarySearchTreeClass {
     #root = null;
@@ -120,6 +124,18 @@ class BinarySearchTreeClass {
 
     remove(key) {
         this.#root = this.#removeNode(this.#root, key);
+    }
+
+    createInOrderIterator() {
+        return new BinarySearchTreeInOrderIteratorClass(this.#root);
+    }
+
+    createPostOrderIterator() {
+        return new BinarySearchTreePostOrderIteratorClass(this.#root);
+    }
+
+    createPreOrderIterator() {
+        return new BinarySearchTreePreOrderIteratorClass(this.#root);
     }
 
     get comparator() {

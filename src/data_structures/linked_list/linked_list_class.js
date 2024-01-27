@@ -25,6 +25,7 @@ class LinkedListClass {
         return null;
     }
 
+    // TODO
     find(element) {
         return this.findNode(element)?.element ?? null;
     }
