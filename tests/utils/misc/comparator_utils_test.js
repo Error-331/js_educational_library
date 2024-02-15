@@ -233,6 +233,18 @@ test('Comparator utilities tests...', async (t) => {
             assert.strictEqual(comparatorIsLte(result), false);
             assert.strictEqual(comparatorIsGte(result), true);
         });
+
+        await t.test('Should throw an error if one of the parameters is "Nil" - case 1...', () => {
+            defaultCompare(testValue2, testValue1);
+
+            assert.throws(() => defaultCompare(null, testValue2))
+        });
+
+        await t.test('Should throw an error if one of the parameters is "Nil" - case 2...', () => {
+            defaultCompare(testValue2, testValue1);
+
+            assert.throws(() => defaultCompare(testValue1, null))
+        });
     });
 
     await t.test('stringSimpleCaseInsensitiveComparator() function tests...', async (t) => {

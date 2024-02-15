@@ -47,6 +47,14 @@ function comparatorIsGte(comparatorValue) {
 }
 
 function defaultCompare(first, second) {
+    if (isNil(first)) {
+        throw new Error('Cannot perform comparison, "first" cannot be "Nil"');
+    }
+
+    if (isNil(second)) {
+        throw new Error('Cannot perform comparison, "second" cannot be "Nil"');
+    }
+
     if (first === second) {
         return COMPARATOR_EQUAL;
     }

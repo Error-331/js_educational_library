@@ -111,7 +111,7 @@ class BinarySearchTreeClass {
     }
 
     insert(key) {
-        if (this.#root === null) {
+        if (isNil(this.#root)) {
             this.#root = new BinarySearchTreeNodeClass(key);
         } else {
             this.#insertNode(this.#root, key);
