@@ -49,7 +49,7 @@ class GeneralTreeNodeRenderableProxyClass {
     }
 
     get parent() {
-        return this.#node.parent();
+        return this.#node.parent;
     }
 
     get data() {
@@ -121,9 +121,9 @@ let LevelZeroPtr;
 let xTopAdjustment;
 let yTopAdjustment;
 
-let LevelSeparation = 10;
+let LevelSeparation = 400;
 let MaxDepth = Infinity;
-let SiblingSeparation = 10;
+let SiblingSeparation = 400;
 let SubtreeSeparation;
 
 let previousLevelNode = [];
@@ -193,7 +193,7 @@ function INITPREVNOOELIST(rootNode) {
     }
 }
 
-function MEANNODESIZE(leftNode, rightNode) {
+function meanNodeSize(leftNode, rightNode) {
     let nodeSize = 0;
 
     if (!isNil(leftNode)) {
@@ -242,7 +242,7 @@ function APPORATION(node, level) {
             leftModsum = leftModsum + ancestorNeighbor.data.modifier
         }
 
-        let moveDistance = (neighbor.data.prelim + leftModsum + SubtreeSeparation + MEANNODESIZE(leftmost, neighbor)) - (leftmost.data.prelim + rightModsum);
+        let moveDistance = (neighbor.data.prelim + leftModsum + SubtreeSeparation + meanNodeSize(leftmost, neighbor)) - (leftmost.data.prelim + rightModsum);
 
         if (moveDistance > 0) {
             let TempPtr = node;
@@ -288,21 +288,14 @@ function setNeighbors(node, level) {
     previousLevelNode[level] = node;
 }
 
-function FIRSHIALK(node, level) {
-    // Set the pointer to the previous node at this level.
-    // LEFTNEIGHBOR(Node) ~ GETPREVNODEATLEVEL(Level);
+function firstWalk(node, level) {
+    setNeighbors(node, level);
 
-    setNeighbors(node, level)
-
-    // SETPREVNODEATLEVEL(Level, Node); (* This is now the previous. *)
-
-
-    // fiODIFIER(Node) ~ B; (*Set the default modifier value.
     node.data.modifier = 0;
 
     if (node.isLeaf || level === MaxDepth) {
         if (node.hasLeftSibling) {
-            node.data.prelim = node.previousSibling.data.prelim + SiblingSeparation + MEANNODESIZE(node.previousSibling, node);
+            node.data.prelim = node.previousSibling.data.prelim + SiblingSeparation + meanNodeSize(node.previousSibling, node);
         } else {
             node.data.prelim = 0;
         }
@@ -311,19 +304,19 @@ function FIRSHIALK(node, level) {
         const leftMost = firstChild;
         let rightMost = firstChild;
 
-        FIRSHIALK(leftMost, level + 1);
+        firstWalk(leftMost, level + 1);
 
         while(rightMost.hasRightSibling) {
             rightMost = rightMost.nextSibling;
-            FIRSHIALK(rightMost, level + 1);
+            firstWalk(rightMost, level + 1);
         }
 
         const Midpoint = (leftMost.data.prelim + rightMost.data.prelim) / 2;
 
         if (node.hasLeftSibling) {
-            node.data.prelim = node.previousSibling.data.prelim + SiblingSeparation + MEANNODESIZE(node.previousSibling, node);
+            node.data.prelim = node.previousSibling.data.prelim + SiblingSeparation + meanNodeSize(node.previousSibling, node);
             node.data.modifier = node.data.prelim - Midpoint;
-            APPORATION(Node, level);
+            APPORATION(node, level);
         } else {
             node.data.prelim = Midpoint;
         }
@@ -341,17 +334,18 @@ function SECONDWALK(node, level, modsum) {
         let xTemp = xTopAdjustment + node.data.prelim + modsum;
         let yTemp = yTopAdjustment + (level * LevelSeparation);
 
+
         if (CHECKEXTENTSRANG(xTemp, yTemp)) {
             node.data.x = xTemp;
-            console.log(level , LevelSeparation);
             node.data.y = yTemp;
 
             if (node.hasChildren) {
                 result = SECONDWALK(node.firstChild, level + 1, modsum + node.data.modifier);
+            }
 
-                if (result === true && node.hasRightSibling) {
-                    result = SECONDWALK(node.previousSibling, level + 1, modsum)
-                }
+            // TODO: possible error
+            if (node.hasRightSibling) {
+                result = SECONDWALK(node.nextSibling, level, modsum)
             }
         } else {
             result = false;
@@ -361,18 +355,20 @@ function SECONDWALK(node, level, modsum) {
         result = true;
         return result;
     }
+
+    return result;
 }
 
-function POSITIONTREE(node) {
-    if (!isNil(node)) {
-        INITPREVNOOELIST(node);
+function positionTree(rootNode) {
+    if (!isNil(rootNode)) {
+        INITPREVNOOELIST(rootNode);
 
-        FIRSHIALK(node, 0);
+        firstWalk(rootNode, 0);
 
-        xTopAdjustment = node.data.x - node.data.prelim;
-        yTopAdjustment = node.data.y;
+        xTopAdjustment = rootNode.data.x - rootNode.data.prelim;
+        yTopAdjustment = rootNode.data.y;
 
-        return SECONDWALK(node, 0, 0);
+        return SECONDWALK(rootNode, 0, 0);
     } else {
         return true;
     }
@@ -380,18 +376,44 @@ function POSITIONTREE(node) {
 
 
 const currentTree = new GenericTreeClass(null, { customNodeProxyClass: GeneralTreeNodeRenderableProxyClass });
-const childLevel0 = currentTree.createNewRoot({ gIndex: 0, width: 10, x: 0, y: 0 });
+
+const previewImageNode = currentTree.createNewRoot({ gIndex: 0, width: 10, x: 0, y: 0, text: 'preview_img', arrows: [1] });
+const helloNode = previewImageNode.addChild({ gIndex: 1, width: 10, x: 0, y: 0, text: 'hello', arrows: [2] });
+const menuWorkingHoursNode = helloNode.addChild({ gIndex: 2, width: 10, x: 0, y: 0, text: 'menu_working_hours', arrows: [3, 4, 5] });
+const agentHandoffNode = menuWorkingHoursNode.addChild({ gIndex: 3, width: 10, x: 0, y: 0, text: 'agent_handoff', arrows: [6] });
+const contactsNode = menuWorkingHoursNode.addChild({ gIndex: 4, width: 10, x: 0, y: 0, text: 'contacts', arrows: [2, 3, 5,]});
+const noAgentResolvedNode = menuWorkingHoursNode.addChild({ gIndex: 5, width: 10, x: 0, y: 0, text: 'no_agent_resolved', arrows: [7] });
+
+const handoffNode = agentHandoffNode.addChild({ gIndex: 6, width: 10, x: 0, y: 0, text: 'handoff' });
+const resolvedNode = noAgentResolvedNode.addChild({ gIndex: 7, width: 10, x: 0, y: 0, text: 'resolved' });
+
+positionTree(currentTree.root);
+
+
+
+console.log(previewImageNode.data);
+console.log(helloNode.data);
+console.log(menuWorkingHoursNode.data);
+console.log(agentHandoffNode.data);
+console.log(contactsNode.data);
+console.log(noAgentResolvedNode.data);
+console.log(handoffNode.data);
+console.log(resolvedNode.data);
+
+
+
+/*const childLevel0 = currentTree.createNewRoot({ gIndex: 0, width: 10, x: 0, y: 0 });
 
 const childLevel1 = childLevel0.addChild({ gIndex: 1,  width: 10, x: 0, y: 0 });
 const childLevel3 = childLevel0.addChild({ gIndex: 3,  width: 10, x: 0, y: 0 });
 const childLevel2 = childLevel1.addChild({ gIndex: 2,  width: 10, x: 0, y: 0 });
 
-POSITIONTREE(currentTree.root);
+positionTree(currentTree.root);
 
 console.log(childLevel0.data);
 console.log(childLevel1.data);
 console.log(childLevel2.data);
-console.log(childLevel3.data);
+console.log(childLevel3.data);*/
 
 // exports
 
