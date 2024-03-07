@@ -11,11 +11,18 @@ import GenericTreeNodeClass from './generic_tree_node_class.js';
 // implementation
 class GenericTreeClass {
     #root = null;
+
     #comparator = defaultCompare;
+
+    #customNodeProxyClass = null;
 
     createNewRoot(data = null) {
         this.destroy();
-        this.#root = new GenericTreeNodeClass(this, null, null, this.#comparator, data);
+
+        const rootChild = new GenericTreeNodeClass(this, null, null, this.#comparator, data);
+        const CustomNodeProxyClass = this.#customNodeProxyClass;
+
+        this.#root = isNil(CustomNodeProxyClass) ? rootChild : new CustomNodeProxyClass(rootChild);
 
         return this.#root;
     }
@@ -34,9 +41,17 @@ class GenericTreeClass {
         return this.#comparator;
     }
 
-    constructor(comparator = null) {
+    get customNodeProxyClass() {
+        return this.#customNodeProxyClass;
+    }
+
+    constructor(comparator = null, config = {}) {
         if (!isNil(comparator)) {
             this.#comparator = comparator;
+        }
+
+        if (!isNil(config.customNodeProxyClass)) {
+            this.#customNodeProxyClass = config.customNodeProxyClass;
         }
     }
 }

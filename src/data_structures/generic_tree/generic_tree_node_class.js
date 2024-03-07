@@ -6,7 +6,7 @@
 import { COMPARATOR_EQUAL, COMPARATOR_NONE_EQUAL } from './../../constants/comparator_constants.js';
 import { isNil } from './../../utils/misc/logic_utils.js';
 
-import LinkedListClass from './../linked_list/linked_list_class.js';
+import DoublyLinkedList from './../linked_list/doubly_linked_list_class.js';
 import GenericTreeNodeChildrenIteratorClass from './generic_tree_node_children_iterator_class.js';
 
 // implementation
@@ -23,8 +23,7 @@ class GenericTreeNodeClass {
         const linkedListNode = this.#childrenLinkedList.push(null);
         const treeNode = new GenericTreeNodeClass(this.#tree, this, linkedListNode, this.#childrenLinkedList.comparator, data);
 
-        linkedListNode.element = treeNode;
-
+        linkedListNode.element = isNil(this.#tree.customNodeProxyClass) ? treeNode : new this.#tree.customNodeProxyClass(treeNode);
         return treeNode;
     }
 
@@ -110,9 +109,21 @@ class GenericTreeNodeClass {
         return this.#linkedListNode?.next?.element;
     }
 
-   /* get previousSibling() {
-        this.#linkedListNode?.next
-    }*/
+    get previousSibling() {
+        this.#linkedListNode?.prev?.element;
+    }
+
+    get hasChildren() {
+        return !isNil(this.#childrenLinkedList) && !this.#childrenLinkedList.isEmpty;
+    }
+
+    get hasLeftSibling() {
+        return !isNil(this.#linkedListNode?.prev?.element);
+    }
+
+    get hasRightSibling() {
+        return !isNil(this.#linkedListNode?.next?.element);
+    }
 
     set data(data) {
         this.#data = data;
@@ -128,7 +139,7 @@ class GenericTreeNodeClass {
         this.#linkedListNode = linkedListNode;
 
         this.#data = data;
-        this.#childrenLinkedList = new LinkedListClass(comparator);
+        this.#childrenLinkedList = new DoublyLinkedList(comparator);
     }
 }
 
