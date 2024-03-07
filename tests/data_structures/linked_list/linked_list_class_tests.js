@@ -45,6 +45,7 @@ test('LinkedListClass tests...', async (t) => {
         await t.test('Should push an element to linked list', () => {
             const linkedListObj = new LinkedListClass();
             const newNode = linkedListObj.push(5);
+
             checkLinkedListElement(newNode.element, 5);
 
             checkLinkedListNotEmpty(linkedListObj, 1, 5, 5);

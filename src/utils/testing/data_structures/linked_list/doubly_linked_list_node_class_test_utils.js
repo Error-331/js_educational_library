@@ -6,12 +6,13 @@ import assert from 'node:assert/strict';
 // internal imports
 
 // implementation
-function checkLinkedListNodeDestroyed(linkedListNode) {
+function checkDoublyLinkedListNodeDestroyed(linkedListNode) {
     assert.strictEqual(linkedListNode.element, null);
     assert.strictEqual(linkedListNode.next, null);
+    assert.strictEqual(linkedListNode.prev, null);
 }
 
 // exports
 export {
-    checkLinkedListNodeDestroyed,
+    checkDoublyLinkedListNodeDestroyed,
 }

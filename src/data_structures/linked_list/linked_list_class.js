@@ -260,15 +260,20 @@ class LinkedListClass {
         } else {
             this.#head = newHead;
 
-            let result = this[Symbol.iterator].next();
             let nodeCount = 0;
+            let currentNode = this.#head;
 
-            while (!result.done) {
+            while(!isNil(currentNode)) {
                 nodeCount++;
+                currentNode = currentNode.next;
             }
 
             this.#count = nodeCount;
         }
+    }
+
+    set count(count) {
+        this.#count = count;
     }
 
     set comparator(comparator) {
