@@ -110,7 +110,7 @@ class GenericTreeNodeClass {
     }
 
     get previousSibling() {
-        this.#linkedListNode?.prev?.element;
+        return this.#linkedListNode?.prev?.element;
     }
 
     get hasChildren() {
