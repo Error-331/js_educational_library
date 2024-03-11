@@ -18,132 +18,132 @@ class GeneralTreeNodePositionCalculatorClass {
 
     #checkCoordinatesAreInRangeFunc;
 
-    #extractNodeModifier(node) {
+    #extractNodeData(node, property, errorMessage, errorMessagePart) {
         if (isNil(node)) {
-            throw new Error(`Tree node is not provided - cannot extract its modifier`);
+            throw new Error(`Tree node is not provided - ${errorMessagePart}`);
         }
 
-        if (isNil(node.data?.modifier)) {
-            throw new Error(`Tree node modifier is not specified`);
+        if (isNil(node.data)) {
+            throw new Error(`Tree node data is null or undefined - ${errorMessagePart}`);
         }
 
-        return node.data.modifier;
+        const propertyValue = node.data[property];
+
+        if (isNil(propertyValue)) {
+            throw new Error(errorMessage);
+        }
+
+        return propertyValue;
+    }
+
+    #updateNodeData(node, property, errorMessagePart, value) {
+        if (isNil(node)) {
+            throw new Error(`Tree node is not provided - ${errorMessagePart}`);
+        }
+
+        if (isNil(node.data)) {
+            throw new Error(`Tree node data is null or undefined - ${errorMessagePart}`);
+        }
+
+        node.data[property] = value;
+    }
+
+    #extractNodeModifier(node) {
+        return this.#extractNodeData(
+            node,
+                'modifier',
+                'Tree node modifier is not specified',
+                'cannot extract its modifier'
+        );
     }
 
     #extractNodePrelim(node) {
-        if (isNil(node)) {
-            throw new Error(`Tree node is not provided - cannot extract its pre-limit`);
-        }
-
-        if (isNil(node.data?.prelim)) {
-            throw new Error(`Tree node pre-limit is not specified`);
-        }
-
-        return node.data.prelim;
+        return this.#extractNodeData(
+            node,
+                'prelim',
+                'Tree node pre-limit is not specified',
+                'cannot extract its pre-limit'
+        );
     }
 
     #extractNodeY(node) {
-        if (isNil(node)) {
-            throw new Error(`Tree node is not provided - cannot extract its Y coordinate`);
-        }
-
-        if (isNil(node.data?.y)) {
-            throw new Error(`Tree node Y coordinate is not specified`);
-        }
-
-        return node.data.y;
+        return this.#extractNodeData(
+            node,
+                'y',
+                'Tree node Y coordinate is not specified',
+                'cannot extract its Y coordinate'
+        );
     }
 
     #extractNodeX(node) {
-        if (isNil(node)) {
-            throw new Error(`Tree node is not provided - cannot extract its X coordinate`);
-        }
-
-        if (isNil(node.data?.x)) {
-            throw new Error(`Tree node X coordinate is not specified`);
-        }
-
-        return node.data.x;
+        return this.#extractNodeData(
+            node,
+                'x',
+                'Tree node X coordinate is not specified',
+                'cannot extract its X coordinate'
+        );
     }
 
     #extractNodeHeight(node) {
-        if (isNil(node)) {
-            throw new Error(`Tree node is not provided - cannot extract its height`);
-        }
+        const height = this.#extractNodeData(
+            node,
+                'height',
+                'Tree node height is not specified',
+                'cannot extract its height'
+        );
 
-        if (isNil(node.data?.height)) {
-            throw new Error(`Tree node height is not specified`);
-        }
-
-        if (node.data.height <= 0) {
+        if (height <= 0) {
             throw new Error(`Height of the tree node cannot be less than or equal to zero`);
         }
 
-        return node.data.height;
+        return height
     }
 
     #extractNodeWidth(node) {
-        if (isNil(node)) {
-            throw new Error(`Tree node is not provided - cannot extract its width`);
-        }
+        const width = this.#extractNodeData(
+            node,
+                'width',
+                'Tree node width is not specified',
+                'cannot extract its width'
+        );
 
-        if (isNil(node.data?.width)) {
-            throw new Error(`Tree node width is not specified`);
-        }
-
-        if (node.data.width <= 0) {
+        if (width <= 0) {
             throw new Error(`Width of the tree node cannot be less than or equal to zero`);
         }
 
-        return node.data.width;
+        return width;
     }
 
     #updateNodeModifier(node, modifier) {
-        if (isNil(node)) {
-            throw new Error(`Tree node is not provided - cannot update its modifier`);
-        }
-
         if (!isNumber(modifier)) {
             throw new Error('Cannot set modifier of the node, provided modifier is not a number')
         }
 
-        node.data.modifier = modifier;
+        this.#updateNodeData(node, 'modifier', 'cannot update its modifier', modifier);
     }
 
     #updateNodePrelim(node, prelim) {
-        if (isNil(node)) {
-            throw new Error(`Tree node is not provided - cannot update its pre-limit`);
-        }
-
         if (!isNumber(prelim)) {
             throw new Error('Cannot set pre-limit of the node, provided pre-limit is not a number')
         }
 
-        node.data.prelim = prelim;
+        this.#updateNodeData(node, 'prelim', 'cannot update its pre-limit', prelim);
     }
 
     #updateNodeY(node, y) {
-        if (isNil(node)) {
-            throw new Error(`Tree node is not provided - cannot update its y coordinate`);
-        }
-
         if (!isNumber(y)) {
             throw new Error('Cannot set Y coordinate of the node, provided coordinate is not a number')
         }
 
-        node.data.y = y;
+        this.#updateNodeData(node, 'y', 'cannot update its y coordinate', y);
     }
 
     #updateNodeX(node, x) {
-        if (isNil(node)) {
-            throw new Error(`Tree node is not provided - cannot update its x coordinate`);
-        }
-
         if (!isNumber(x)) {
             throw new Error('Cannot set X coordinate of the node, provided coordinate is not a number')
         }
 
-        node.data.x = x;
+        this.#updateNodeData(node, 'x', 'cannot update its x coordinate', x);
     }
 
     #calculateMeanNodeSize(leftNode, rightNode) {
@@ -288,7 +288,7 @@ class GeneralTreeNodePositionCalculatorClass {
         let result = false;
 
         if (level <= this.#maxDepth) {
-            let xTemp = this.#xTopAdjustment + node.data.prelim + modSum;
+            let xTemp = this.#xTopAdjustment + this.#extractNodePrelim(node) + modSum;
             let yTemp = this.#yTopAdjustment + (level * this.#levelSeparation);
 
             if (this.#checkCoordinatesAreInRangeFunc(xTemp, yTemp)) {
@@ -296,7 +296,7 @@ class GeneralTreeNodePositionCalculatorClass {
                 this.#updateNodeY(node, yTemp);
 
                 if (node.hasChildren) {
-                    result = this.#secondWalk(node.firstChild, level + 1, modSum + node.data.modifier);
+                    result = this.#secondWalk(node.firstChild, level + 1, modSum + this.#extractNodeModifier(node));
                 }
 
                 if (node.hasRightSibling) {

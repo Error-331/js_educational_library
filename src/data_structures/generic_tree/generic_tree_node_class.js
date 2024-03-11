@@ -20,6 +20,10 @@ class GenericTreeNodeClass {
     #linkedListNode = null;
 
     addChild(data) {
+        if (isNil(this.#childrenLinkedList)) {
+            throw new Error('Cannot add new child - children linked list have not been initialized');
+        }
+
         const linkedListNode = this.#childrenLinkedList.push(null);
         const treeNode = new GenericTreeNodeClass(this.#tree, this, linkedListNode, this.#childrenLinkedList.comparator, data);
 
@@ -62,7 +66,11 @@ class GenericTreeNodeClass {
     }
 
     getChildAt(index) {
-        return this.#childrenLinkedList.getNodeAt(index)?.element;
+        if (isNil(this.#childrenLinkedList)) {
+            throw new Error('Cannot extract child at specified index - children linked list have not been initialized');
+        }
+
+        return this.#childrenLinkedList.getNodeAt(index)?.element ?? null;
     }
 
     get tree() {
@@ -82,20 +90,32 @@ class GenericTreeNodeClass {
     }
 
     get isLeaf() {
-        return this.#childrenLinkedList?.isEmpty ?? true;
+        if (isNil(this.#childrenLinkedList)) {
+            throw new Error('Cannot determine whether node is leaf or not - children linked list have not been initialized');
+        }
+
+        return this.#childrenLinkedList.isEmpty;
     }
 
     get leftmostChild() {
+        if (isNil(this.#childrenLinkedList)) {
+            throw new Error('Cannot find nodes leftmost child - children linked list have not been initialized');
+        }
+
         if (!this.isLeaf) {
-            return this.#childrenLinkedList?.head?.element;
+            return this.#childrenLinkedList.head?.element ?? null;
         } else {
             return null;
         }
     }
 
     get rightmostChild() {
+        if (isNil(this.#childrenLinkedList)) {
+            throw new Error('Cannot find nodes rightmost child - children linked list have not been initialized');
+        }
+
         if (!this.isLeaf) {
-            return this.#childrenLinkedList?.lastChild?.element;
+            return this.#childrenLinkedList.lastChild?.element ?? null;
         } else {
             return null;
         }
@@ -106,15 +126,27 @@ class GenericTreeNodeClass {
     }
 
     get nextSibling() {
-        return this.#linkedListNode?.next?.element;
+        if (isNil(this.#linkedListNode)) {
+            throw new Error('Cannot find nodes next sibling - linked list node have not been initialized');
+        }
+
+        return this.#linkedListNode.next?.element ?? null;
     }
 
     get previousSibling() {
-        return this.#linkedListNode?.prev?.element;
+        if (isNil(this.#linkedListNode)) {
+            throw new Error('Cannot find nodes previous sibling - linked list node have not been initialized');
+        }
+
+        return this.#linkedListNode.prev?.element ?? null;
     }
 
     get hasChildren() {
-        return !isNil(this.#childrenLinkedList) && !this.#childrenLinkedList.isEmpty;
+        if (isNil(this.#childrenLinkedList)) {
+            throw new Error('Cannot determine whether node has children or not - children linked list have not been initialized');
+        }
+
+        return !this.#childrenLinkedList.isEmpty;
     }
 
     get hasLeftSibling() {

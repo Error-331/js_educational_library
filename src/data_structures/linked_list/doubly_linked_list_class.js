@@ -39,6 +39,10 @@ class DoublyLinkedList extends LinkedListClass {
     }
 
     insertAfterNode(previousNode, element) {
+        if (isNil(previousNode)) {
+            throw new Error('Cannot insert new node after specified one - specified node cannot be null');
+        }
+
         const node = new DoublyLinkedListNode(element);
 
         if (previousNode === this.#tail) {
@@ -50,6 +54,10 @@ class DoublyLinkedList extends LinkedListClass {
         } else {
             const currentHead = previousNode.next;
 
+            if (isNil(currentHead)) {
+                throw new Error('Cannot add node after non-existent node');
+            }
+
             node.next = currentHead;
             previousNode.next = node;
 
@@ -57,7 +65,7 @@ class DoublyLinkedList extends LinkedListClass {
             node.prev = previousNode;
         }
 
-        this.count = this.count + 1;
+        this.count += 1;
         return node;
     }
 
@@ -76,6 +84,10 @@ class DoublyLinkedList extends LinkedListClass {
     }
 
     removeHeadNode() {
+        if (isNil(this.head)) {
+            return null;
+        }
+
         const currentHead = this.head;
         const currentElement = currentHead.element;
 
@@ -94,7 +106,11 @@ class DoublyLinkedList extends LinkedListClass {
     }
 
     removeTailNode() {
-        const currentTail = this.#tail;
+        if (isNil(this.tail)) {
+            throw new Error('Cannot remove tail node - tail node is null');
+        }
+
+        const currentTail = this.tail;
         const currentElement = currentTail.element;
 
         this.#tail = currentTail.prev;
@@ -131,7 +147,18 @@ class DoublyLinkedList extends LinkedListClass {
             } else if (index === this.count - 1) {
                 return this.removeTailNode();
             } else {
-                return this.removeNextNode(this.getElementAt(index).prev);
+                const previousNodeIdx = index - 1;
+                const currentNode = this.getNodeAt(previousNodeIdx);
+
+                if (isNil(currentNode)) {
+                    throw Error(`Cannot remove node at ${previousNodeIdx} - node does not exist`);
+                }
+
+                if (isNil(currentNode.prev)) {
+                    throw Error(`Cannot remove node at ${previousNodeIdx - 1} - node does not exist`);
+                }
+
+                return this.removeNextNode(currentNode.prev);
             }
         }
 

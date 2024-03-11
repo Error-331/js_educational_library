@@ -7,6 +7,7 @@ import { isNil } from './../../utils/misc/logic_utils.js';
 import { defaultCompare } from './../../utils/misc/comparator_utils.js';
 
 import GenericTreeNodeClass from './generic_tree_node_class.js';
+import DoublyLinkedListNode from './../linked_list/doubly_linked_list_node_class';
 
 // implementation
 class GenericTreeClass {
@@ -19,10 +20,12 @@ class GenericTreeClass {
     createNewRoot(data = null) {
         this.destroy();
 
-        const rootChild = new GenericTreeNodeClass(this, null, null, this.#comparator, data);
+        const linkedListNode = new DoublyLinkedListNode(null);
+        const rootChild = new GenericTreeNodeClass(this, null, linkedListNode, this.#comparator, data);
         const CustomNodeProxyClass = this.#customNodeProxyClass;
 
         this.#root = isNil(CustomNodeProxyClass) ? rootChild : new CustomNodeProxyClass(rootChild);
+        linkedListNode.element = this.#root;
 
         return this.#root;
     }

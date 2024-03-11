@@ -3,6 +3,7 @@
 // external imports
 
 // internal imports
+import { isObject, isNil } from './../../utils/misc/logic_utils.js';
 
 // implementation
 class LinkedListNodeClass {
@@ -23,8 +24,13 @@ class LinkedListNodeClass {
     }
 
     destroy() {
-        typeof this.#element === 'object' ? this.#element?.destroy() : null;
-        typeof this.#next === 'object' ?  this.#next?.destroy() : null;
+        if (isObject(this.#element)) {
+            this.#element?.destroy();
+        }
+
+        if (isNil(this.#next)) {
+            this.#next?.destroy();
+        }
 
         this.abandon();
     }
