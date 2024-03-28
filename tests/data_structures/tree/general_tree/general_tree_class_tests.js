@@ -4,21 +4,21 @@
 import test from 'node:test';
 
 // internal imports
-import GenericTreeClass from './../../../src/data_structures/generic_tree/generic_tree_class.js';
+import GeneralTree from './../../../../src/data_structures/tree/general_tree/general_tree_class.js';
 
-import { checkTree } from './../../../src/utils/testing/data_structures/generic_tree/generic_tree_test_utils.js';
-import { checkNode } from './../../../src/utils/testing/data_structures/generic_tree/generic_tree_node_test_utils.js';
+import { checkTree } from './../../../../src/utils/testing/data_structures/tree/general_tree/general_tree_class_test_utils.js';
+import { checkNode } from './../../../../src/utils/testing/data_structures/tree/general_tree/general_tree_node_class_test_utils.js';
 
 // implementation
-test('GenericTreeClass tests...', async (t) => {
+test('GeneralTree tests...', async (t) => {
     await t.test('Instance creation tests...', async (t) => {
-        await t.test('Should create a GenericTreeClass - case 1', () => {
-            const tree = new GenericTreeClass();
+        await t.test('Should create a GeneralTree - case 1', () => {
+            const tree = new GeneralTree();
             checkTree(tree, null)
         });
 
-        await t.test('Should create a GenericTreeClass - case 2', () => {
-            const tree = new GenericTreeClass();
+        await t.test('Should create a GeneralTree - case 2', () => {
+            const tree = new GeneralTree();
 
             const data = 'test_val1';
             const node = tree.createNewRoot(data);
@@ -30,14 +30,14 @@ test('GenericTreeClass tests...', async (t) => {
 
     await t.test('Root node creation tests...', async (t) => {
         await t.test('Should create a new root node - case 1', () => {
-            const tree = new GenericTreeClass();
+            const tree = new GeneralTree();
             const data = 'test_val1';
 
             checkNode(tree.createNewRoot(data), tree, null, data);
         });
 
         await t.test('Should create a new root node - case 2', () => {
-            let tree = new GenericTreeClass();
+            let tree = new GeneralTree();
 
             const data1 = 'test_val1';
             const data2 = 5;
@@ -52,7 +52,7 @@ test('GenericTreeClass tests...', async (t) => {
 
     await t.test('Root node extraction tests...', async (t) => {
         await t.test('Should extract root node - case 1', () => {
-            let tree = new GenericTreeClass();
+            let tree = new GeneralTree();
             const data = 'test_val1';
 
             let node = tree.createNewRoot(data);
@@ -63,7 +63,7 @@ test('GenericTreeClass tests...', async (t) => {
         });
 
         await t.test('Should extract root node - case 2', () => {
-            let tree = new GenericTreeClass();
+            let tree = new GeneralTree();
 
             const data1 = 'test_val1';
             const data2 = 5;

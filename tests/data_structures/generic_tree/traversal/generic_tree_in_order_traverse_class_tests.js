@@ -11,7 +11,7 @@ import {
     genericTreeData1,
 } from './../../tree/test_data.js';
 
-import { fillGenericTreeByObject } from './../../../../src/utils/testing/data_structures/tree/generic_tree/generic_tree_class_test_utils.js';
+import { fillGenericTreeByObject } from './../../../../src/utils/testing/data_structures/tree/generic_tree/general_tree_class_test_utils.js';
 
 // implementation
 test('GenericTreeInOrderTraverseClass tests...', async (t) => {

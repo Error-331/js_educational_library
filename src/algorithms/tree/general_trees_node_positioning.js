@@ -3,121 +3,18 @@
 // external imports
 
 // internal imports
-import {isNil, isUndefined} from './../../utils/misc/logic_utils.js';
+import { isNil } from './../../utils/misc/logic_utils.js';
+import GeneralTreeClass from './../../data_structures/generic_tree/general_tree_class.js';
 
 // implementation
+class GeneralTreeNodePositionCalculatorClass {
+    #xTopAdjustment = 0;
+    #yTopAdjustment = 0;
 
-import GenericTreeNodeClass from "../../data_structures/generic_tree/generic_tree_node_class.js";
-import GenericTreeClass from "../../data_structures/generic_tree/generic_tree_class.js";
-
-class GeneralTreeNodeRenderableProxyClass {
-    #node = null;
-
-    #previousSibling = undefined;
-
-    addChild(data) {
-        return this.#node.addChild(data);
-    }
-
-    destroy() {
-        this.#node.destroy();
-        this.#node = null;
-    }
-
-    findChild(data) {
-        return this.#node.findChild(data);
-    }
-
-    findChildBy(comparator, data) {
-        return this.#node.findChildBy(comparator, data);
-    }
-
-    findChildByData(data) {
-        return this.#node.findChildByData(data);
-    }
-
-    hasChild(data) {
-        return this.#node.hasChild(data);
-    }
-
-    getChildAt(index) {
-        return this.#node.getChildAt(index);
-    }
-
-    get tree() {
-        return this.#node.tree;
-    }
-
-    get parent() {
-        return this.#node.parent;
-    }
-
-    get data() {
-        return this.#node.data;
-    }
-
-    get children() {
-        return this.#node.children;
-    }
-
-    get isLeaf() {
-        return this.#node.isLeaf;
-    }
-
-    get leftmostChild() {
-        return this.#node.leftmostChild;
-    }
-
-    get rightmostChild() {
-        return this.#node.rightmostChild;
-    }
-
-    get firstChild() {
-        return this.#node.firstChild;
-    }
-
-    get nextSibling() {
-        return this.#node.nextSibling;
-    }
-
-    get previousSibling() {
-        if (!isUndefined(this.#previousSibling)) {
-            return this.#previousSibling;
-        } else {
-            return this.#node.previousSibling;
-        }
-    }
-
-    get hasChildren() {
-        return this.#node.hasChildren;
-    }
-
-    get hasLeftSibling() {
-        if (!isUndefined(this.#previousSibling)) {
-            return this.#node.hasLeftSibling;
-        } else {
-            return !isNil(this.#node.previousSibling);
-        }
-    }
-
-    get hasRightSibling() {
-        return this.#node.hasRightSibling;
-    }
-
-    set data(data){
-        return this.#node.data;
-    }
-
-    set previousSibling(node) {
-        this.#previousSibling = node;
-    }
-
-    constructor(node) {
-        this.#node = node;
-    }
+    constructor() {}
 }
 
-let LevelZeroPtr;
+
 let xTopAdjustment;
 let yTopAdjustment;
 
@@ -126,72 +23,6 @@ let MaxDepth = Infinity;
 let SiblingSeparation = 400;
 let SubtreeSeparation;
 
-let previousLevelNode = [];
-
-// The current node's leftmost offspring
-function FIRSTCHILD(node) {
-    return node.leftmostChild;
-}
-
-// The current node's closest sibling node on the left.
-function LEFTSIBLING(node) {
-
-}
-
-// The current node's closest sibling node on the right
-function RIGHTSIBLING(Node) {
-
-}
-
-// The current node's x-coordinate
-function XCOORD(Node) {
-
-}
-
-// The current node's y-coordinate
-function YCOORD(Node) {
-
-}
-
-// The current node's nearest neighbor to the left, at the same level
-function LEFTNEIGHBOR(node) {
-    return node.previousSibling;
-}
-
-function GETPREVNOOEATLEVEL(level) {
-    let TempPtr = LevelZeroPtr;
-    let i = 0;
-
-    while(TempPtr !== 0) {
-        if(i === level) {
-            return PREVNODE(TempPtr)
-        }
-
-        TempPtr = NEXTLEVEL(TempPtr);
-        i = i + 1;
-    }
-
-    return null;
-}
-
-function PREVNODE(node) {
-
-}
-
-function NEXTLEVEL(node) {
-    return node.leftmostChild;
-}
-
-function INITPREVNOOELIST(rootNode) {
-    let TempPtr = rootNode;
-
-    while(TempPtr !== null) {
-        //PREVNODE(TempPtr) = null;
-        previousLevelNode.push(null)
-
-        TempPtr = NEXTLEVEL(TempPtr)
-    }
-}
 
 function meanNodeSize(leftNode, rightNode) {
     let nodeSize = 0;
@@ -268,7 +99,6 @@ function APPORATION(node, level) {
             }
         }
 
-
         compareDepth = compareDepth + 1;
         if (leftmost.isLeaf) {
             leftmost = GETLEFTMOST(node, 0, compareDepth)
@@ -277,20 +107,7 @@ function APPORATION(node, level) {
         }
     }
 }
-
-function setNeighbors(node, level) {
-    node.previousSibling = previousLevelNode[level];
-
-    if(!isNil(node.previousSibling)){
-        node.previousSibling.rightNeighbor = node;
-    }
-
-    previousLevelNode[level] = node;
-}
-
 function firstWalk(node, level) {
-    setNeighbors(node, level);
-
     node.data.modifier = 0;
 
     if (node.isLeaf || level === MaxDepth) {
@@ -361,8 +178,6 @@ function SECONDWALK(node, level, modsum) {
 
 function positionTree(rootNode) {
     if (!isNil(rootNode)) {
-        INITPREVNOOELIST(rootNode);
-
         firstWalk(rootNode, 0);
 
         xTopAdjustment = rootNode.data.x - rootNode.data.prelim;
@@ -374,8 +189,8 @@ function positionTree(rootNode) {
     }
 }
 
-
-const currentTree = new GenericTreeClass(null, { customNodeProxyClass: GeneralTreeNodeRenderableProxyClass });
+// const currentTree = new GenericTreeClass(null, { customNodeProxyClass: GeneralTreeNodeRenderableProxyClass });
+const currentTree = new GenericTreeClass(null);
 
 const previewImageNode = currentTree.createNewRoot({ gIndex: 0, width: 10, x: 0, y: 0, text: 'preview_img', arrows: [1] });
 const helloNode = previewImageNode.addChild({ gIndex: 1, width: 10, x: 0, y: 0, text: 'hello', arrows: [2] });
@@ -388,7 +203,6 @@ const handoffNode = agentHandoffNode.addChild({ gIndex: 6, width: 10, x: 0, y: 0
 const resolvedNode = noAgentResolvedNode.addChild({ gIndex: 7, width: 10, x: 0, y: 0, text: 'resolved' });
 
 positionTree(currentTree.root);
-
 
 
 console.log(previewImageNode.data);

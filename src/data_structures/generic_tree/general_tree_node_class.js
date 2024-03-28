@@ -10,7 +10,7 @@ import DoublyLinkedList from './../linked_list/doubly_linked_list_class.js';
 import GenericTreeNodeChildrenIteratorClass from './generic_tree_node_children_iterator_class.js';
 
 // implementation
-class GenericTreeNodeClass {
+class GeneralTreeNodeClass {
     #tree = null;
     #parent = null;
 
@@ -25,9 +25,9 @@ class GenericTreeNodeClass {
         }
 
         const linkedListNode = this.#childrenLinkedList.push(null);
-        const treeNode = new GenericTreeNodeClass(this.#tree, this, linkedListNode, this.#childrenLinkedList.comparator, data);
+        const treeNode = new GeneralTreeNodeClass(this.#tree, this, linkedListNode, this.#childrenLinkedList.comparator, data);
 
-        linkedListNode.element = isNil(this.#tree.customNodeProxyClass) ? treeNode : new this.#tree.customNodeProxyClass(treeNode);
+        linkedListNode.element = treeNode;
         return treeNode;
     }
 
@@ -149,12 +149,20 @@ class GenericTreeNodeClass {
         return !this.#childrenLinkedList.isEmpty;
     }
 
+    get hasPreviousSibling() {
+        return !isNil(this.previousSibling);
+    }
+
+    get hasNextSibling() {
+        return !isNil(this.nextSibling);
+    }
+
     get hasLeftSibling() {
-        return !isNil(this.#linkedListNode?.prev?.element);
+        return this.hasPreviousSibling;
     }
 
     get hasRightSibling() {
-        return !isNil(this.#linkedListNode?.next?.element);
+        return this.hasNextSibling;
     }
 
     set data(data) {
@@ -162,8 +170,8 @@ class GenericTreeNodeClass {
     }
 
     constructor(tree, parent = null, linkedListNode, comparator = null, data = null) {
-        if (tree === null || tree === undefined) {
-            throw new Error('RegularGeneralTreeNodeClass: cannot create a node without specifying the tree object');
+        if (isNil(tree)) {
+            throw new Error('GeneralTreeNodeClass: cannot create a node without specifying the tree object');
         }
 
         this.#tree = tree;
@@ -176,4 +184,4 @@ class GenericTreeNodeClass {
 }
 
 // exports
-export default GenericTreeNodeClass;
+export default GeneralTreeNodeClass;

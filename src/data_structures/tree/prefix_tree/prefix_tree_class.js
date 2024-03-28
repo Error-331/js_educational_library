@@ -6,11 +6,11 @@
 import { isNil } from './../../../utils/misc/logic_utils.js';
 import { prefixTreeCharComparator } from './prefix_tree_comparator.js';
 
-import GenericTreeClass from './../../generic_tree/generic_tree_class.js';
+import GeneralTreeClass from './../../generic_tree/general_tree_class.js';
 import PrefixTreeNodeDataClass from './prefix_tree_node_data_class.js';
 
 // implementation
-class PrefixTreeClass extends GenericTreeClass {
+class PrefixTreeClass extends GeneralTreeClass {
     insert(key) {
         let currentNode = this.root;
 

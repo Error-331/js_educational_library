@@ -3,7 +3,7 @@
 // external imports
 
 // internal imports
-import GenericTreeClass from './../../../../../data_structures/generic_tree/generic_tree_class.js';
+import GeneralTreeClass from './../../../../../data_structures/generic_tree/general_tree_class.js';
 
 // implementation
 function fillGenericTreeNodeChildrenByArray(node, childrenData) {
@@ -14,7 +14,7 @@ function fillGenericTreeNodeChildrenByArray(node, childrenData) {
 }
 
 function fillGenericTreeByObject(data) {
-    const genericTreeObj = new GenericTreeClass();
+    const genericTreeObj = new GeneralTreeClass();
     const rootNode = genericTreeObj.createNewRoot(data.value);
 
     fillGenericTreeNodeChildrenByArray(rootNode, data.children);

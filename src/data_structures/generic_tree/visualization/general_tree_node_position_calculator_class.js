@@ -10,156 +10,30 @@ class GeneralTreeNodePositionCalculatorClass {
     #xTopAdjustment = 0;
     #yTopAdjustment = 0;
 
-    #levelSeparation;
-    #siblingSeparation;
-    #subtreeSeparation;
+    #levelSeparation = 0;
+    #siblingSeparation = 0;
+    #subtreeSeparation = 0;
 
-    #maxDepth;
+    #maxDepth = Infinity;
 
-    #checkCoordinatesAreInRangeFunc;
+    #checkCoordinatesAreInRangeFunc = () => true;
 
-    #extractNodeData(node, property, errorMessage, errorMessagePart) {
-        if (isNil(node)) {
-            throw new Error(`Tree node is not provided - ${errorMessagePart}`);
-        }
-
-        if (isNil(node.data)) {
-            throw new Error(`Tree node data is null or undefined - ${errorMessagePart}`);
-        }
-
-        const propertyValue = node.data[property];
-
-        if (isNil(propertyValue)) {
-            throw new Error(errorMessage);
-        }
-
-        return propertyValue;
-    }
-
-    #updateNodeData(node, property, errorMessagePart, value) {
-        if (isNil(node)) {
-            throw new Error(`Tree node is not provided - ${errorMessagePart}`);
-        }
-
-        if (isNil(node.data)) {
-            throw new Error(`Tree node data is null or undefined - ${errorMessagePart}`);
-        }
-
-        node.data[property] = value;
-    }
-
-    #extractNodeModifier(node) {
-        return this.#extractNodeData(
-            node,
-                'modifier',
-                'Tree node modifier is not specified',
-                'cannot extract its modifier'
-        );
-    }
-
-    #extractNodePrelim(node) {
-        return this.#extractNodeData(
-            node,
-                'prelim',
-                'Tree node pre-limit is not specified',
-                'cannot extract its pre-limit'
-        );
-    }
-
-    #extractNodeY(node) {
-        return this.#extractNodeData(
-            node,
-                'y',
-                'Tree node Y coordinate is not specified',
-                'cannot extract its Y coordinate'
-        );
-    }
-
-    #extractNodeX(node) {
-        return this.#extractNodeData(
-            node,
-                'x',
-                'Tree node X coordinate is not specified',
-                'cannot extract its X coordinate'
-        );
-    }
-
-    #extractNodeHeight(node) {
-        const height = this.#extractNodeData(
-            node,
-                'height',
-                'Tree node height is not specified',
-                'cannot extract its height'
-        );
-
-        if (height <= 0) {
-            throw new Error(`Height of the tree node cannot be less than or equal to zero`);
-        }
-
-        return height
-    }
-
-    #extractNodeWidth(node) {
-        const width = this.#extractNodeData(
-            node,
-                'width',
-                'Tree node width is not specified',
-                'cannot extract its width'
-        );
-
-        if (width <= 0) {
-            throw new Error(`Width of the tree node cannot be less than or equal to zero`);
-        }
-
-        return width;
-    }
-
-    #updateNodeModifier(node, modifier) {
-        if (!isNumber(modifier)) {
-            throw new Error('Cannot set modifier of the node, provided modifier is not a number')
-        }
-
-        this.#updateNodeData(node, 'modifier', 'cannot update its modifier', modifier);
-    }
-
-    #updateNodePrelim(node, prelim) {
-        if (!isNumber(prelim)) {
-            throw new Error('Cannot set pre-limit of the node, provided pre-limit is not a number')
-        }
-
-        this.#updateNodeData(node, 'prelim', 'cannot update its pre-limit', prelim);
-    }
-
-    #updateNodeY(node, y) {
-        if (!isNumber(y)) {
-            throw new Error('Cannot set Y coordinate of the node, provided coordinate is not a number')
-        }
-
-        this.#updateNodeData(node, 'y', 'cannot update its y coordinate', y);
-    }
-
-    #updateNodeX(node, x) {
-        if (!isNumber(x)) {
-            throw new Error('Cannot set X coordinate of the node, provided coordinate is not a number')
-        }
-
-        this.#updateNodeData(node, 'x', 'cannot update its x coordinate', x);
-    }
+    #previousLevelNode = [];
 
     #calculateMeanNodeSize(leftNode, rightNode) {
         let nodeSize = 0;
 
         if (!isNil(leftNode)) {
-            nodeSize = nodeSize + this.#extractNodeWidth(rightNode);
+            nodeSize = nodeSize + rightNode.widthSafe;
         } else if (!isNil(rightNode)) {
-            nodeSize = nodeSize + this.#extractNodeWidth(leftNode);
+            nodeSize = nodeSize + leftNode.widthSafe;
         }
 
         return nodeSize;
     }
 
     #findRelativeLeftmostNode(node, level, depth) {
-        if (!isNil(node)) {
+        if (isNil(node)) {
             throw new Error('Node not provided - unable to find the leftmost one relative to it');
         }
 
@@ -173,27 +47,29 @@ class GeneralTreeNodePositionCalculatorClass {
 
         if (level >= depth) {
             return node;
-        } else if (node.isLeaf === true) {
-            return null;
         } else {
-            let rightmost = node.firstChild;
-            let leftmost = this.#findRelativeLeftmostNode(rightmost, level + 1, depth);
+            if (node.isLeaf) {
+                return null;
+            } else {
+                let rightmost = node.firstChild;
+                let leftmost = this.#findRelativeLeftmostNode(rightmost, level + 1, depth);
 
-            while (isNil(leftmost) && rightmost.hasRightSibling) {
-                rightmost = rightmost.previousSibling;
-                leftmost = this.#findRelativeLeftmostNode(rightmost, level + 1, depth);
+                while (isNil(leftmost) && rightmost.hasNextSibling) {
+                    rightmost = rightmost.nextSibling;
+                    leftmost = this.#findRelativeLeftmostNode(rightmost, level + 1, depth);
+                }
+
+                return leftmost;
             }
-
-            return leftmost;
         }
     }
 
     #apportion(node, level) {
         let leftmost = node.firstChild;
-        let neighbor = leftmost.previousSibling;
+        let neighbor = leftmost.leftNeighbor;
 
         let compareDepth = 1;
-        let depthToStop = this.#maxDepth - level;
+        const depthToStop = this.maxDepth - level;
 
         while(!isNil(leftmost) && !isNil(neighbor) && compareDepth <= depthToStop) {
             let leftModsum = 0;
@@ -203,14 +79,21 @@ class GeneralTreeNodePositionCalculatorClass {
             let ancestorNeighbor = neighbor;
 
             for (let i = 0; i < compareDepth; i++) {
-                ancestorLeftmost = ancestorLeftmost.parent
+                ancestorLeftmost = ancestorLeftmost.parent;
                 ancestorNeighbor = ancestorNeighbor.parent;
 
-                rightModsum = rightModsum + this.#extractNodeModifier(ancestorLeftmost);
-                leftModsum = leftModsum + this.#extractNodeModifier(ancestorNeighbor);
+                rightModsum = rightModsum + ancestorLeftmost.modifierSafe;
+                leftModsum = leftModsum + ancestorNeighbor.modifierSafe;
             }
 
-            let moveDistance = (this.#extractNodePrelim(neighbor) + leftModsum + this.#subtreeSeparation + this.#calculateMeanNodeSize(leftmost, neighbor)) - (this.#extractNodePrelim(leftmost) + rightModsum);
+            let moveDistance = (
+                neighbor.prelimSafe +
+                leftModsum + this.subtreeSeparation +
+                this.#calculateMeanNodeSize(leftmost, neighbor)
+            ) - (
+                leftmost.prelimSafe +
+                rightModsum
+            );
 
             if (moveDistance > 0) {
                 let tmpNode = node;
@@ -222,40 +105,45 @@ class GeneralTreeNodePositionCalculatorClass {
                 }
 
                 if (!isNil(tmpNode)) {
-                    let portion = moveDistance / leftSiblings;
                     tmpNode = node;
+                    const portion = moveDistance / leftSiblings;
 
-                    while(tmpNode === ancestorNeighbor) {
-                        this.#updateNodePrelim(tmpNode, this.#extractNodePrelim(tmpNode) + moveDistance);
-                        this.#updateNodeModifier(tmpNode, this.#extractNodeModifier(tmpNode) + moveDistance)
+                    while(tmpNode !== ancestorNeighbor) {
+                        tmpNode.prelim = tmpNode.prelimSafe + moveDistance;
+                        tmpNode.modifier = tmpNode.modifierSafe + moveDistance;
 
                         moveDistance = moveDistance - portion;
                         tmpNode = tmpNode.previousSibling;
                     }
-                } else {
-                    return;
                 }
             }
 
             compareDepth = compareDepth + 1;
             if (leftmost.isLeaf) {
-                leftmost = this.#findRelativeLeftmostNode(node, 0, compareDepth)
+                leftmost = this.#findRelativeLeftmostNode(node, 0, compareDepth);
             } else {
                 leftmost = leftmost.firstChild;
+            }
+
+            if (!isNil(leftmost)) {
+                neighbor = leftmost.leftNeighbor;
             }
         }
     }
 
-
     #firstWalk(node, level) {
-        this.#updateNodeModifier(node, 0);
+        node.modifier = 0;
+        this.setNodeNeighbors(node, level);
 
-        if (node.isLeaf || level === this.#maxDepth) {
-            if (node.hasLeftSibling) {
-                const newPrelim = this.#extractNodePrelim(node.previousSibling) + this.#siblingSeparation + this.#calculateMeanNodeSize(node.previousSibling, node);
-                this.#updateNodePrelim(node, newPrelim);
+        if (node.isLeaf || level === this.maxDepth) {
+            if (node.hasPreviousSibling) {
+                const newPrelim = node.previousSibling.prelimSafe +
+                    this.siblingSeparation +
+                    this.#calculateMeanNodeSize(node.previousSibling, node);
+
+                node.prelim = newPrelim;
             } else {
-                this.#updateNodePrelim(node, 0);
+                node.prelim = 0;
             }
         } else {
             const firstChild = node.firstChild;
@@ -264,22 +152,25 @@ class GeneralTreeNodePositionCalculatorClass {
 
             this.#firstWalk(leftMost, level + 1);
 
-            while(rightMost.hasRightSibling) {
+            while(rightMost.hasNextSibling) {
                 rightMost = rightMost.nextSibling;
                 this.#firstWalk(rightMost, level + 1);
             }
 
-            const midpoint = (this.#extractNodePrelim(leftMost) + this.#extractNodePrelim(rightMost)) / 2;
+            const midpoint = (leftMost.prelimSafe + rightMost.prelimSafe) / 2;
 
-            if (node.hasLeftSibling) {
-                const newPrelim = this.#extractNodePrelim(node.previousSibling) + this.#siblingSeparation + this.#calculateMeanNodeSize(node.previousSibling, node);
+            if (node.hasPreviousSibling) {
+                const newPrelim =
+                    node.previousSibling.prelimSafe +
+                    this.siblingSeparation +
+                this.#calculateMeanNodeSize(node.previousSibling, node);
 
-                this.#updateNodePrelim(node, newPrelim);
-                this.#updateNodeModifier(node, this.#extractNodePrelim(node) - midpoint);
+                node.prelim = newPrelim;
+                node.modifier = node.prelimSafe - midpoint;
 
                 this.#apportion(node, level);
             } else {
-                this.#updateNodePrelim(node, midpoint);
+                node.prelim = midpoint;
             }
         }
     }
@@ -287,19 +178,19 @@ class GeneralTreeNodePositionCalculatorClass {
     #secondWalk(node, level, modSum) {
         let result = false;
 
-        if (level <= this.#maxDepth) {
-            let xTemp = this.#xTopAdjustment + this.#extractNodePrelim(node) + modSum;
-            let yTemp = this.#yTopAdjustment + (level * this.#levelSeparation);
+        if (level <= this.maxDepth) {
+            const xTemp = this.#xTopAdjustment + node.prelimSafe + modSum;
+            const yTemp = this.#yTopAdjustment + (level * this.levelSeparation);
 
             if (this.#checkCoordinatesAreInRangeFunc(xTemp, yTemp)) {
-                this.#updateNodeX(node, xTemp);
-                this.#updateNodeY(node, yTemp);
+                node.x = xTemp;
+                node.y = yTemp;
 
                 if (node.hasChildren) {
-                    result = this.#secondWalk(node.firstChild, level + 1, modSum + this.#extractNodeModifier(node));
+                    result = this.#secondWalk(node.firstChild, level + 1, modSum + node.modifierSafe);
                 }
 
-                if (node.hasRightSibling) {
+                if (node.hasNextSibling) {
                     result = this.#secondWalk(node.nextSibling, level, modSum)
                 }
             } else {
@@ -315,6 +206,8 @@ class GeneralTreeNodePositionCalculatorClass {
     reset() {
         this.#xTopAdjustment = 0;
         this.#yTopAdjustment = 0;
+
+        this.#previousLevelNode = [];
     }
 
     positionTree(rootNode) {
@@ -325,10 +218,39 @@ class GeneralTreeNodePositionCalculatorClass {
         this.reset();
         this.#firstWalk(rootNode, 0);
 
-        this.#xTopAdjustment = this.#extractNodeX(rootNode) - this.#extractNodePrelim(rootNode);
-        this.#yTopAdjustment = this.#extractNodeY(rootNode);
+        this.#xTopAdjustment = rootNode.xSafe - rootNode.prelimSafe;
+        this.#yTopAdjustment = rootNode.ySafe;
 
         return this.#secondWalk(rootNode, 0, 0);
+    }
+
+    get levelSeparation() {
+        return this.#levelSeparation;
+    }
+
+    get siblingSeparation() {
+        return this.#siblingSeparation;
+    }
+
+    get subtreeSeparation() {
+        return this.#subtreeSeparation;
+    }
+
+    get maxDepth() {
+        return this.#maxDepth;
+    }
+
+    setNodeNeighbors(node, level) {
+        node.leftNeighbor = this.#previousLevelNode[level];
+        if(!isNil(node.leftNeighbor)) {
+            node.leftNeighbor.rightNeighbor = node;
+        }
+
+        this.#previousLevelNode[level] = node;
+    }
+
+    get checkCoordinatesAreInRangeFunc() {
+        return this.#checkCoordinatesAreInRangeFunc
     }
 
     set levelSeparation(value) {
@@ -352,7 +274,7 @@ class GeneralTreeNodePositionCalculatorClass {
             throw new Error('Cannot not set subtree separation value - provided value is not a number');
         }
 
-        this.#subtreeSeparation = value
+        this.#subtreeSeparation = value;
     }
 
     set maxDepth(value) {
@@ -371,7 +293,7 @@ class GeneralTreeNodePositionCalculatorClass {
         this.#checkCoordinatesAreInRangeFunc = userFunc;
     }
 
-    constructor(configuration = {}) {
+    constructor(configuration) {
         this.levelSeparation = configuration.levelSeparation ?? 0;
         this.siblingSeparation = configuration.siblingSeparation ?? 0
 
