@@ -3,7 +3,7 @@
 // external imports
 
 // internal imports
-import GeneralTreeClass from './../../../../../data_structures/generic_tree/general_tree_class.js';
+import GeneralTreeClass from '../../../../../data_structures/tree/general_tree/general_tree_class.js';
 
 // implementation
 function fillGenericTreeNodeChildrenByArray(node, childrenData) {

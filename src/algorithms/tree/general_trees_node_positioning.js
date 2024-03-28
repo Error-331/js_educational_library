@@ -4,7 +4,7 @@
 
 // internal imports
 import { isNil } from './../../utils/misc/logic_utils.js';
-import GeneralTreeClass from './../../data_structures/generic_tree/general_tree_class.js';
+import GeneralTreeClass from '../../data_structures/tree/general_tree/general_tree_class.js';
 
 // implementation
 class GeneralTreeNodePositionCalculatorClass {

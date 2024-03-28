@@ -15,7 +15,7 @@ import {
 } from './../test_data.js';
 
 import PrefixTreeClass from './../../../../src/data_structures/tree/prefix_tree/prefix_tree_class.js';
-import GenericTreeInOrderTraverseClass from './../../../../src/data_structures/generic_tree/traversal/generic_tree_in_order_traverse_class.js';
+import GenericTreeInOrderTraverseClass from '../../../../src/data_structures/tree/general_tree/traversal/generic_tree_in_order_traverse_class.js';
 
 // implementation
 test('PrefixTreeClass tests...', async (t) => {

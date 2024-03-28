@@ -3,7 +3,7 @@
 // external imports
 
 // internal imports
-import { isNil, isFunction } from './../../../utils/misc/logic_utils.js';
+import { isNil, isFunction } from '../../../../utils/misc/logic_utils.js';
 
 // implementation
 class GenericTreeInOrderTraverseClass {

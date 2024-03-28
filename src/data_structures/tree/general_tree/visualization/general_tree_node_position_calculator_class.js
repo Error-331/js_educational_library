@@ -3,7 +3,7 @@
 // external imports
 
 // internal imports
-import { isNil, isNumber, isFunction } from './../../../utils/misc/logic_utils.js';
+import { isNil, isNumber, isFunction } from '../../../../utils/misc/logic_utils.js';
 
 // implementation
 class GeneralTreeNodePositionCalculatorClass {

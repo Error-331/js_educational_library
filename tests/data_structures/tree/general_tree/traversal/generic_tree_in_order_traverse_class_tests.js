@@ -5,11 +5,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 // internal imports
-import GenericTreeInOrderTraverseClass from './../../../../src/data_structures/generic_tree/traversal/generic_tree_in_order_traverse_class.js';
+import GenericTreeInOrderTraverseClass from '../../../../../src/data_structures/tree/general_tree/traversal/generic_tree_in_order_traverse_class.js';
 
 import {
     genericTreeData1,
-} from './../../tree/test_data.js';
+} from '../../test_data.js';
 
 import { fillGenericTreeByObject } from './../../../../src/utils/testing/data_structures/tree/generic_tree/general_tree_class_test_utils.js';
 

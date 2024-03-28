@@ -3,15 +3,15 @@
 // external imports
 
 // internal imports
-import { isNil } from './../../utils/misc/logic_utils.js';
+import { isNil } from '../../../utils/misc/logic_utils.js';
 
-import GeneralTreeNodeClass from './general_tree_node_class.js';
-import DoublyLinkedListNode from './../linked_list/doubly_linked_list_node_class.js';
+import GeneralTreeNode from './general_tree_node_class.js';
+import DoublyLinkedListNode from '../../linked_list/doubly_linked_list_node_class.js';
 
 // implementation
-class GeneralTreeClass {
+class GeneralTree {
     #root = null;
-    #NodeClass;
+    #NodeClass = null;
 
     createNewRoot(data = null) {
         this.destroy();
@@ -34,9 +34,9 @@ class GeneralTreeClass {
     }
 
     constructor(NodeClass) {
-        this.#NodeClass = isNil(NodeClass) ? GeneralTreeNodeClass : NodeClass;
+        this.#NodeClass = isNil(NodeClass) ? GeneralTreeNode : NodeClass;
     }
 }
 
 // exports
-export default GeneralTreeClass;
+export default GeneralTree;

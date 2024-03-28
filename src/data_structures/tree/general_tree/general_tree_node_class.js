@@ -3,14 +3,14 @@
 // external imports
 
 // internal imports
-import { COMPARATOR_EQUAL, COMPARATOR_NONE_EQUAL } from './../../constants/comparator_constants.js';
-import { isNil } from './../../utils/misc/logic_utils.js';
+import { COMPARATOR_EQUAL, COMPARATOR_NONE_EQUAL } from '../../../constants/comparator_constants.js';
+import { isNil } from '../../../utils/misc/logic_utils.js';
 
-import DoublyLinkedList from './../linked_list/doubly_linked_list_class.js';
+import DoublyLinkedList from '../../linked_list/doubly_linked_list_class.js';
 import GenericTreeNodeChildrenIteratorClass from './generic_tree_node_children_iterator_class.js';
 
 // implementation
-class GeneralTreeNodeClass {
+class GeneralTreeNode {
     #tree = null;
     #parent = null;
 
@@ -25,7 +25,7 @@ class GeneralTreeNodeClass {
         }
 
         const linkedListNode = this.#childrenLinkedList.push(null);
-        const treeNode = new GeneralTreeNodeClass(this.#tree, this, linkedListNode, this.#childrenLinkedList.comparator, data);
+        const treeNode = new GeneralTreeNode(this.#tree, this, linkedListNode, this.#childrenLinkedList.comparator, data);
 
         linkedListNode.element = treeNode;
         return treeNode;
@@ -184,4 +184,4 @@ class GeneralTreeNodeClass {
 }
 
 // exports
-export default GeneralTreeNodeClass;
+export default GeneralTreeNode;

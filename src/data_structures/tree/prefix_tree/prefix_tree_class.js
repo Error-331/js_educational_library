@@ -6,7 +6,7 @@
 import { isNil } from './../../../utils/misc/logic_utils.js';
 import { prefixTreeCharComparator } from './prefix_tree_comparator.js';
 
-import GeneralTreeClass from './../../generic_tree/general_tree_class.js';
+import GeneralTreeClass from '../general_tree/general_tree_class.js';
 import PrefixTreeNodeDataClass from './prefix_tree_node_data_class.js';
 
 // implementation

@@ -1,8 +1,8 @@
 // external imports
 
 // internal imports
-import GeneralTreeNode from './../general_tree_node_class.js';
-import { isNil, isNumber } from './../../../utils/misc/logic_utils.js';
+import GeneralTreeNode from '../general_tree_node_class.js';
+import { isNil, isNumber } from '../../../../utils/misc/logic_utils.js';
 
 // implementation
 class GeneralTreePositionedNode extends GeneralTreeNode {
