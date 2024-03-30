@@ -3,7 +3,7 @@
 // external imports
 
 // internal imports
-import { isNil, isNumber, isFunction } from '../../../../utils/misc/logic_utils.js';
+import { isNil, isBoolean, isNumber, isFunction } from '../../../../utils/misc/logic_utils.js';
 
 // implementation
 class GeneralTreeNodePositionCalculatorClass {
@@ -16,17 +16,25 @@ class GeneralTreeNodePositionCalculatorClass {
 
     #maxDepth = Infinity;
 
+    #normalizeWidth = false;
+
     #checkCoordinatesAreInRangeFunc = () => true;
 
     #previousLevelNode = [];
 
+    #maxNodeWidth = null;
+
     #calculateMeanNodeSize(leftNode, rightNode) {
         let nodeSize = 0;
 
+        if (this.normalizeWidth && isNil(this.maxNodeWidth)) {
+            throw new Error('Cannot calculate mean node size - "normalizeWidth" flag is set but maxNodeWidth is null');
+        }
+
         if (!isNil(leftNode)) {
-            nodeSize = nodeSize + rightNode.widthSafe;
+            nodeSize = nodeSize + (this.normalizeWidth ? this.maxNodeWidth : rightNode.widthSafe);
         } else if (!isNil(rightNode)) {
-            nodeSize = nodeSize + leftNode.widthSafe;
+            nodeSize = nodeSize + (this.normalizeWidth ? this.maxNodeWidth : leftNode.widthSafe);
         }
 
         return nodeSize;
@@ -203,11 +211,42 @@ class GeneralTreeNodePositionCalculatorClass {
         return result;
     }
 
+    #determineMaxWidthHeight(rootNode) {
+        const queue = [ rootNode ];
+        while (queue.length !== 0) {
+            let node = queue.shift();
+
+            if (isNil(this.#maxNodeWidth) || this.#maxNodeWidth < node.widthSafe) {
+                this.#maxNodeWidth = node.widthSafe;
+            }
+
+            if (!node.isLeaf) {
+                queue.push(node.firstChild)
+            }
+
+            do {
+                if (node.hasNextSibling) {
+                    node = node.nextSibling;
+
+                    if (!node.isLeaf) {
+                        queue.push(node.firstChild)
+                    }
+
+                    if (isNil(this.#maxNodeWidth) || this.#maxNodeWidth < node.widthSafe) {
+                        this.#maxNodeWidth = node.widthSafe;
+                    }
+                }
+            } while (node.hasNextSibling)
+        }
+    }
+
     reset() {
         this.#xTopAdjustment = 0;
         this.#yTopAdjustment = 0;
 
         this.#previousLevelNode = [];
+
+        this.#maxNodeWidth = null;
     }
 
     positionTree(rootNode) {
@@ -216,6 +255,11 @@ class GeneralTreeNodePositionCalculatorClass {
         }
 
         this.reset();
+
+        if (this.#normalizeWidth) {
+            this.#determineMaxWidthHeight();
+        }
+
         this.#firstWalk(rootNode, 0);
 
         this.#xTopAdjustment = rootNode.xSafe - rootNode.prelimSafe;
@@ -247,6 +291,14 @@ class GeneralTreeNodePositionCalculatorClass {
         }
 
         this.#previousLevelNode[level] = node;
+    }
+
+    get normalizeWidth() {
+        return this.#normalizeWidth;
+    }
+
+    get maxNodeWidth() {
+        return this.#maxNodeWidth;
     }
 
     get checkCoordinatesAreInRangeFunc() {
@@ -285,6 +337,14 @@ class GeneralTreeNodePositionCalculatorClass {
         this.#maxDepth = value;
     }
 
+    set normalizeWidth(value) {
+        if (!isBoolean(value)) {
+            throw new Error('Cannot set "normalize width" flag - provided value is not boolean');
+        }
+
+        this.#normalizeWidth = value;
+    }
+
     set checkCoordinatesAreInRangeFunc(userFunc) {
         if (!isFunction(userFunc)) {
             throw new Error('Cannot not set coordinates range checker - provided value is not a function');
@@ -299,6 +359,8 @@ class GeneralTreeNodePositionCalculatorClass {
 
         this.subtreeSeparation = configuration.subtreeSeparation ?? 0;
         this.maxDepth = configuration.maxDepth ?? Infinity;
+
+        this.normalizeWidth = configuration.normalizeWidth ?? false;
 
         this.checkCoordinatesAreInRangeFunc = configuration.checkCoordinatesAreInRangeFunc ?? (() => true);
     }
