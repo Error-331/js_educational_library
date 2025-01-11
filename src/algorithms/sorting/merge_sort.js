@@ -45,12 +45,12 @@ function mergeTwoSortedArrays(comparator, arrayToSort, startIndex, middleIndex, 
     }
 }
 
-function mergeSortRec(comparator, arrayToSort, startIndex, endIndex) {
+function mergeSortPart(comparator, arrayToSort, startIndex, endIndex) {
     if (startIndex < endIndex) {
         const middleIndex = Math.floor((startIndex + endIndex) / 2);
 
-        mergeSortRec(comparator, arrayToSort, startIndex, middleIndex);
-        mergeSortRec(comparator, arrayToSort, middleIndex + 1, endIndex);
+        mergeSortPart(comparator, arrayToSort, startIndex, middleIndex);
+        mergeSortPart(comparator, arrayToSort, middleIndex + 1, endIndex);
         mergeTwoSortedArrays(comparator, arrayToSort, startIndex, middleIndex, endIndex);
     }
 
@@ -58,16 +58,16 @@ function mergeSortRec(comparator, arrayToSort, startIndex, endIndex) {
 }
 
 function mergeSort(comparator, arrayToSort) {
-    if (!isArray(arrayToSort)) {
-        throw new Error('Cannot sort an non-array entity');
-    }
-
     if (!isFunction(comparator)) {
         throw new Error('Cannot sort an array - comparator is not a function');
     }
 
+    if (!isArray(arrayToSort)) {
+        throw new Error('Cannot sort an non-array entity');
+    }
+
     const arrayToSortCopy = arrayToSort.slice();
-    return mergeSortRec(comparator, arrayToSortCopy, 0, arrayToSort.length - 1);
+    return mergeSortPart(comparator, arrayToSortCopy, 0, arrayToSort.length - 1);
 }
 
 const mergeSortNumbers = curry(mergeSort)(defaultCompare);
