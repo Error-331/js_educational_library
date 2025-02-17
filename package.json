@@ -2,12 +2,27 @@
   "name": "js_educational_library",
   "version": "0.0.1",
   "description": "code testing platform...",
-  "main": "index.js",
+  "exports": {
+    ".": "./src/index.ts",
+    "./utils/misc/*": "./src/utils/misc/*.ts",
+
+    "./package.json": "./package.json"
+  },
   "type": "module",
   "scripts": {
-    "test": "node --test"
+    "test": "jest"
   },
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "@babel/core": "^7.26.9",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
+    "typescript": "^5.7.3",
+    "ts-node": "^10.9.2",
+    "jest": "^29.7.0",
+    "babel-jest": "^29.7.0",
+    "ts-jest": "^29.2.5"
+  },
   "dependencies": {}
 }
