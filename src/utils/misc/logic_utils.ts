@@ -1,42 +1,48 @@
-'use strict';
-
 // external imports
 
 // internal imports
 
 // implementation
-const isBoolean = (input) => {
+
+/*
+ * Function that determines whether provided value is of type boolean or not.
+ *
+ * @param {unknown} input - Input value which will tested whether it is of type boolean or not.
+ * @returns {boolean} 'true' - if provided value is of type boolean and vice versa
+ */
+
+function isBoolean(input: unknown): input is boolean {
     return typeof input === 'boolean';
-};
+}
 
-const isNumber = (input) => {
+function isNumber (input: unknown): input is number {
     return typeof input === 'number';
-};
+}
 
-const isString = (input) => {
+function isString (input: unknown): input is string {
     return typeof input === 'string';
-};
+}
 
-const isObject = (input) => {
+function isObject(input: unknown): input is object {
     if (isNil(input)) {
         return false;
     } else if (isArray(input)) {
         return false;
     } else return typeof input === 'object';
-};
+}
 
-const isArray = (input) => {
+function isArray(input: unknown): input is unknown[] {
     return (
         input instanceof Array ||
         Object.prototype.toString.call(input) === '[object Array]'
     );
-};
+}
 
-const isFunction = (input) => {
+function isFunction(input: unknown): input is (...args: unknown[]) => unknown {
     return typeof input === 'function';
-};
+}
 
-const isClass = (input) => {
+function isClass(input: unknown): boolean {
     if (typeof input === 'function') {
         if (!isNullOrEmpty(input.prototype)) {
             const descResult = Object.getOwnPropertyDescriptor(input, 'prototype').writable;
@@ -52,21 +58,21 @@ const isClass = (input) => {
     } else {
         return false;
     }
-};
+}
 
-const isUndefined = (value) => {
+function isUndefined(value: unknown): boolean {
     return value === undefined;
-};
+}
 
-const isNull = (value) => {
+function isNull(value: unknown): boolean {
     return value === null;
-};
+}
 
-const isNil = (value) => {
+function isNil(value: unknown): boolean {
     return isUndefined(value) || isNull(value);
-};
+}
 
-const isNullOrEmpty = (value) => {
+function isNullOrEmpty(value: unknown): boolean {
     if (isNil(value)) {
         return true;
     }
@@ -78,15 +84,15 @@ const isNullOrEmpty = (value) => {
     }
 
     return false;
-};
+}
 
-const defaultTo = (defaultValue, value) => {
+function defaultTo<DefaultValueType, ValueType>(defaultValue: DefaultValueType, value: ValueType | null | undefined): ValueType | DefaultValueType {
     if (isNullOrEmpty(value)) {
         return defaultValue;
     } else {
         return value;
     }
-};
+}
 
 // exports
 export {
