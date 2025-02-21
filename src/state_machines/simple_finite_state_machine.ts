@@ -13,7 +13,8 @@ import AbstractFiniteStateMachine from './abstract_finite_state_machine';
 import { isNil, isString } from './../utils/misc/logic_utils';
 
 // implementation
-class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionReturnType = undefined, TransitionTargetType = string> extends AbstractFiniteStateMachine<
+class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionReturnType = undefined, TransitionTargetType = string>
+    extends AbstractFiniteStateMachine<
         SimpleStateDefinition<TransitionContextType, TransitionReturnType, TransitionTargetType>,
         SimpleStateEntry<TransitionContextType, TransitionReturnType, TransitionTargetType>,
         SimpleStateActions<TransitionContextType>,

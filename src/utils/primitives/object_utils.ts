@@ -1,9 +1,7 @@
-'use strict';
-
 // external imports
 
 // internal imports
-import { isNil, isUndefined, isObject, isArray } from './../misc/logic_utils.js';
+import { isNil, isUndefined, isObject, isArray } from '../misc/logic_utils';
 
 // implementation
 function cloneArrayDeep(arrayToClone) {

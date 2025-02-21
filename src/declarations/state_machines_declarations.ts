@@ -30,7 +30,7 @@ interface SimpleStateTransition<TransitionContextType, TransitionReturnType, Tra
 
 interface SimpleStateActions<TransitionContextType> {
     onEnter?: (context?: TransitionContextType) => Promise<void>,
-    onExit?: () => Promise<void>,
+    onExit?: (context?: TransitionContextType) => Promise<void>,
 }
 
 interface SimpleStateTransitions<TransitionContextType, TransitionReturnType, TransitionTargetType = string> {
@@ -38,8 +38,8 @@ interface SimpleStateTransitions<TransitionContextType, TransitionReturnType, Tr
 }
 
 interface SimpleStateEntry<TransitionContextType, TransitionReturnType, TransitionTargetType = string> extends AbstractStateEntry {
-    actions: SimpleStateActions<TransitionContextType>,
-    transitions: SimpleStateTransitions<TransitionContextType, TransitionReturnType, TransitionTargetType>
+    actions?: SimpleStateActions<TransitionContextType>,
+    transitions?: SimpleStateTransitions<TransitionContextType, TransitionReturnType, TransitionTargetType>
 }
 
 interface SimpleStateDefinition<TransitionContextType = undefined, TransitionReturnType = undefined, TransitionTargetType = string>
