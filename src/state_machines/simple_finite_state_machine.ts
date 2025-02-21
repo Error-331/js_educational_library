@@ -7,10 +7,10 @@ import {
 
     SimpleStateActions,
     SimpleStateTransition,
-} from './../declarations/state_machines_declarations';
+} from '../declarations/state_machines_declarations';
 import AbstractFiniteStateMachine from './abstract_finite_state_machine';
 
-import { isNil, isString } from './../utils/misc/logic_utils';
+import { isNil, isString } from '../utils/misc/logic_utils';
 
 // implementation
 class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionReturnType = undefined, TransitionTargetType = string>
