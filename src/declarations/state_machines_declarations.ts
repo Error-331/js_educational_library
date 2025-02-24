@@ -10,7 +10,7 @@ interface AbstractStateEntry {
 }
 
 interface AbstractStateDefinition<StateEntryType extends AbstractStateEntry> {
-    initialState?: unknown;
+    initialState: unknown;
     states: {
         [key: string]: StateEntryType;
     }
@@ -23,7 +23,7 @@ interface BaseStateTransition<TransitionTargetType, TransitionActionType> {
 }
 
 // simple state declarations
-type SimpleStateTransitionAction<TransitionContextType = undefined, TransitionReturnType = unknown> = (context?: TransitionContextType) => Promise<TransitionReturnType>;
+type SimpleStateTransitionAction<TransitionContextType = undefined, TransitionReturnType = unknown> = (context?: TransitionContextType, data?: unknown) => Promise<TransitionReturnType>;
 
 interface SimpleStateTransition<TransitionContextType, TransitionReturnType, TransitionTargetType = string>
     extends BaseStateTransition<TransitionTargetType, SimpleStateTransitionAction<TransitionContextType, TransitionReturnType>> {}
@@ -45,7 +45,7 @@ interface SimpleStateEntry<TransitionContextType, TransitionReturnType, Transiti
 interface SimpleStateDefinition<TransitionContextType = undefined, TransitionReturnType = undefined, TransitionTargetType = string>
     extends AbstractStateDefinition<SimpleStateEntry<TransitionContextType, TransitionReturnType, TransitionTargetType>>
 {
-    initialState?: string;
+    initialState: string;
 }
 
 // stage state declarations

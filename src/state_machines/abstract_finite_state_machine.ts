@@ -22,15 +22,13 @@ abstract class AbstractFiniteStateMachine<
 
     protected _unrecoverableErrorStateName: string | undefined;
 
-    constructor(stateDefinition: StateDefinitionType, context?: TransitionContextType, unrecoverableErrorStateName?: string) {
+    constructor(stateDefinition: StateDefinitionType, unrecoverableErrorStateName?: string, context?: TransitionContextType) {
         this._initialStateDefinition = cloneDeep(stateDefinition);
         this._currentStateDefinition = cloneDeep(stateDefinition);
 
         this._context = context
 
-        if (!isNil(this._initialStateDefinition.initialState) && isString(this._initialStateDefinition.initialState)) {
-            this._currentStateName = this._initialStateDefinition.initialState;
-        }
+        this.setCurrentStateName(this._initialStateDefinition.initialState);
 
         if (!isNil(unrecoverableErrorStateName)) {
             if (isString(unrecoverableErrorStateName)) {
@@ -43,10 +41,7 @@ abstract class AbstractFiniteStateMachine<
 
     protected abstract prepareEmptyStateData(): StateEntryType;
     protected abstract addEmptyStateIfNotExist(stateName: string): void;
-
-    protected setCurrentStateName(stateName: string): void {
-        this._currentStateName = stateName;
-    }
+    protected abstract setCurrentStateName(stateName: unknown): void;
 
     public addEmptyState(stateName: string): void {
         if (isNil(stateName)) {
@@ -89,7 +84,7 @@ abstract class AbstractFiniteStateMachine<
         this._unrecoverableErrorStateName = stateName;
     }
 
-    public abstract dispatch(transitionName: string): Promise<boolean>;
+    public abstract dispatch(transitionName: string, data?: unknown): Promise<boolean>;
 }
 
 // exports
