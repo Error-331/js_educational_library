@@ -9,19 +9,46 @@
  *
  * @param {unknown} input - Input value which will tested whether it is of type boolean or not.
  * @returns {boolean} 'true' - if provided value is of type boolean and vice versa
+ *
  */
 
 function isBoolean(input: unknown): input is boolean {
     return typeof input === 'boolean';
 }
 
+/*
+ * Function that determines whether provided value is of type number or not.
+ *
+ * @param {unknown} input - Input value which will tested whether it is of type number or not.
+ * @returns {boolean} 'true' - if provided value is of type number and vice versa
+ *
+ */
+
 function isNumber(input: unknown): input is number {
     return typeof input === 'number';
 }
 
+/*
+ * Function that determines whether provided value is of type string or not.
+ *
+ * @param {unknown} input - Input value which will tested whether it is of type string or not.
+ * @returns {boolean} 'true' - if provided value is of type string and vice versa
+ *
+ */
+
 function isString(input: unknown): input is string {
     return typeof input === 'string';
 }
+
+/*
+ * Function that determines whether provided value is of type object or not.
+ *
+ * Function will differentiate between regular object and array or null, in which case the function will return false.
+ *
+ * @param {unknown} input - Input value which will tested whether it is of type object or not.
+ * @returns {boolean} 'true' - if provided value is of type object and vice versa
+ *
+ */
 
 function isObject(input: unknown): input is object {
     if (isNil(input)) {
