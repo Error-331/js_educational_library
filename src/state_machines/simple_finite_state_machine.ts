@@ -64,6 +64,25 @@ class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionRetu
     }
 
     /**
+     * Method that checks incoming transition name.
+     *
+     * @param {unknown} transitionName - transition name
+     *
+     * @throws {RangeError} if transition name is nil or is not a string.
+     *
+     */
+
+    protected checkTransitionName(transitionName: unknown): void {
+        if (isNil(transitionName)) {
+            throw new RangeError('Transition name cannot be nil');
+        }
+
+        if (!isString(transitionName)) {
+            throw new RangeError('Transition name must be of type string');
+        }
+    }
+
+    /**
      * Method that tries to find transition data for current state.
      * This method is usually called after inside the dispatch() (@see dispatch) when transition to new state is about to be made.
      *
@@ -109,7 +128,7 @@ class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionRetu
 
     protected transitToNoActionState(transitionsData: SimpleStateTransition<TransitionContextType, TransitionReturnType, TransitionTargetType>): boolean {
         if (!isString(transitionsData.target)) {
-            throw new RangeError('Cannot dispatch state transition - "no action" transition target is not a string');
+            throw new RangeError('Cannot transition to stage - "no action" transition target is not a string');
         }
 
         this.setCurrentStateName(transitionsData.target);
@@ -121,11 +140,10 @@ class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionRetu
         data?: unknown
     ): Promise<boolean> {
         if (!isString(transitionsData.target)) {
-            throw new RangeError('Cannot dispatch state transition - transition target is not a string');
+            throw new RangeError('Cannot transition to stage - transition target is not a string');
         }
 
-       const c = await transitionsData.action(this.context, data);
-        console.log('zz', c);
+        await transitionsData.action(this.context, data);
         this.setCurrentStateName(transitionsData.target);
 
         return true;
@@ -162,10 +180,7 @@ class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionRetu
     }
 
     public async dispatch(transitionName: string, data?: unknown): Promise<boolean> {
-        if (isNil(transitionName)) {
-            throw new RangeError('Cannot dispatch state transition - transition name is not specified');
-        }
-
+        this.checkTransitionName(transitionName);
         const transitionsData: SimpleStateTransition<TransitionContextType, TransitionReturnType, TransitionTargetType> | undefined  = this.findTransitionDataForCurrentState(transitionName);
 
         if (isNil(transitionsData)) {

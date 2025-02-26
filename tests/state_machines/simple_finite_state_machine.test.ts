@@ -130,9 +130,7 @@ describe('Simple finite state machine class tests...', () => {
             },
 
             [testState2]: {
-                actions: {
-                    // onEnter: async () => {},
-                },
+                actions: {},
 
                 transitions: {
                     [testTransition1]: {
@@ -143,16 +141,11 @@ describe('Simple finite state machine class tests...', () => {
             },
 
             [testState3]: {
-                actions: {
-                    //  onExit: async () => {},
-                }
+                actions: {}
             },
 
             [testState4]: {
-                actions: {
-                    //  onEnter: async () => {},
-                    onExit: async () => {}
-                },
+                actions: {},
 
                 transitions: {
                     [testTransition1]: {
@@ -195,9 +188,7 @@ describe('Simple finite state machine class tests...', () => {
                 }
             },
 
-            [unrecoverableErrorState]: {
-
-            }
+            [unrecoverableErrorState]: {}
         }
     };
 
@@ -479,6 +470,9 @@ describe('Simple finite state machine class tests...', () => {
                 expect(dispatchResult).toBe(false);
                 checkInstance(stateMachine, unrecoverableErrorState, undefined, stateDefinition1, stateDefinition1, unrecoverableErrorState);
             });
+        });
+
+        describe('Unsuccessful transition to new state (no actions, transition actions (no context))...', () => {
 
         });
     });
