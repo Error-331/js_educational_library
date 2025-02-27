@@ -1,10 +1,10 @@
-'use strict';
-
 // external imports
 
 // internal imports
-import { isNil, isArray, isFunction } from './../misc/logic_utils.js';
-import { defaultCompare, comparatorIsLt } from './../misc/comparator_utils.js';
+import { ArrayIterator, CollectionIterator } from '../../declarations/collection_declarations';
+
+import { isNil,  isObject, isArray, isFunction, isBoolean } from '../misc/logic_utils';
+import { defaultCompare, comparatorIsLt } from '../misc/comparator_utils.js';
 
 // implementation
 function findIdxInObjectsArrayByKeyValue(valueToFind, objectsArray, keyToFind){
@@ -180,6 +180,67 @@ function concatSortedNumbers(...arraysToConcat) {
     return concatSorted(defaultCompare, ...arraysToConcat);
 }
 
+function arrayEvery<ArrayValueType>(collection: ArrayLike<ArrayValueType>, predicate: ArrayIterator<ArrayValueType, boolean>): boolean {
+    if (!isArray(collection)) {
+        throw new RangeError('Cannot perform "every" check on collection - collection is not a proper array');
+    }
+
+    if (!isFunction(predicate)) {
+        throw new RangeError('Cannot perform "every" check on collection - predicate is not a function');
+    }
+
+    for (let idx = 0; idx < collection.length; idx++) {
+        const result = predicate(collection[idx], idx, collection);
+
+        if (!isBoolean(result)) {
+            throw new RangeError('Cannot perform "every" check on collection - predicate function returned none-boolean value');
+        }
+
+        if (result === false) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function objectEvery<CollectionType extends object>(collection: CollectionType, predicate: CollectionIterator<CollectionType, boolean>): boolean {
+    if (!isObject(collection)) {
+        throw new RangeError('Cannot perform "every" check on collection - collection is not a proper object');
+    }
+
+    if (!isFunction(predicate)) {
+        throw new RangeError('Cannot perform "every" check on collection - predicate is not a function');
+    }
+
+    for (const key in collection) {
+        const result = predicate(collection[key], key, collection);
+
+        if (!isBoolean(result)) {
+            throw new RangeError('Cannot perform "every" check on collection - predicate function returned none-boolean value');
+        }
+
+        if (result === false) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function every<CollectionTypeOrValue>(
+    collection: ArrayLike<CollectionTypeOrValue> | CollectionTypeOrValue,
+    predicate: ArrayIterator<CollectionTypeOrValue, boolean> & CollectionIterator<CollectionTypeOrValue, boolean>
+) {
+    if (isObject(collection)) {
+        return objectEvery<typeof collection>(collection, predicate);
+    } else if(isArray<CollectionTypeOrValue>(collection)) {
+        return arrayEvery<CollectionTypeOrValue>(collection, predicate);
+    } else {
+        throw new RangeError('Cannot perform "every" check on collection - collection must be either be object or array');
+    }
+}
+
 // exports
 export {
     findIdxInObjectsArrayByKeyValue,
@@ -198,4 +259,8 @@ export {
 
     concatSorted,
     concatSortedNumbers,
+
+    arrayEvery,
+    objectEvery,
+    every,
 }
