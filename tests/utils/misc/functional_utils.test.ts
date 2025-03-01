@@ -63,7 +63,6 @@ describe('Functional utilities tests...', () => {
 
         test('Should correctly return default value - case 2', () => {
             const func = defaultTo([1, 'a', null]);
-            console.log('xxx', func(null));
             expect(func(null)).toStrictEqual([1, 'a', null]);
         });
 
