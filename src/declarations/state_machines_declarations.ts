@@ -55,10 +55,7 @@ type StagedTransitionResult = boolean | string | undefined;
 type StagedTransitionTarget = string | StagedTransitionToStateArray;
 
 interface StagedStateDefinition<TransitionContextType = undefined, TransitionReturnType = StagedTransitionResult>
-    extends SimpleStateDefinition<TransitionContextType, TransitionReturnType, StagedTransitionTarget>
-{
-
-}
+    extends SimpleStateDefinition<TransitionContextType, TransitionReturnType, StagedTransitionTarget> {}
 
 // exports
 export type {

@@ -9,12 +9,13 @@ import {
     StagedTransitionToState,
     StagedTransitionToStateArray,
 
-} from './../declarations/state_machines_declarations';
+} from '../declarations/state_machines_declarations';
 
 import { STAGED_FINITE_STATE_MACHINE_TRANSITION_NAME } from '../constants/state_machines_constants';
+import SimpleFiniteStateMachine from './simple_finite_state_machine';
 
 import { isNil, isString, isBoolean, isArray } from '../utils/misc/logic_utils';
-import SimpleFiniteStateMachine from './simple_finite_state_machine';
+import { every } from '../utils/primitives/array_utils';
 
 // implementation
 class StagedFiniteStateMachine<TransitionContextType = undefined,> extends
@@ -24,18 +25,11 @@ class StagedFiniteStateMachine<TransitionContextType = undefined,> extends
         return isArray(input) && input.length === 2 && isString(input[0]) && isString(input[1]);
     }
 
-    // TODO: convert to every()
     protected isTargetStagedTransitionToStateArray(input: unknown): input is StagedTransitionToStateArray {
-        if (!isArray(input)) {
+        if (!isArray<string>(input)) {
             return false;
         } else {
-            for (const targetEntity of input) {
-                if (!this.isTargetStagedTransitionToState(targetEntity)) {
-                    return false;
-                }
-            }
-
-            return true;
+            return every<unknown>(input, target => this.isTargetStagedTransitionToState(target))
         }
     }
 
