@@ -4,16 +4,17 @@ import type { Mock, MockContext } from 'jest/index';
 // internal imports
 
 // implementation
+import { STAGED_FINITE_STATE_MACHINE_TRANSITION_NAME } from '../../../constants/state_machines_constants';
+
 import { StagedStateDefinition } from '../../../declarations/state_machines_declarations';
 import StagedFiniteStateMachine from '../../../state_machines/staged_finite_state_machine';
 
 function mockTransitionActionInStateDefinition(
     stateDefinition: StagedStateDefinition<unknown, unknown>,
     stateName: string,
-    transitionName: string,
 ): Mock<unknown> {
-    const mockTransitionAction = jest.fn(stateDefinition.states[stateName].transitions[transitionName].action);
-    stateDefinition.states[stateName].transitions[transitionName].action = mockTransitionAction;
+    const mockTransitionAction = jest.fn(stateDefinition.states[stateName].transitions[STAGED_FINITE_STATE_MACHINE_TRANSITION_NAME].action);
+    stateDefinition.states[stateName].transitions[STAGED_FINITE_STATE_MACHINE_TRANSITION_NAME].action = mockTransitionAction;
 
     return mockTransitionAction;
 }

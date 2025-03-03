@@ -15,6 +15,10 @@ const testTransition2 = 'testTransition2';
 const testTransition3 = 'testTransition3';
 const testTransition4 = 'testTransition4';
 
+const testSubTransition1 = 'testSubTransition1';
+const testSubTransition2 = 'testSubTransition2';
+const testSubTransition3 = 'testSubTransition3';
+
 const initialState1 = testState1;
 const unrecoverableErrorState = 'testUnrecoverableErrorState';
 
@@ -31,6 +35,10 @@ export {
     testTransition2,
     testTransition3,
     testTransition4,
+
+    testSubTransition1,
+    testSubTransition2,
+    testSubTransition3,
 
     initialState1,
     unrecoverableErrorState,
