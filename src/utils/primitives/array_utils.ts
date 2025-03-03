@@ -4,7 +4,7 @@
 import { ArrayIterator, CollectionIterator } from '../../declarations/collection_declarations';
 
 import { isNil,  isObject, isArray, isFunction, isBoolean } from '../misc/logic_utils';
-import { defaultCompare, comparatorIsLt } from '../misc/comparator_utils.js';
+import { defaultCompare, comparatorIsLt } from '../misc/comparator_utils';
 
 // implementation
 function findIdxInObjectsArrayByKeyValue(valueToFind, objectsArray, keyToFind){
@@ -17,16 +17,19 @@ function findIdxInObjectsArrayByKeyValue(valueToFind, objectsArray, keyToFind){
     return -1;
 }
 
-function findMinimumValueInArrayList(comparator, ...arraysList) {
+function findMinimumValueInArrayList(
+    comparator: (first: number, second: number) => number,
+    ...arraysList: number[][]
+): number[] {
     if (!isFunction(comparator)) {
-        throw new Error('Cannot find minimum value in arrays list - comparator is not a function');
+        throw new RangeError('Cannot find minimum value in arrays list - comparator is not a function');
     }
 
     if (!isArray(arraysList)) {
-        throw new Error('Cannot find minimum value in arrays list - provided entity is not an array');
+        throw new RangeError('Cannot find minimum value in arrays list - provided entity is not an array');
     }
 
-    return arraysList.reduce((accumulator, currentArray, currentArrayIndex) => {
+    return arraysList.reduce((accumulator: [number, number, number], currentArray: number[], currentArrayIndex: number): [number, number, number] => {
         accumulator[2] += currentArray.length;
 
         if (comparatorIsLt(comparator(currentArray[0], accumulator[1]))) {
