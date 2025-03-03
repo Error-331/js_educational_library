@@ -8,7 +8,6 @@ import {
 
     StagedTransitionToState,
     StagedTransitionToStateArray,
-
 } from '../declarations/state_machines_declarations';
 
 import { STAGED_FINITE_STATE_MACHINE_TRANSITION_NAME } from '../constants/state_machines_constants';
@@ -79,8 +78,8 @@ class StagedFiniteStateMachine<TransitionContextType = undefined,> extends
         transitionsData: SimpleStateTransition<TransitionContextType, StagedTransitionResult, StagedTransitionTarget>,
         data?: unknown
     ): Promise<boolean> {
-        if (!isString(transitionsData.target)) {
-            throw new RangeError('Cannot dispatch state transition - transition target is not a string');
+        if (!isString(transitionsData.target) && !isArray(transitionsData.target)) {
+            throw new RangeError('Cannot dispatch state transition - transition target is not a string or array');
         }
 
         const transitionActionResult: StagedTransitionResult = await transitionsData.action(this.context, data);
