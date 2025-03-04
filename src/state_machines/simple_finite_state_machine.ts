@@ -29,16 +29,6 @@ class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionRetu
         };
     }
 
-    protected addEmptyStateIfNotExist(stateName: string): void {
-        if (isNil(stateName)) {
-            throw new RangeError('Cannot add empty state - state name is not specified');
-        }
-
-        if (isNil(this.currentStateDefinition.states[stateName])) {
-            this.currentStateDefinition.states[stateName] = this.prepareEmptyStateData();
-        }
-    }
-
     /**
      * Method that sets current state name of the state machine.
      * This method is usually called after successful transition was being made after call to dispatch() (@see dispatch).
@@ -103,7 +93,7 @@ class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionRetu
             throw new RangeError('Cannot find state transition data - current state name is not set');
         }
 
-        const currentState = this.currentStateDefinition.states[this.currentStateName];
+        const currentState = this._currentStateDefinition.states[this.currentStateName];
 
         if (isNil(currentState)) {
             throw new RangeError('Cannot find state transition data - state data is not set');
@@ -149,6 +139,16 @@ class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionRetu
         return true;
     }
 
+    public addEmptyStateIfNotExist(stateName: string): void {
+        if (isNil(stateName)) {
+            throw new RangeError('Cannot add empty state - state name is not specified');
+        }
+
+        if (isNil(this._currentStateDefinition.states[stateName])) {
+            this._currentStateDefinition.states[stateName] = this.prepareEmptyStateData();
+        }
+    }
+
     public addStateActions(stateName: string, actionsData: SimpleStateActions<TransitionContextType>): void {
         if (isNil(stateName)) {
             throw new RangeError('Cannot add state actions - state name is not specified');
@@ -159,7 +159,7 @@ class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionRetu
         }
 
         this.addEmptyStateIfNotExist(stateName);
-        this.currentStateDefinition.states[stateName].actions = actionsData;
+        this._currentStateDefinition.states[stateName].actions = actionsData;
     }
 
     public addStateTransition(stateName: string, transitionName: string, transitionData: SimpleStateTransition<TransitionContextType, TransitionReturnType, TransitionTargetType>): void {
@@ -176,7 +176,12 @@ class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionRetu
         }
 
         this.addEmptyStateIfNotExist(stateName);
-        this.currentStateDefinition.states[stateName].transitions[transitionName] = transitionData;
+
+        if (isNil(this._currentStateDefinition.states[stateName].transitions)) {
+            this._currentStateDefinition.states[stateName].transitions = {};
+        }
+
+        this._currentStateDefinition.states[stateName].transitions[transitionName] = transitionData;
     }
 
     public async dispatch(transitionName: string, data?: unknown): Promise<boolean> {
