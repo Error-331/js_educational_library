@@ -4,6 +4,9 @@
   "description": "code testing platform...",
   "exports": {
     ".": "./src/index.ts",
+
+    "./errors/*": "./src/errors/*.ts",
+
     "./utils/misc/*": "./src/utils/misc/*.ts",
 
     "./package.json": "./package.json"
@@ -23,6 +26,9 @@
     "jest": "^29.7.0",
     "babel-jest": "^29.7.0",
     "ts-jest": "^29.2.5"
+  },
+  "peerDependencies": {
+    "zod": "^3.24.1"
   },
   "dependencies": {}
 }
