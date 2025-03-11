@@ -6,7 +6,7 @@ import { isString } from '../../utils/misc/logic_utils';
 // implementation
 
 /**
- * Function that calculation Hamming distance for strings (case-sensitive).
+ * Function that calculates Hamming distance for strings (case-sensitive).
  * Calculates the number of positions at which the corresponding symbols in both strings are different.
  *
  * @param {string} first - fist string to compare
