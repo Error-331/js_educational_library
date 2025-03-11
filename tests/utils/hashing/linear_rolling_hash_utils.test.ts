@@ -2,7 +2,7 @@
 
 // internal imports
 import { HASHING_M_PRIME_NUMBER1, HASHING_M_PRIME_NUMBER2, HASHING_P_PRIME_NUMBER_ALPHABETIC1 } from '../../../src/constants/hash_constants';
-import { calcLinearHash } from '../../../src/utils/hashing/linear_rolling_hash_utils';
+import { calcLinearHash, calcLinearRollingHash } from '../../../src/utils/hashing/linear_rolling_hash_utils';
 
 // implementation
 describe('Linear hashing utils tests...', () => {
@@ -56,6 +56,18 @@ describe('Linear hashing utils tests...', () => {
             test('Should correctly calculate hash of the string - case 4...', async () => {
                 expect(calcLinearHash(true, 3, HASHING_M_PRIME_NUMBER2, stringToHash4)).toEqual(caseSensitiveHashResult4);
             });
+        });
+    });
+
+    describe('calcLinearRollingHash() function tests...', () => {
+        test('Should ...', async () => {
+            const h = calcLinearRollingHash(true, 5, HASHING_M_PRIME_NUMBER2, 'abc','d');
+            const g = calcLinearHash(true, 5, HASHING_M_PRIME_NUMBER2, 'bcd');
+            const t = calcLinearHash(true, 5, HASHING_M_PRIME_NUMBER2, 'abc');
+            const z = calcLinearHash(true, 5, HASHING_M_PRIME_NUMBER2, 'abcd');
+
+            console.log('res', h, g, t, z);
+            //expect(calcLinearRollingHash(true, 3, HASHING_M_PRIME_NUMBER2, stringToHash4)).toEqual(caseSensitiveHashResult4);
         });
     });
 });

@@ -59,8 +59,34 @@ function calcLinearHash(matchCase: boolean, p: number, m: number, stringToHash: 
     return hashes[hashes.length - 1];
 }
 
+
+/*
+long long rolling_hash(string prev,char nxt)
+{
+   const int p = 31;
+   const int m = 1e9 + 9;
+   long long H=compute_hash(prev);
+   long long Hnxt=( ( H - pow(prev[0],prev.length()-1) ) * p + (int)nxt ) % m;
+   return Hnxt;
+}
+ */
+
+function calcLinearRollingHash(matchCase: boolean, p: number, m: number, prevString: string, nextString: string) {
+    const hashData = calcLinearHashData(matchCase, p, m, prevString);
+
+    // Hnxt=( ( H - c1ak-1 ) * a + ck+1a0 )
+    //const c = Math.pow(prevString.charCodeAt(0), prevString.length - 1);
+    // H(abc) => a*(5^2) + b*(5^1) + c*(5^0)
+    console.log(hashData);
+    const c = hashData.hashes[hashData.hashes.length - 1] - prevString.charCodeAt(0);
+
+    return (c + ((hashData.powersOfP[hashData.powersOfP.length - 1] * p) % m) * nextString.charCodeAt(0)) % m
+}
+
 // exports
 export {
     calcLinearHashData,
     calcLinearHash,
+
+    calcLinearRollingHash,
 }
