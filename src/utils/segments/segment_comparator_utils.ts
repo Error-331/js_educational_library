@@ -1,13 +1,11 @@
-'use strict';
-
 // external imports
 
 // internal imports
 import {
     COMPARATOR_EQUAL,
-} from './../../constants/comparator_constants.js';
+} from '../../constants/comparator_constants';
 
-import { isNil, isFunction } from './../misc/logic_utils.js';
+import { isNil, isFunction } from '../misc/logic_utils';
 
 // implementation
 function leftSegmentComparator(segmentElementComparator, first, second) {

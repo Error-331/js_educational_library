@@ -1,11 +1,9 @@
-'use strict';
-
 // external imports
 
 // internal imports
-import { isArray, isFunction } from './../../utils/misc/logic_utils.js';
-import { curry } from './../../utils/misc/functional_utils.js';
-import { defaultCompare, comparatorIsLte } from './../../utils/misc/comparator_utils.js';
+import { isArray, isFunction } from '../../utils/misc/logic_utils';
+import { curry } from '../../utils/misc/functional_utils';
+import { defaultCompare, comparatorIsLte } from '../../utils/misc/comparator_utils';
 
 // implementation
 function mergeTwoSortedArrays(comparator, arrayToSort, startIndex, middleIndex, endIndex) {

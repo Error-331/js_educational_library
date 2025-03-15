@@ -1,12 +1,10 @@
-'use strict';
-
 // external imports
 
 // internal imports
-import { isNumber, isArray } from './../misc/logic_utils.js';
+import { isNumber, isArray } from '../misc/logic_utils';
 
 // implementation
-function combineNumericSegments(firstSegment, secondSegment) {
+function combineNumericSegments(firstSegment: number, secondSegment: number) {
     if (!isArray(firstSegment)) {
         throw new Error('Cannot perform numeric segments merge, first segment pair is not an array');
     }
