@@ -34,7 +34,7 @@ function validateSetCookieOptions(setCookieOptions: SetCookieOptions): SetCookie
     const setCookieOptionsParsed = cookieOptionsSchema.safeParse(setCookieOptions);
 
     if (!setCookieOptionsParsed.success) {
-        throw createValidationError(setCookieOptionsParsed);
+        throw createValidationError<SetCookieOptions, SetCookieOptions>(setCookieOptionsParsed);
     }
 
     return setCookieOptionsParsed.data;
