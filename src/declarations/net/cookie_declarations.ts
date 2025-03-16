@@ -5,17 +5,12 @@
 // implementation
 type SetCookieOptions = {
     domain?: string;
-    expires?: number;
+    expires?: string;
     httpOnly?: boolean;
     maxAge?: number;
     path?: string;
     secure?: boolean;
-
-    /*path: "/",
-    domain: "localhost",
-    maxAge: 5000,
-    httpOnly: true,
-    secure: false,*/
+    sameSite?: boolean;
 };
 
 type CookieStoreOptions = {
@@ -28,7 +23,7 @@ type JWTCookieStoreOptions = CookieStoreOptions & {
 
 interface CookieStore {
     getByName(cookieName: string): Promise<string | undefined>;
-    setByName(cookieName: string): Promise<void>;
+    setByName(cookieName: string, cookieValue: string, setCookieOptions?: SetCookieOptions): Promise<void>;
 }
 
 interface JWTCookieStore {

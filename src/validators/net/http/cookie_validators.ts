@@ -24,11 +24,12 @@ import { createValidationError } from '../../../utils/misc/validation_utils';
 function validateSetCookieOptions(setCookieOptions: SetCookieOptions): SetCookieOptions {
     const cookieOptionsSchema = z.object({
         domain: z.string(),
-        expires: z.number(),
+        expires: z.string(),
         httpOnly: z.boolean(),
         maxAge: z.number(),
         path: z.string(),
         secure: z.boolean(),
+        sameSite: z.boolean(),
     }).partial();
 
     const setCookieOptionsParsed = cookieOptionsSchema.safeParse(setCookieOptions);
