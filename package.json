@@ -17,15 +17,33 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "next": "^15.2.2",
+    "server-only": "^0.0.1",
+    "firebase-admin": "^13.2.0",
+    "firebase": "^11.4.0"
   },
   "peerDependenciesMeta": {
     "zod": {
       "optional": true
+    },
+    "next": {
+      "optional": true
+    },
+    "server-only": {
+      "optional": true
+    },
+    "firebase-admin": {
+      "optional": true
+    },
+    "firebase": {
+      "optional": true
     }
   },
   "devDependencies": {
+    "@types/node": "^22.13.10",
     "@types/jest": "^29.5.14",
+    "@types/firebase": "^3.2.3",
     "@babel/core": "^7.26.9",
     "@babel/preset-env": "^7.26.9",
     "@babel/preset-typescript": "^7.26.0",
@@ -34,8 +52,7 @@
     "jest": "^29.7.0",
     "babel-jest": "^29.7.0",
     "ts-jest": "^29.2.5",
-    "zod": "^3.24.1",
-    "next": "^15.2.2"
+    "zod": "^3.24.1"
   },
   "dependencies": {}
 }

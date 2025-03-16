@@ -1,0 +1,9 @@
+{
+  "apiKey": "test_app_key",
+  "authDomain": "test_domain.com",
+  "projectId": "test_project_id",
+  "storageBucket": "est_domain.firebasestorage.app",
+  "messagingSenderId": "102030",
+  "appId": "1:555:web:444b",
+  "measurementId": "C-BB56"
+}
