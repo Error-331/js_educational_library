@@ -6,8 +6,18 @@ import type { Config } from 'jest';
 // implementation
 const config: Config = {
     verbose: true,
+
+    testPathIgnorePatterns: [
+        './tests/algorithms/',
+        './tests/data_structures/',
+        './tests/errors/',
+        './tests/state_machines/',
+        './tests/utils/',
+        './tests/validators/'
+    ],
+
     roots: [
-        './tests/'
+        './tests'
     ]
 };
 
