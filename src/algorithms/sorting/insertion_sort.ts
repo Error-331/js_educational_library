@@ -1,12 +1,14 @@
 // external imports
 
 // internal imports
+import { ComparatorType } from '../../declarations/utility_declarations';
+
 import { isArray, isFunction } from '../../utils/misc/logic_utils';
 import { curry } from '../../utils/misc/functional_utils';
 import { defaultCompare, comparatorIsGt } from '../../utils/misc/comparator_utils';
 
 // implementation
-function insertionSort<ValuesType extends unknown>(comparator: (previousElement: ValuesType, currentElement: ValuesType) => number, arrayToSort: ValuesType[]) {
+function insertionSort<ValuesType extends unknown>(comparator: ComparatorType<ValuesType>, arrayToSort: ValuesType[]) {
     if (!isFunction(comparator)) {
         throw new Error('Cannot sort an array - comparator is not a function');
     }

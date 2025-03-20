@@ -1,6 +1,8 @@
 // external imports
 
 // internal imports
+import { ComparatorType } from '../../declarations/utility_declarations';
+
 import { isString, isFunction } from '../../utils/misc/logic_utils';
 import { comparatorIsEqual, stringSimpleCaseInsensitiveComparator } from '../../utils/misc/comparator_utils';
 
@@ -21,7 +23,7 @@ import { curry } from '../../utils/misc/functional_utils';
  *
  */
 function naiveStringMatcher(
-    comparator: (first: string, second: string) => number,
+    comparator: ComparatorType<string>,
     strToMatch: string,
     strToExamine: string
 ): number {

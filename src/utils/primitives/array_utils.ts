@@ -1,6 +1,7 @@
 // external imports
 
 // internal imports
+import { ComparatorType } from '../../declarations/utility_declarations';
 import { ArrayIterator, CollectionIterator } from '../../declarations/collection_declarations';
 
 import { isNil,  isObject, isArray, isFunction, isBoolean } from '../misc/logic_utils';
@@ -18,7 +19,7 @@ function findIdxInObjectsArrayByKeyValue(valueToFind, objectsArray, keyToFind){
 }
 
 function findMinimumValueInArrayList(
-    comparator: (first: number, second: number) => number,
+    comparator: ComparatorType<number>,
     ...arraysList: number[][]
 ): number[] {
     if (!isFunction(comparator)) {

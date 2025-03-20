@@ -9,8 +9,12 @@ type PartialShallow<ObjectType> = {
 
 type AtLeast<ObjectType, ObjectKeysType extends keyof ObjectType> = Partial<ObjectType> & Pick<ObjectType, ObjectKeysType>;
 
+type ComparatorType<InputDataType> = (first: InputDataType, second: InputDataType) => number;
+
 // exports
 export type {
     PartialShallow,
     AtLeast,
+
+    ComparatorType,
 }

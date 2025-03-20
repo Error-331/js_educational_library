@@ -1,6 +1,8 @@
 // external imports
 
 // internal imports
+import { ComparatorType } from '../../declarations/utility_declarations';
+
 import { isNil, isArray, isFunction } from '../../utils/misc/logic_utils';
 import { mergeSort } from '../sorting/merge_sort';
 
@@ -45,7 +47,7 @@ import { mergeSort } from '../sorting/merge_sort';
  *
  */
 function mergeSortSegmentsByLeftSegment<InputDataType>(
-    comparator: (first: InputDataType, second: InputDataType) => InputDataType,
+    comparator: ComparatorType<InputDataType>,
     combinator: (firstSegment: InputDataType, secondSegment: InputDataType) => [InputDataType, InputDataType],
     boundariesArrayToMerge: [InputDataType, InputDataType][],
 ): [InputDataType, InputDataType][] {
