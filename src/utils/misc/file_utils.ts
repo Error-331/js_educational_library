@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { isString } from './logic_utils';
 
 // implementation
-function readJSONFileSync(path: string) {
+function readJSONFileSync<JSONObjectType extends object>(path: string): JSONObjectType {
     if (!isString(path)) {
         throw new RangeError('Cannot read JSON file - path to file is not a string');
     }
