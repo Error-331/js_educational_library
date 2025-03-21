@@ -64,6 +64,10 @@ type MockFirebaseAdminApp = {
     readonly options: MockFirebaseClientAdminAppOptions;
 }
 
+type MockFirebaseAdminAppAuth = {
+    readonly app: MockFirebaseAdminApp;
+}
+
 // exports
 export {
     MockFirebaseClientAppOptions,
@@ -78,4 +82,6 @@ export {
 
     MockFirebaseClientAdminAppOptions,
     MockFirebaseAdminApp,
+
+    MockFirebaseAdminAppAuth,
 }

@@ -2,7 +2,7 @@
 
 // internal imports
 import { __resetMock as resetFirebaseAdminAppMock } from '../../__mocks__/firebase-admin/app';
-//import { __resetMock as resetFirebaseAuthMock } from '../../__mocks__/firebase/auth';
+import { __resetMock as resetFirebaseAdminAuthMock } from '../../__mocks__/firebase-admin/auth';
 
 import FirebaseAdminRegistry from '../../../src/registers/firebase/firebase_admin_registry';
 
@@ -11,10 +11,10 @@ import FirebaseAdminAdditionalConfig from '../../__mocks__/firebase_admin_app_ad
 import FirebaseAdminServiceAccount from '../../__mocks__/firebase_admin_service_account.json';
 
 // implementation
-describe('Firebase client registry tests...', () => {
+describe('Firebase admin registry tests...', () => {
     beforeEach(() => {
         resetFirebaseAdminAppMock();
-       // resetFirebaseAuthMock();
+        resetFirebaseAdminAuthMock();
     });
 
     describe('Instance creation tests...', () => {
@@ -22,7 +22,7 @@ describe('Firebase client registry tests...', () => {
             const firebaseAdminRegistry = FirebaseAdminRegistry.getInstance();
 
             expect(firebaseAdminRegistry.appName).toEqual(env.FIREBASE_ADMIN_APP_NAME);
-            expect(firebaseAdminRegistry.app.name).toEqual(env.FIREBASE_CLIENT_APP_NAME);
+            expect(firebaseAdminRegistry.app.name).toEqual(env.FIREBASE_ADMIN_APP_NAME);
 
             const accessToken = await firebaseAdminRegistry.app.options.credential.getAccessToken();
             const returnedOptions = {
@@ -41,8 +41,7 @@ describe('Firebase client registry tests...', () => {
 
             expect(returnedOptions).toStrictEqual(properOptions);
 
-          //  expect(firebaseClientRegistry.auth.name).toEqual(env.FIREBASE_CLIENT_APP_NAME);
-          //  expect(firebaseClientRegistry.auth.config).toStrictEqual(FirebaseClientConfig);
+            expect(firebaseAdminRegistry.auth.app.name).toEqual(env.FIREBASE_ADMIN_APP_NAME);
         });
     });
 });

@@ -11,6 +11,7 @@ import {
 } from '../.jest/declarations/firebase_mock_declarations';
 
 import { getApps, __addApp } from  './firebase-admin/app';
+import { __addAuth } from './firebase-admin/auth';
 
 import { readJSONFileSync } from '../../src/utils/misc/file_utils';
 import { isNil, isString } from '../../src/utils/misc/logic_utils';
@@ -34,7 +35,7 @@ const credential = {
                         privateKey: serviceAccountData.private_key,
                     }
                 } else {
-                    serviceAccount = serviceAccountPathOrObject
+                    serviceAccount = serviceAccountPathOrObject;
                 }
 
                 const currentDate = new Date();
@@ -57,10 +58,13 @@ const admin = {
         const app = getApps().find(firebaseAdminApp => firebaseAdminApp.name === name);
 
         if (isNil(app)) {
-            __addApp({
+            const newApp = {
                 options,
                 name
-            });
+            };
+
+            __addApp(newApp);
+            __addAuth(newApp);
         }
     }
 };

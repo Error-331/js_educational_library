@@ -11,8 +11,8 @@ import { readJSONFileSync } from '../../utils/misc/file_utils';
 
 // implementation
 /**
- * Register that instantiates Firebase client app and hold reference to it.
- * Current class implements Singleton pattern which allows to avoid reinitialization of Firebase client app and be accessible from every part of the application.
+ * Register that instantiates Firebase Client app and hold reference to it.
+ * Current class implements Singleton pattern which allows to avoid reinitialization of Firebase Client app and be accessible from every part of the application.
  *
  * @class
  *

@@ -4,15 +4,22 @@ import 'server-only';
 import admin from 'firebase-admin';
 import { App, getApp, getApps } from 'firebase-admin/app';
 
-import { getFirestore } from 'firebase-admin/firestore';
-import { getStorage } from 'firebase-admin/storage';
-import { getAuth } from 'firebase-admin/auth';
+import { Firestore, getFirestore } from 'firebase-admin/firestore';
+import { Storage, getStorage } from 'firebase-admin/storage';
+import { Auth, getAuth } from 'firebase-admin/auth';
 
 // internal imports
 import { readJSONFileSync } from '../../utils/misc/file_utils';
 import { isNil, isString } from '../../utils/misc/logic_utils';
 
 // implementation
+/**
+ * Register that instantiates Firebase Admin app and hold reference to it.
+ * Current class implements Singleton pattern which allows to avoid reinitialization of Firebase Aamin app and be accessible from every part of the application.
+ *
+ * @class
+ *
+ */
 class FirebaseAdminRegistry {
     private static instance: FirebaseAdminRegistry;
 
@@ -81,17 +88,41 @@ class FirebaseAdminRegistry {
         return getApp(this.appName);
     }
 
-    get firestore() {
+    /**
+     * Method that returns current Firebase Admin application Firestore instance.
+     * Method will also try to initialize Firebase Admin application if it was not initialized previously.
+     *
+     * @returns {Firestore} Firebase Admin Firestore instance.
+     *
+     */
+
+    get firestore(): Firestore {
         this.init();
         return getFirestore();
     }
 
-    get storage() {
+    /**
+     * Method that returns current Firebase Admin application Storage instance.
+     * Method will also try to initialize Firebase Admin application if it was not initialized previously.
+     *
+     * @returns {Storage} Firebase Admin Storage instance.
+     *
+     */
+
+    get storage(): Storage {
         this.init();
         return getStorage(this.app);
     }
 
-    get auth() {
+    /**
+     * Method that returns current Firebase Admin application authentication instance.
+     * Method will also try to initialize Firebase Admin application if it was not initialized previously.
+     *
+     * @returns {Auth} Firebase Admin application authentication instance.
+     *
+     */
+
+    get auth(): Auth {
         this.init();
         return getAuth(this.app);
     }
