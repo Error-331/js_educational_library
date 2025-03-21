@@ -41,6 +41,10 @@ class NextJSServerCookieStore extends AbstractCookieStore implements CookieStore
         return cookieStore.get(cookieName)?.value;
     }
 
+    public async getJWTResponseCookie(): Promise<string | undefined> {
+        return this.getByName(JWT_COOKIE_DEFAULT_NAME);
+    }
+
     /**
      * Method that sets/modifies the cookie (via 'Set-Cookie' headers).
      *
