@@ -37,7 +37,7 @@ function getApp(appName: string): MockFirebaseClientApp {
     return app;
 }
 
-function __resetMock() {
+function __resetMock(): void {
     firebaseApps = [];
 }
 

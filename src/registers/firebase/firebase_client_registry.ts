@@ -2,13 +2,12 @@
 import 'server-only';
 import { FirebaseOptions } from '@firebase/app';
 
-import { readFileSync } from 'node:fs';
-
-import { initializeApp, getApp, getApps } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+import { FirebaseApp, initializeApp, getApp, getApps } from 'firebase/app';
+import { Auth, getAuth } from 'firebase/auth';
 
 // internal imports
 import { isNil, isString } from '../../utils/misc/logic_utils';
+import { readJSONFileSync } from '../../utils/misc/file_utils';
 
 // implementation
 /**
@@ -53,8 +52,7 @@ class FirebaseClientRegistry {
             throw new RangeError('Cannot load Firebase client application configuration file - path to file must be of type string');
         }
 
-        const fileContents = readFileSync(process.env.FIREBASE_CLIENT_APP_CONFIG_JSON_PATH, { encoding: 'utf8', flag: 'r' });
-        return JSON.parse(fileContents);
+        return readJSONFileSync<FirebaseOptions>(process.env.FIREBASE_CLIENT_APP_CONFIG_JSON_PATH);
     }
 
     /**
@@ -71,7 +69,7 @@ class FirebaseClientRegistry {
             throw new RangeError('Cannot initialize Firebase application - name is not specified');
         }
 
-        const firebaseApp = getApps().find(firebaseApp => firebaseApp.name === process.env.FIREBASE_CLIENT_APP_NAME);
+        const firebaseApp = getApps().find(firebaseApp => firebaseApp.name === this.appName);
         if (isNil(firebaseApp)) {
             initializeApp(this.loadFirebaseClientAppConfig(), this.appName);
         }
@@ -84,7 +82,7 @@ class FirebaseClientRegistry {
      *
      */
 
-    get appName() {
+    get appName(): string {
         return process.env.FIREBASE_CLIENT_APP_NAME;
     }
 
@@ -96,7 +94,7 @@ class FirebaseClientRegistry {
      *
      */
 
-    get app() {
+    get app(): FirebaseApp {
         this.init();
         return getApp(this.appName);
     }
@@ -109,7 +107,7 @@ class FirebaseClientRegistry {
      *
      */
 
-    get auth() {
+    get auth(): Auth {
         this.init();
         return getAuth(this.app);
     }
