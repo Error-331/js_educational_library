@@ -3,6 +3,11 @@
 // internal imports
 
 // implementation
+type testContextType1 = {
+    defParam1: string,
+    addParam1?: string | number,
+};
+
 const testState1 = 'state1';
 const testState2 = 'state2';
 const testState3 = 'state3';
@@ -22,8 +27,14 @@ const testSubTransition3 = 'testSubTransition3';
 const initialState1 = testState1;
 const unrecoverableErrorState = 'testUnrecoverableErrorState';
 
+const testContext1: testContextType1 = {
+    defParam1: 'test_value1'
+};
+
 // exports
 export {
+    testContextType1,
+
     testState1,
     testState2,
     testState3,
@@ -42,4 +53,6 @@ export {
 
     initialState1,
     unrecoverableErrorState,
+
+    testContext1,
 }

@@ -56,6 +56,9 @@ abstract class AbstractFiniteStateMachine<
     public abstract addStateActions(stateName: string, actionsData: StateActions): void;
     public abstract addStateTransition(stateName: string, transitionName: string, transitionData: StateTransition): void;
 
+    public abstract get statesCount(): number;
+    public abstract get statesCountNoneSpecial(): number;
+
     public get currentStateName(): string | undefined {
         return this._currentStateName;
     }

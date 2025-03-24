@@ -5,6 +5,8 @@ import { SimpleStateDefinition } from '../../src/declarations/state_machines_dec
 import SimpleFiniteStateMachine from '../../src/state_machines/simple_finite_state_machine';
 
 import {
+    testContextType1,
+
     testState1,
     testState2,
     testState3,
@@ -19,6 +21,8 @@ import {
 
     initialState1,
     unrecoverableErrorState,
+
+    testContext1,
 } from './common_finite_state_machine_test_data';
 
 import {
@@ -194,12 +198,104 @@ describe('Simple finite state machine class tests...', () => {
         }
     };
 
+    const canonicalStateDefinition3: SimpleStateDefinition<undefined, number | string | null | undefined | unknown> = {
+        initialState: initialState1,
+
+        states: {
+            [testState1]: {
+                transitions: {
+                    [testTransition1]: {
+                        target: testState4,
+                        action: async (context: testContextType1, data: number): Promise<number> => {
+                                context.addParam1 = 5;
+
+                                return data + 5;
+                            },
+                    },
+
+                    [testTransition2]: {
+                        target: testState4,
+                        action: async (context: undefined, data: string): Promise<string> => { return 'test_' + data; },
+                    },
+
+                    [testTransition3]: {
+                        target: testState5,
+                        action: async (context: undefined, data: string): Promise<string> => { return 'prom_' + data; },
+                    },
+                }
+            },
+
+            [testState2]: {
+                actions: {},
+
+                transitions: {
+                    [testTransition1]: {
+                        target: testState6,
+                        action: async (context: undefined, data: unknown): Promise<null> => { return null; },
+                    }
+                }
+            },
+
+            [testState3]: {
+                actions: {}
+            },
+
+            [testState4]: {
+                actions: {},
+
+                transitions: {
+                    [testTransition1]: {
+                        target: testState1,
+                        action: async (context: undefined, data: string): Promise<null> => { return null; },
+                    },
+
+                    [testTransition2]: {
+                        target: testState5,
+                        action: async (context: undefined, data: number): Promise<number> => { return data - 100; },
+                    }
+                }
+            },
+
+            [testState5]: {
+                transitions: {
+                    [testTransition1]: {
+                        target: testState2,
+                        action: async (context: undefined, data: unknown): Promise<unknown> => { return { key1: 'test_val1', key2: data }; },
+                    },
+
+                    [testTransition2]: {
+                        target: testState1,
+                        action: async (context: undefined, data: (va: number) => number): Promise<unknown> => { return data(5); },
+                    }
+                }
+            },
+
+            [testState6]: {
+                actions: {},
+                transitions: {
+                    [testTransition1]: {
+                        target: testState2,
+                    },
+
+                    [testTransition2]: {
+                        target: testState4,
+                        action: async (context: undefined, data: unknown): Promise<unknown> => { return { key1: 15, key2: data + '0' }; },
+                    }
+                }
+            },
+
+            [unrecoverableErrorState]: {}
+        }
+    };
+
     let stateDefinition1 = cloneDeep(canonicalStateDefinition1);
     let stateDefinition2 = cloneDeep(canonicalStateDefinition2);
+    let stateDefinition3 = cloneDeep(canonicalStateDefinition3);
 
     afterEach(() => {
         stateDefinition1 = cloneDeep(canonicalStateDefinition1);
         stateDefinition2 = cloneDeep(canonicalStateDefinition2);
+        stateDefinition3 = cloneDeep(canonicalStateDefinition3);
     });
 
     describe('Instance creation tests...', () => {
@@ -293,7 +389,7 @@ describe('Simple finite state machine class tests...', () => {
                 expect(dispatchResult).toBe(true);
                 checkInstance(stateMachine, testState4, undefined, stateDefinition2, stateDefinition2, undefined);
                 await checkTransitionActionMock(mockTransitionAction.mock, undefined, transitionActionTestParam1, transitionActionResult1, 1);
-            });
+            });//
 
             test('Should dispatch a transition and transit to new state - case 2 (no actions, transition actions (no context))', async () => {
                 const mockTransitionAction = mockTransitionActionInStateDefinition(stateDefinition2, initialState1, testTransition2);
@@ -365,6 +461,22 @@ describe('Simple finite state machine class tests...', () => {
                 expect(dispatchResult).toBe(true);
                 checkInstance(stateMachine, testState1, undefined, stateDefinition2, stateDefinition2, undefined);
                 await checkTransitionActionMock(mockTransitionAction6.mock, undefined, transitionActionTestParam10, transitionActionResult10, 1);
+            });
+        });
+
+        describe('Successful transition to new state(s) (no actions, transition actions (with context))...', () => {
+            test('Should dispatch a transition and transit to new state - case 1', async () => {
+                const mockTransitionAction = mockTransitionActionInStateDefinition(stateDefinition3, initialState1, testTransition1);
+
+                const stateMachine = new SimpleFiniteStateMachine<testContextType1>(stateDefinition3, undefined, testContext1);
+                checkInstance<testContextType1>(stateMachine, initialState1, testContext1, stateDefinition3, stateDefinition3, undefined);
+
+                const dispatchResult = await stateMachine.dispatch(testTransition1, transitionActionTestParam1);
+                const testContext1DerivedState1: testContextType1 = Object.assign({}, testContext1, { addParam1: 5 });
+
+                expect(dispatchResult).toBe(true);
+                checkInstance<testContextType1>(stateMachine, testState4, testContext1DerivedState1, stateDefinition3, stateDefinition3, undefined);
+                await checkTransitionActionMock(mockTransitionAction.mock, testContext1, transitionActionTestParam1, transitionActionResult1, 1);
             });
         });
 

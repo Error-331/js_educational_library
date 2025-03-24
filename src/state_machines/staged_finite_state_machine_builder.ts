@@ -28,6 +28,7 @@ class StagedFiniteStateMachineBuilder<TransitionContextType = undefined> {
 
     constructor(context: TransitionContextType, initialState: string) {
         this.stateMachine = new StagedFiniteStateMachine({ initialState, states: {} }, undefined, context);
+        this.stateMachine.addEmptyStateIfNotExist(initialState);
     }
 
     protected resetStage(): void {
@@ -80,11 +81,7 @@ class StagedFiniteStateMachineBuilder<TransitionContextType = undefined> {
         let target: string | StagedTransitionToStateArray;
 
         if (this.transitionConditionsToStates.length === 0) {
-            if (isNil(this.nextStateName)) {
-                throw new RangeError('Cannot finalize transition - target state is not specified');
-            }
-
-            target = this.nextStateName;
+            target = !isNil(this.nextStateName) ? this.nextStateName : [];
         } else {
             target = this.transitionConditionsToStates.slice();
         }

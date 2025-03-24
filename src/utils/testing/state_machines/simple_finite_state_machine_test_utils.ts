@@ -18,10 +18,10 @@ function mockTransitionActionInStateDefinition(
     return mockTransitionAction;
 }
 
-function checkInstance(
-    stateMachine: SimpleFiniteStateMachine,
+function checkInstance<TransitionContextType = unknown>(
+    stateMachine: SimpleFiniteStateMachine<TransitionContextType>,
     currentStateName: string | undefined,
-    context: unknown,
+    context: TransitionContextType,
     initialStateDefinition: SimpleStateDefinition | undefined,
     currentStateDefinition: SimpleStateDefinition | undefined,
     unrecoverableErrorStateName: string | undefined

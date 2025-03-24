@@ -121,6 +121,36 @@ describe('Staged finite state machine builder class tests...', () => {
         });
     });
 
+    describe('stage() method tests...', () => {
+        test('Should correctly compose state using multiple stages - case 1 (two transitions)...', () => {
+            const builder = new StagedFiniteStateMachineBuilder(undefined, testState1);
+
+            const stateMachine = builder
+                .stage(testState1,  async (context: undefined): Promise<boolean> => { return true })
+                // .nextStage(testState2, async (context: undefined, data: number): Promise<boolean> => { return data === 1 })
+                //.nextStage(testState3, async (context: undefined, data: string): Promise<boolean> => { return data === 'test' })
+                .build();
+
+            console.log('ss', stateMachine.currentStateDefinition);
+            console.log('ss1', JSON.stringify(stateMachine.currentStateDefinition));
+        });
+    });
+
+
+    /*describe('nextStage() method tests...', () => {
+        test('Should correctly compose state using multiple chained stages - case 1 (two transitions)...', () => {
+            const builder = new StagedFiniteStateMachineBuilder(undefined, testState1);
+
+            const stateMachine = builder
+                .stage(testState1,  async (context: undefined): Promise<boolean> => { return true })
+               // .nextStage(testState2, async (context: undefined, data: number): Promise<boolean> => { return data === 1 })
+                //.nextStage(testState3, async (context: undefined, data: string): Promise<boolean> => { return data === 'test' })
+                .build();
+
+            console.log('ss', stateMachine.currentStateDefinition);
+        });
+    });*/
+
 });
 
 // exports

@@ -206,6 +206,20 @@ class SimpleFiniteStateMachine<TransitionContextType = undefined, TransitionRetu
             return false;
         }
     }
+
+    public get statesCount(): number {
+        return Object.keys(this._currentStateDefinition.states).length;
+    }
+
+    public get statesCountNoneSpecial(): number {
+        const statesCount = this.statesCount;
+
+        if (!isNil(this._unrecoverableErrorStateName) && !isNil(this._currentStateDefinition.states[this._unrecoverableErrorStateName])) {
+            return statesCount - 1;
+        }
+
+        return statesCount;
+    }
 }
 
 // exports
