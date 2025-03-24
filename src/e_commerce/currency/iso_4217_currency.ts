@@ -1,11 +1,13 @@
 // external imports
 
 // internal imports
+import { CurrencyInfo } from '../../declarations/e_commerce/currency_declarations';
 import AbstractCurrency from './abstract_currency';
-import { isNil, isString, isNumber } from '../../utils/misc/logic_utils';
+
+import { isString, isNumber } from '../../utils/misc/logic_utils';
 
 // implementation
-class ISO4217Currency extends AbstractCurrency{
+class ISO4217Currency extends AbstractCurrency implements CurrencyInfo {
     private _alphabeticCode: string;
     private _numericCode: number;
 
