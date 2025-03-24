@@ -15,6 +15,7 @@ import {
     checkLinkedListIterator,
 } from '../../../src/utils/testing/data_structures/linked_list/linked_list_class_test_utils';
 import { checkLinkedListNodeDestroyed } from '../../../src/utils/testing/data_structures/linked_list/linked_list_node_class_test_utils';
+import { defaultCompare } from '../../../src/utils/misc/comparator_utils';
 
 import LinkedList from '../../../src/data_structures/linked_list/linked_list';
 
@@ -24,12 +25,12 @@ type KeyValueNode = { key: number; value: number };
 describe('Linked list class tests...', () => {
     describe('Instance creation tests...', () => {
         test('Should create an empty linked list', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
             checkLinkedListEmpty<number>(linkedListObj);
         });
 
         test('Should create non-empty linked list', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -42,7 +43,7 @@ describe('Linked list class tests...', () => {
 
     describe('push() method tests...', () => {
         test('Should push an element to linked list', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
             const newNode = linkedListObj.push(5);
 
             checkLinkedListData<number>(newNode.data, 5);
@@ -52,7 +53,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should push multiple elements to linked list', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             let newNode = linkedListObj.push(5);
             checkLinkedListData<number>(newNode.data, 5);
@@ -73,7 +74,7 @@ describe('Linked list class tests...', () => {
 
     describe('insertBeforeHead() method tests...', () => {
         test('Should correctly insert element into linked list before "head" - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             let newNode = linkedListObj.insertBeforeHead(5);
             checkLinkedListData<number>(newNode.data, 5);
@@ -89,7 +90,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should correctly insert element into linked list before "head" - case 2', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -109,7 +110,7 @@ describe('Linked list class tests...', () => {
 
     describe('insertAfterNode() method tests...', () => {
         test('Should correctly insert element into linked list after specific node - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             let previousNode = linkedListObj.push(7);
@@ -127,7 +128,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should correctly insert element into linked list after specific node - case 2', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             let previousNode = linkedListObj.push(7);
@@ -153,7 +154,7 @@ describe('Linked list class tests...', () => {
 
     describe('insert() method tests...', () => {
         test('Should correctly insert element into linked list - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -170,7 +171,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should correctly insert element into linked list - case 2', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(74);
             linkedListObj.push(1);
@@ -188,7 +189,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should correctly insert element into linked list - case 3', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -205,7 +206,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should correctly insert element into linked list - case 4', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(74);
             linkedListObj.push(1);
@@ -225,7 +226,7 @@ describe('Linked list class tests...', () => {
 
     describe('getNodeAt() method tests...', () => {
         test('Should correctly extract node from the linked list by its index - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -241,7 +242,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should correctly extract node from the linked list by its index - case 2', () => {
-            const linkedListObj = new LinkedList<KeyValueNode>();
+            const linkedListObj = new LinkedList<KeyValueNode>(defaultCompare);
 
             linkedListObj.push({key: 5, value: 65});
             linkedListObj.push({key: 7, value: -5});
@@ -259,7 +260,7 @@ describe('Linked list class tests...', () => {
 
     describe('find() method tests...', () => {
         test('Should correctly find node in the linked list by node value - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -313,7 +314,7 @@ describe('Linked list class tests...', () => {
 
     describe('indexOf() method tests...', () => {
         test('Should correctly find nodes index in the linked list by node value - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -367,7 +368,7 @@ describe('Linked list class tests...', () => {
 
     describe('removeHeadNode() method tests...', () => {
         test('Should correctly remove head node from the linked list - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -385,7 +386,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should correctly remove head node from the linked list - case 2', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -422,7 +423,7 @@ describe('Linked list class tests...', () => {
 
     describe('removeNextNode() method tests...', () => {
         test('Should correctly remove a node after specific one in the linked list - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             const previousNode = linkedListObj.push(7);
@@ -440,7 +441,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should correctly remove a node after specific one in the linked list - case 2', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             const previousNode = linkedListObj.push(5);
             linkedListObj.push(7);
@@ -472,7 +473,7 @@ describe('Linked list class tests...', () => {
 
     describe('removeAt() method tests...', () => {
         test('Should correctly remove a node at specific index in the linked list - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -490,7 +491,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should correctly remove a node at specific index in the linked list - case 2', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -508,7 +509,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should correctly remove a node at specific index in the linked list - case 3', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -528,7 +529,7 @@ describe('Linked list class tests...', () => {
 
     describe('remove() method tests...', () => {
         test('Should correctly remove a node with specific value in the linked list - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -609,7 +610,7 @@ describe('Linked list class tests...', () => {
 
     describe('iterator tests...', () => {
         test('Should correctly iterate through the linked list - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
             const linkedListValues = [5, 7, -1, 10];
 
             linkedListObj.push(linkedListValues[0]);
@@ -621,7 +622,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should correctly iterate through the linked list - case 2', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
             const linkedListValues = [74, 1, -65, -2, 88];
 
             linkedListObj.push(linkedListValues[0]);
@@ -636,7 +637,7 @@ describe('Linked list class tests...', () => {
 
     describe('toString() method tests...', () => {
         test('Should correctly convert linked list to string - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -652,7 +653,7 @@ describe('Linked list class tests...', () => {
 
     describe('toArray() method tests...',() => {
         test('Should correctly convert linked list to array - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);
@@ -666,7 +667,7 @@ describe('Linked list class tests...', () => {
         });
 
         test('Should correctly convert linked list to array - case 2', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(74);
             linkedListObj.push(1);
@@ -683,7 +684,7 @@ describe('Linked list class tests...', () => {
 
     describe('destroy() method tests...', () => {
         test('Should correctly destroy linked list and free all resources - case 1', () => {
-            const linkedListObj = new LinkedList<number>();
+            const linkedListObj = new LinkedList<number>(defaultCompare);
 
             linkedListObj.push(5);
             linkedListObj.push(7);

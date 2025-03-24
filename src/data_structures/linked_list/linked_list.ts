@@ -3,8 +3,8 @@
 // internal imports
 import { ComparatorType } from '../../declarations/utility_declarations';
 
-import { isNil } from '../../utils/misc/logic_utils';
-import { defaultCompare, comparatorIsEqual } from '../../utils/misc/comparator_utils';
+import { isNil, isFunction } from '../../utils/misc/logic_utils';
+import { comparatorIsEqual } from '../../utils/misc/comparator_utils';
 
 import LinkedListNode from './linked_list_node';
 
@@ -13,7 +13,7 @@ class LinkedList<DataType> {
     protected _head: LinkedListNode<DataType> | null  = null;
     protected _count: number = 0;
 
-    protected _comparator: ComparatorType<DataType> = defaultCompare;
+    protected _comparator: ComparatorType<DataType>;
 
     public findNode(data: DataType): LinkedListNode<DataType> | null {
         for (const node of this) {
@@ -182,22 +182,23 @@ class LinkedList<DataType> {
 
         return dataArray;
     }
-
+     // LinkedListNode<DataType>
+     //
     public [Symbol.iterator](): Iterator<LinkedListNode<DataType>, undefined> {
         let nodeCounter = 0;
-        let node = null;
+        let node: LinkedListNode<DataType> = null;
 
         const linkedList = this;
 
         return {
-            next: function(): IteratorResult<LinkedListNode<DataType>, never> {
+            next: function(): IteratorResult<LinkedListNode<DataType>, undefined> {
                 if (nodeCounter >= linkedList._count) {
                     return { done: true, value: undefined };
                 } else if (nodeCounter === 0) {
                     nodeCounter += 1;
                     node = linkedList._head;
 
-                    return node === null ? { done: true, value: undefined } : { value: node, done: false };
+                    return node === null ? { done: true, value: undefined } : { done: false, value: node };
                 } else {
                     node = node.next;
 
@@ -205,14 +206,14 @@ class LinkedList<DataType> {
                         return { done: true, value: undefined };
                     } else {
                         nodeCounter += 1;
-                        return { value: node, done: false };
+                        return { done: false, value: node };
                     }
                 }
             }
         }
     }
 
-    public getNodeAt(index): LinkedListNode<DataType> | null {
+    public getNodeAt(index: number): LinkedListNode<DataType> | null {
         if (index >= 0 && index <= this._count) {
             let node = this._head;
 
@@ -283,6 +284,10 @@ class LinkedList<DataType> {
     }
 
     constructor(comparator?: ComparatorType<DataType>) {
+        if (!isFunction(comparator)) {
+            throw new RangeError('Cannot create linked list instance - comparator is not a function')
+        }
+
         this.comparator = comparator;
     }
 }
