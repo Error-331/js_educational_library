@@ -4,13 +4,50 @@
 
 // implementation
 type SetCookieOptions = {
+    /**
+     * Domain name for the cookie
+     */
     domain?: string;
+
+    /**
+     * Expiry date of the cookie in GMT
+     */
     expires?: Date;
+
+    /**
+     * Flags the cookie to be accessible only by the web server
+     */
     httpOnly?: boolean;
+
+    /**
+     * Option for setting the expiry time relative to the current time in **milliseconds**
+     */
     maxAge?: number;
+
+    /**
+     * Path for the cookie
+     */
     path?: string;
+
+    /**
+     * Marks the cookie to be used with HTTPS only.
+     */
     secure?: boolean;
-    sameSite?: boolean;
+
+    /**
+     * Value of the “SameSite” Set-Cookie attribute.
+     * @link https://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site-00#section-4.1.1.
+     */
+    sameSite?: 'lax' | 'strict' | 'none';
+
+    /**
+     * Value of the “Priority” Set-Cookie attribute.
+     * @link https://datatracker.ietf.org/doc/html/draft-west-cookie-priority-00#section-4.3
+     */
+    priority?: 'low' | 'medium' | 'high';
+
+    /** Marks the cookie to use partitioned storage. */
+    partitioned?: boolean;
 };
 
 type CookieStoreOptions = {

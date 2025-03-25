@@ -18,7 +18,7 @@ const JWT_SET_COOKIE_DEFAULT_OPTIONS: SetCookieOptions = {
     maxAge: JWT_COOKIE_DEFAULT_MAX_AGE,
     httpOnly: true,
     secure: true,
-    sameSite: true,
+    sameSite: 'strict',
 }
 
 const JWT_SET_COOKIE_LOCALHOST_OPTIONS: SetCookieOptions = {
