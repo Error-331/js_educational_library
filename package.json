@@ -8,8 +8,8 @@
     "./errors/*": "./src/errors/*.ts",
     "./utils/misc/*": "./src/utils/misc/*.ts",
 
-    "./net/http/cookies": "./src/net/http/cookies/*.ts",
-    "./security/authentication/strategies/firebase": "./src/security/authentication/strategies/firebase/*.ts",
+    "./net/http/cookies/*": "./src/net/http/cookies/*.ts",
+    "./security/authentication/strategies/firebase/*": "./src/security/authentication/strategies/firebase/*.ts",
 
     "./package.json": "./package.json"
   },
