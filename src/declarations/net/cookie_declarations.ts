@@ -5,7 +5,7 @@
 // implementation
 type SetCookieOptions = {
     domain?: string;
-    expires?: string;
+    expires?: Date;
     httpOnly?: boolean;
     maxAge?: number;
     path?: string;

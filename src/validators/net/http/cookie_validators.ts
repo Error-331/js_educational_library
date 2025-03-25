@@ -24,7 +24,7 @@ import { createValidationError } from '../../../utils/misc/validation_utils';
 function validateSetCookieOptions(setCookieOptions: SetCookieOptions): SetCookieOptions {
     const cookieOptionsSchema = z.object({
         domain: z.string(),
-        expires: z.string(),
+        expires: z.date(),
         httpOnly: z.boolean(),
         maxAge: z.number(),
         path: z.string(),

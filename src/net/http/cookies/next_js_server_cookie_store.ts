@@ -3,30 +3,15 @@ import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adap
 import { cookies } from 'next/headers';
 
 // internal imports
-import { JWTCookieStoreOptions, SetCookieOptions, CookieStore, JWTCookieStore } from '../../../declarations/net/cookie_declarations';
-import { JWT_COOKIE_DEFAULT_NAME, JWT_SET_COOKIE_DEFAULT_OPTIONS } from '../../../constants/net/http/cookie_constants';
-
-import AbstractCookieStore from './abstract_cookie_store';
-import { validateSetCookieOptions } from '../../../validators/net/http/cookie_validators';
+import { SetCookieOptions, CookieStore, JWTCookieStore } from '../../../declarations/net/cookie_declarations';
+import AbstractJWTCookieStore from './abstract_jwt_cookie_store';
 
 import { isNil, isString } from '../../../utils/misc/logic_utils';
 import { cloneDeep } from '../../../utils/primitives/object_utils';
 
 // implementation
-class NextJSServerCookieStore extends AbstractCookieStore implements CookieStore, JWTCookieStore {
+class NextJSServerCookieStore extends AbstractJWTCookieStore implements CookieStore, JWTCookieStore {
     protected parsedCookiesStore: ReadonlyRequestCookies;
-    protected options: JWTCookieStoreOptions;
-
-    // @todo Replace Object.assign() with something like mergeDeep
-    constructor(options?: JWTCookieStoreOptions) {
-        super(options);
-
-        if (!isNil(this.options.jwtSetCookieOptions)) {
-            this.options.jwtSetCookieOptions = Object.assign({}, JWT_SET_COOKIE_DEFAULT_OPTIONS, validateSetCookieOptions(this.options.jwtSetCookieOptions));
-        } else {
-            this.options.jwtSetCookieOptions = cloneDeep(JWT_SET_COOKIE_DEFAULT_OPTIONS);
-        }
-    }
 
     protected async parseCookies(): Promise<ReadonlyRequestCookies> {
         if (isNil(this.parsedCookiesStore)) {
@@ -41,17 +26,9 @@ class NextJSServerCookieStore extends AbstractCookieStore implements CookieStore
         cookieStore.delete(cookieName);
     }
 
-    public async clearJWTResponseCookie(): Promise<void> {
-        await this.clearByName(JWT_COOKIE_DEFAULT_NAME);
-    }
-
     public async getByName(cookieName: string): Promise<string | undefined> {
         const cookieStore = await this.parseCookies();
         return cookieStore.get(cookieName)?.value;
-    }
-
-    public async getJWTResponseCookie(): Promise<string | undefined> {
-        return this.getByName(JWT_COOKIE_DEFAULT_NAME);
     }
 
     /**
@@ -82,16 +59,6 @@ class NextJSServerCookieStore extends AbstractCookieStore implements CookieStore
 
         const cookieStore = await this.parseCookies();
         cookieStore.set(cookieName, cookieValue, newSetCookieOptions);
-    }
-
-    public async setJWTResponseCookie(jwtToken: string, setCookieOptions?: SetCookieOptions): Promise<void> {
-        let newSetCookieOptions: SetCookieOptions;
-
-        if (!isNil(setCookieOptions)) {
-            newSetCookieOptions = this.mergeSetCookieOptions(this.options.jwtSetCookieOptions, setCookieOptions);
-        }
-
-        await this.setByName(JWT_COOKIE_DEFAULT_NAME, jwtToken, newSetCookieOptions);
     }
 }
 

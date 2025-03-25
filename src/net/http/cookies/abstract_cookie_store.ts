@@ -14,7 +14,7 @@ import { cloneDeep } from '../../../utils/primitives/object_utils';
  * @class
  *
  */
-class AbstractCookieStore {
+abstract class AbstractCookieStore {
     protected options: CookieStoreOptions;
 
     /**
@@ -59,6 +59,20 @@ class AbstractCookieStore {
 
         return Object.assign({}, originalOptionsCopy, additionalOptionsCopy);
     }
+
+    public abstract clearByName(cookieName: string): Promise<void>;
+    public abstract getByName(cookieName: string): Promise<string | undefined>;
+
+    /**
+     * Method that sets/modifies the cookie (via 'Set-Cookie' headers).
+     *
+     * @param {string} cookieName - cookie name to be set/modified.
+     * @param {string} cookieValue - new cookie value.
+     * @param {SetCookieOptions} setCookieOptions - cookie options that will override default ones (@see {@link this.options.setCookieOptions})
+     *
+     */
+
+    public abstract setByName(cookieName: string, cookieValue: string, setCookieOptions?: SetCookieOptions): Promise<void>;
 }
 
 // exports
