@@ -36,6 +36,15 @@ class NextJSServerCookieStore extends AbstractCookieStore implements CookieStore
         return this.parsedCookiesStore;
     }
 
+    public async clearByName(cookieName: string): Promise<void> {
+        const cookieStore = await this.parseCookies();
+        cookieStore.delete(cookieName);
+    }
+
+    public async clearJWTResponseCookie(): Promise<void> {
+        await this.clearByName(JWT_COOKIE_DEFAULT_NAME);
+    }
+
     public async getByName(cookieName: string): Promise<string | undefined> {
         const cookieStore = await this.parseCookies();
         return cookieStore.get(cookieName)?.value;
