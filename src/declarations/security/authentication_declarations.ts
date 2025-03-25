@@ -7,7 +7,7 @@ type EmailPasswordSingInParams = [email: string, password: string];
 
 interface AuthenticationSignInStrategy<SignInParams> {
     signIn(...args: SignInParams): Promise<void>;
-    signOut(): Promise<boolean>;
+    signOut(): Promise<void>;
 }
 
 interface AuthenticationEmailPasswordSignInStrategy extends AuthenticationSignInStrategy<EmailPasswordSingInParams> {}
