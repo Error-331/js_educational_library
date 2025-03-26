@@ -1,5 +1,5 @@
 // external imports
-import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
+//import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
 
 // internal imports
 import { CookieStore, JWTCookieStore } from '../../../../declarations/net/cookie_declarations';
@@ -34,15 +34,15 @@ abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthent
         }
 
         const fbAuth = FirebaseAdminRegistry.getInstance().auth;
-        let decodedToken: DecodedIdToken;
+        //let decodedToken: DecodedIdToken;
 
         try {
-            decodedToken = await fbAuth.verifySessionCookie(jwtValue);
+            await fbAuth.verifySessionCookie(jwtValue);
         } catch (error) {
             return false;
         }
 
-        return decodedToken.email_verified;
+        return true;
     }
 
     public async signOut(): Promise<void> {

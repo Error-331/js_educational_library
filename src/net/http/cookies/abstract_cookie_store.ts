@@ -13,9 +13,11 @@ import { cloneDeep } from '../../../utils/primitives/object_utils';
  * Abstract class that represents a cookie store and implements some utility methods.
  * @class
  *
+ * @template OptionsType
+ *
  */
-abstract class AbstractCookieStore {
-    protected options: CookieStoreOptions;
+abstract class AbstractCookieStore<OptionsType = CookieStoreOptions> {
+    protected options: OptionsType;
 
     /**
      * Cookie store constructor.
@@ -29,8 +31,8 @@ abstract class AbstractCookieStore {
      * @todo Replace Object.assign() with something like mergeDeep
      *
      */
-    constructor(options?: CookieStoreOptions) {
-        this.options = defaultTo<CookieStoreOptions, CookieStoreOptions>({}, options);
+    constructor(options?: OptionsType) {
+        this.options = defaultTo<OptionsType, OptionsType>({}, options);
 
         if (!isNil(this.options.setCookieOptions)) {
             this.options.setCookieOptions =  Object.assign({}, SET_COOKIE_DEFAULT_OPTIONS, validateSetCookieOptions(this.options.setCookieOptions));

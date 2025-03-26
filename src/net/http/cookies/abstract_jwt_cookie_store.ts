@@ -12,9 +12,7 @@ import { prepareFormattedUTCDateFromNow } from '../../../utils/date/native_date_
 import { isNil } from '../../../utils/misc/logic_utils';
 
 // implementation
-abstract class AbstractJWTCookieStore extends AbstractCookieStore {
-    protected options: JWTCookieStoreOptions;
-
+abstract class AbstractJWTCookieStore extends AbstractCookieStore<JWTCookieStoreOptions> {
     // @todo Replace Object.assign() with something like mergeDeep
     constructor(options?: JWTCookieStoreOptions) {
         super(options);

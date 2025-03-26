@@ -1,5 +1,4 @@
 // external imports
-import 'server-only';
 import { FirebaseOptions } from '@firebase/app';
 
 import { FirebaseApp, initializeApp, getApp, getApps } from 'firebase/app';

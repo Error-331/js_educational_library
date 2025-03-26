@@ -1,6 +1,11 @@
 // external imports
+import { z } from 'zod';
 
 // internal imports
+import {
+    VALIDATION_SET_COOKIE_PRIORITY_ZOD_ENUM,
+    VALIDATION_SET_COOKIE_SAME_SITE_ZOD_ENUM
+} from '../../constants/validation/cookie_validation_constants';
 
 // implementation
 type SetCookieOptions = {
@@ -38,13 +43,13 @@ type SetCookieOptions = {
      * Value of the “SameSite” Set-Cookie attribute.
      * @link https://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site-00#section-4.1.1.
      */
-    sameSite?: 'lax' | 'strict' | 'none';
+    sameSite?: z.infer<typeof VALIDATION_SET_COOKIE_SAME_SITE_ZOD_ENUM>;
 
     /**
      * Value of the “Priority” Set-Cookie attribute.
      * @link https://datatracker.ietf.org/doc/html/draft-west-cookie-priority-00#section-4.3
      */
-    priority?: 'low' | 'medium' | 'high';
+    priority?: z.infer<typeof VALIDATION_SET_COOKIE_PRIORITY_ZOD_ENUM>;
 
     /** Marks the cookie to use partitioned storage. */
     partitioned?: boolean;

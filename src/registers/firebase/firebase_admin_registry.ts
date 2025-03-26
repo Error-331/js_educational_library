@@ -1,6 +1,4 @@
 // external imports
-import 'server-only';
-
 import admin from 'firebase-admin';
 import { App, getApp, getApps } from 'firebase-admin/app';
 

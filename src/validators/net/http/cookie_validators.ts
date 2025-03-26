@@ -33,8 +33,8 @@ function validateSetCookieOptions(setCookieOptions: SetCookieOptions): SetCookie
         maxAge: z.number(),
         path: z.string(),
         secure: z.boolean(),
-        sameSite: z.infer(typeof VALIDATION_SET_COOKIE_SAME_SITE_ZOD_ENUM),
-        priority: z.infer(typeof VALIDATION_SET_COOKIE_PRIORITY_ZOD_ENUM),
+        sameSite: VALIDATION_SET_COOKIE_SAME_SITE_ZOD_ENUM,
+        priority: VALIDATION_SET_COOKIE_PRIORITY_ZOD_ENUM,
         partitioned: z.boolean()
     }).partial();
 
