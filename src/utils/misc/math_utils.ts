@@ -1,4 +1,9 @@
-function digitsCount(usrNumber) {
+// external imports
+
+// internal imports
+
+// implementation
+function digitsCount(usrNumber: number): number {
     let count = 0;
     if (usrNumber >= 1) {
         ++count;
@@ -12,33 +17,33 @@ function digitsCount(usrNumber) {
     return count;
 }
 
-function eq(value1, value2) {
+function eq(value1: number, value2: number): boolean {
     return value1 === value2;
 }
 
-function lt(value, boundary) {
+function lt(value: number, boundary: number): boolean {
     return value < boundary;
 }
 
-function gt(value, boundary) {
+function gt(value: number, boundary: number): boolean {
     return value > boundary;
 }
 
-function lte(value, boundary) {
+function lte(value: number, boundary: number): boolean {
     return value <= boundary;
 }
 
-function gte(value, boundary) {
+function gte(value: number, boundary: number): boolean {
     return value >= boundary;
 }
 
-function between(leftBoundary, rightBoundary, value) {
+function between(leftBoundary: number, rightBoundary: number, value: number): boolean {
     return (gt(value, leftBoundary) && lt(value, rightBoundary)) ||
         eq(value, leftBoundary) ||
         eq (value, rightBoundary);
 }
 
-function calcPagesCount(elementsCount, pageSize) {
+function calcPagesCount(elementsCount: number, pageSize: number): number {
     if (pageSize >= elementsCount) {
         return 1;
     }
@@ -52,6 +57,7 @@ function calcPagesCount(elementsCount, pageSize) {
     }
 }
 
+// exports
 export {
     digitsCount,
     eq,
