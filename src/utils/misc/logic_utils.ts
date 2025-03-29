@@ -113,6 +113,14 @@ function isNullOrEmpty(value: unknown): boolean {
     return false;
 }
 
+function isCanBeEmpty(value: unknown): boolean {
+    if (isNil(value)) {
+        return false;
+    } else {
+        return !!(isArray(value) || isObject(value) || isString(value));
+    }
+}
+
 function defaultTo<DefaultValueType, ValueType>(defaultValue: DefaultValueType, value: ValueType | null | undefined): ValueType | DefaultValueType {
     if (isNullOrEmpty(value)) {
         return defaultValue;
@@ -134,5 +142,6 @@ export {
     isNull,
     isNil,
     isNullOrEmpty,
+    isCanBeEmpty,
     defaultTo,
 }
