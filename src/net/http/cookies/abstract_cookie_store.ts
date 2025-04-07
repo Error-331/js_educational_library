@@ -17,7 +17,7 @@ import { cloneDeep } from '../../../utils/primitives/object_utils';
  *
  */
 abstract class AbstractCookieStore<OptionsType extends CookieStoreOptions> {
-    protected options: OptionsType = {};
+    protected options: OptionsType;
 
     /**
      * Cookie store constructor.

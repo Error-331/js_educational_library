@@ -5,10 +5,15 @@
   "exports": {
     ".": "./src/index.ts",
 
+    "./decralations/net/http/*": "./src/decralations/net/http/*.ts",
+
+    "./constants/net/http/*": "./src/constants/net/http/*.ts",
+
     "./errors/*": "./src/errors/*.ts",
     "./utils/misc/*": "./src/utils/misc/*.ts",
 
     "./net/http/cookies/*": "./src/net/http/cookies/*.ts",
+    "./net/http/request/*": "./src/net/http/request/*.ts",
     "./security/authentication/strategies/firebase/*": "./src/security/authentication/strategies/firebase/*.ts",
 
     "./package.json": "./package.json"
