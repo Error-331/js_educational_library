@@ -1,7 +1,14 @@
 // external imports
 
 // internal imports
-import { GenericFunctionType, RequiredFirstParameters, CurriedFunction } from '../../declarations/function_declarations';
+import {
+    GenericFunctionType,
+    RequiredFirstParameters,
+    CurriedFunction,
+
+    LastElementOfUnknownArgsFunctionsList,
+    ListOfUnknownArgsFunctionsWithLastReturnType,
+} from '../../declarations/function_declarations';
 
 import { isNil } from './logic_utils';
 import { extractPropValueByPath, setPropValueByPath } from '../primitives/object_utils';
@@ -66,6 +73,30 @@ const defaultTo = <FunctionType extends GenericFunctionType>(defaultValue: unkno
  *
  */
 const defaultToNull = <FunctionType extends GenericFunctionType>(testValue: unknown) => defaultTo<FunctionType>(null)(testValue);
+
+
+function chain<
+    LastFunctionReturnType = unknown,
+    FunctionsListType extends ListOfUnknownArgsFunctionsWithLastReturnType<LastFunctionReturnType> = ListOfUnknownArgsFunctionsWithLastReturnType<LastFunctionReturnType>>
+    (...chainFunctions: FunctionsListType) {
+    return (...args: unknown[]): ReturnType<LastElementOfUnknownArgsFunctionsList<FunctionsListType>> => {
+        if (chainFunctions.length === 1) {
+            return chainFunctions[chainFunctions.length - 1](...args);
+        }
+
+        let res: unknown = chainFunctions[0](...args);
+
+        for (let funcIdx = 1; funcIdx < chainFunctions.length - 1; funcIdx++) {
+            res = chainFunctions[funcIdx](res);
+        }
+
+        return chainFunctions[chainFunctions.length - 1](res);
+    };
+}
+
+const b = chain<number>(() => '3', () => '3', () => 5)
+
+//chain<number>([() => '3', () => '3', () => 5])
 
 const lens = (getter, setter) => {
     return ({

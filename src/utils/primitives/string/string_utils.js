@@ -1,7 +1,7 @@
 'use strict';
 
-import { ALPHANUMERIC_LETTERS_EN_ALL } from './../../constants/string_constants.js';
-import { isNullOrEmpty, isString, isBoolean, isNumber } from './../misc/logic_utils.js';
+import { ALPHANUMERIC_LETTERS_EN_ALL } from '../../constants/string_constants.js';
+import { isNullOrEmpty, isString, isBoolean, isNumber } from '../misc/logic_utils.js';
 
 function isOnlyDigits(str){
     return /^[0-9]+$/.test(str);
