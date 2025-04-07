@@ -1,7 +1,8 @@
 // external imports
 
 // internal imports
-import { curry, defaultTo, defaultToNull } from '../../../src/utils/misc/functional_utils';
+import { curry, defaultTo, defaultToNull, chain } from '../../../src/utils/misc/functional_utils';
+import { isString } from '../../../src/utils/misc/logic_utils';
 
 // implementation
 describe('Functional utilities tests...', () => {
@@ -110,6 +111,61 @@ describe('Functional utilities tests...', () => {
 
         test('Should not return default value - case 3', () => {
             expect(defaultToNull({ testProp1: 2, testProp2: 'b', testProp3: [2, 'b', undefined] })).toStrictEqual({ testProp1: 2, testProp2: 'b', testProp3: [2, 'b', undefined] });
+        });
+    });
+
+    describe('chain() function tests...', () => {
+        describe('Basic functions tests...', () => {
+            test('Should return correct result from a chain of functions - case 1', async () => {
+                const result = await chain<number>(
+                    () => '3',
+                    (prevVal: string) => prevVal + '4',
+                    (prevVal: string) => parseInt(prevVal) + 5,
+                )();
+                expect(result).toBe(39);
+            });
+
+            test('Should return correct result from a chain of functions - case 2', async () => {
+                const result = await chain<string>(
+                    (prevVal: number) => prevVal + 10,
+                    (prevVal: number) => `0.${prevVal}`,
+                    (prevVal: string) => parseFloat(prevVal) + 53,
+                    (prevVal: number) => `rest - ${prevVal}`,
+                )(23);
+                expect(result).toBe(`rest - 53.33`);
+            });
+
+            test('Should return correct result from a chain of functions - case 3', async () => {
+                const result = await chain<string>(
+                    (prevVal: string) => prevVal + '_temp',
+                    () => null,
+                    (prevVal: unknown) => `${prevVal}`,
+                    (prevVal: string) => `temp_${prevVal}`,
+                )('test_val1');
+                expect(result).toBe(`temp_null`);
+            });
+        });
+
+        describe('Async functions tests...', () => {
+            test('Should return correct result from a chain of functions - case 1', async () => {
+                const result = await chain<Promise<string>>(
+                    async (prevVal1: string, prevVal2: number) => `${prevVal1}#${prevVal2}`,
+                    (prevVal: string) => Promise.resolve(`prefix_${prevVal}`),
+                    (prevVal: string) => new Promise((resolve) => setTimeout(() => { resolve(`${prevVal}_postfix`) }, 100)),
+                )('test', 5);
+                expect(result).toBe('prefix_test#5_postfix');
+            });
+        });
+
+        describe('Functional utils tests...', () => {
+            test('Should return correct result from a chain of functions - case 1', async () => {
+                const result = await chain<string>(
+                    defaultTo(15),
+                    isString,
+                    curry((prefix: string, prevVal) => `${prefix}${prevVal}`)('prefix_'),
+                )(null);
+                expect(result).toBe('prefix_false');
+            });
         });
     });
 });
