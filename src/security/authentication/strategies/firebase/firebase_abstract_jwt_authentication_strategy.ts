@@ -2,7 +2,7 @@
 //import { DecodedIdToken } from 'firebase-admin/lib/auth/token-verifier';
 
 // internal imports
-import { CookieStore, JWTCookieStore } from '../../../../declarations/net/cookie_declarations';
+import { CookieStore, JWTCookieStore } from '../../../../declarations/net/http/cookie_declarations';
 import { JWT_COOKIE_DEFAULT_MAX_AGE } from '../../../../constants/net/http/cookie_constants';
 
 import AbstractAuthenticationStrategy from './../abstract_authentication_strategy';
@@ -21,7 +21,7 @@ abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthent
 
     protected async addSessionCookie(idToken: string): Promise<void> {
         const fbAdminAuth = FirebaseAdminRegistry.getInstance().auth;
-        const sessionCookie = await fbAdminAuth.createSessionCookie(idToken, { expiresIn: JWT_COOKIE_DEFAULT_MAX_AGE })
+        const sessionCookie = await fbAdminAuth.createSessionCookie(idToken, { expiresIn: JWT_COOKIE_DEFAULT_MAX_AGE * 1000 });
 
         await this.cookieStore.setJWTResponseCookie(sessionCookie);
     }

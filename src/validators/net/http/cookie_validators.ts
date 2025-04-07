@@ -2,7 +2,7 @@
 import { z } from 'zod';
 
 // internal imports
-import { SetCookieOptions } from '../../../declarations/net/cookie_declarations';
+import { SetCookieOptions } from '../../../declarations/net/http/cookie_declarations';
 import {
     VALIDATION_SET_COOKIE_SAME_SITE_ZOD_ENUM,
     VALIDATION_SET_COOKIE_PRIORITY_ZOD_ENUM,

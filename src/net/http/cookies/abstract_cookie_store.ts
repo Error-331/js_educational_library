@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import { SetCookieOptions, CookieStoreOptions } from '../../../declarations/net/cookie_declarations';
+import { SetCookieOptions, CookieStoreOptions } from '../../../declarations/net/http/cookie_declarations';
 import { SET_COOKIE_DEFAULT_OPTIONS } from '../../../constants/net/http/cookie_constants';
 
 import { validateSetCookieOptions } from '../../../validators/net/http/cookie_validators';
@@ -16,8 +16,8 @@ import { cloneDeep } from '../../../utils/primitives/object_utils';
  * @template OptionsType
  *
  */
-abstract class AbstractCookieStore<OptionsType = CookieStoreOptions> {
-    protected options: OptionsType;
+abstract class AbstractCookieStore<OptionsType extends CookieStoreOptions> {
+    protected options: OptionsType = {};
 
     /**
      * Cookie store constructor.

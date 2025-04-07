@@ -1,9 +1,9 @@
 // external imports
 
 // internal imports
-import NextJSServerCookieStore from '../../../src/net/http/cookies/next_js_server_cookie_store';
+import NextJSServerCookieStore from '../../../../src/net/http/cookies/next_js_server_cookie_store';
 
-import { SET_COOKIE_DEFAULT_OPTIONS } from '../../../src/constants/net/http/cookie_constants';
+import { SET_COOKIE_DEFAULT_OPTIONS } from '../../../../src/constants/net/http/cookie_constants';
 import {
     testCookieName1,
     testCookieName2,
@@ -23,7 +23,7 @@ import {
     testCookieOptionsMerged1,
 } from './cookie_store_test_data';
 
-import { cookieConfigAccessorByName, checkCookieByName } from '../../../src/utils/testing/net/http/cookies/next_js_server_cookie_store_test_utils';
+import { cookieConfigAccessorByName, checkCookieByName } from '../../../../src/utils/testing/net/http/cookies/next_js_server_cookie_store_test_utils';
 
 // implementation
 describe('NextJS server cookie store tests...', () => {

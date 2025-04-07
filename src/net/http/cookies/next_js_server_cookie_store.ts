@@ -3,11 +3,14 @@ import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adap
 import { cookies } from 'next/headers';
 
 // internal imports
-import { SetCookieOptions, CookieStore, JWTCookieStore } from '../../../declarations/net/cookie_declarations';
+import { SetCookieOptions, CookieStore, JWTCookieStore } from '../../../declarations/net/http/cookie_declarations';
 import AbstractJWTCookieStore from './abstract_jwt_cookie_store';
+
+import { JWT_COOKIE_DEFAULT_NAME } from '../../../constants/net/http/cookie_constants';
 
 import { isNil, isString } from '../../../utils/misc/logic_utils';
 import { cloneDeep } from '../../../utils/primitives/object_utils';
+import { prepareFormattedUTCDateFromNow } from '../../../utils/date/native_date_utils';
 
 // implementation
 class NextJSServerCookieStore extends AbstractJWTCookieStore implements CookieStore, JWTCookieStore {
@@ -59,6 +62,20 @@ class NextJSServerCookieStore extends AbstractJWTCookieStore implements CookieSt
 
         const cookieStore = await this.parseCookies();
         cookieStore.set(cookieName, cookieValue, newSetCookieOptions);
+    }
+
+    public async setJWTResponseCookie(jwtToken: string, setCookieOptions?: SetCookieOptions): Promise<void> {
+        let newSetCookieOptions: SetCookieOptions = cloneDeep(this.options.jwtSetCookieOptions);
+
+        if (!isNil(setCookieOptions)) {
+            newSetCookieOptions = this.mergeSetCookieOptions(newSetCookieOptions, setCookieOptions);
+        }
+
+        if (!isNil(newSetCookieOptions.expires) && !isNil(newSetCookieOptions.maxAge) && newSetCookieOptions.maxAge > 0) {
+            newSetCookieOptions.expires = new Date(prepareFormattedUTCDateFromNow(newSetCookieOptions.maxAge * -1000));
+        }
+
+        await this.setByName(JWT_COOKIE_DEFAULT_NAME, jwtToken, newSetCookieOptions);
     }
 }
 

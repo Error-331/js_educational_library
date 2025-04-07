@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import { CookieStore, SetCookieOptions } from '../../../../../declarations/net/cookie_declarations';
+import { CookieStore, SetCookieOptions } from '../../../../../declarations/net/http/cookie_declarations';
 
 // implementation
 function cookieConfigAccessorByName(cookieStore: CookieStore, cookieName: string): SetCookieOptions {

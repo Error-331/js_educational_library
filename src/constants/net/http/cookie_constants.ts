@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import { SetCookieOptions } from '../../../declarations/net/cookie_declarations';
+import { SetCookieOptions } from '../../../declarations/net/http/cookie_declarations';
 
 // implementation
 const JWT_COOKIE_DEFAULT_MAX_AGE = 60 * 5; // 5 minutes (in seconds)

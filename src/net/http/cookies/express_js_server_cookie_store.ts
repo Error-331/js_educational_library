@@ -7,7 +7,7 @@ import {
     CookieStore,
     JWTCookieStore,
     JWTCookieStoreOptions
-} from '../../../declarations/net/cookie_declarations';
+} from '../../../declarations/net/http/cookie_declarations';
 import AbstractJWTCookieStore from './abstract_jwt_cookie_store';
 
 import { isNil, isString } from '../../../utils/misc/logic_utils';

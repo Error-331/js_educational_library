@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import { SetCookieOptions } from '../../../../src/declarations/net/cookie_declarations';
+import { SetCookieOptions } from '../../../../src/declarations/net/http/cookie_declarations';
 import ValidationError from '../../../../src/errors/validation_error';
 
 import { validateSetCookieOptions } from '../../../../src/validators/net/http/cookie_validators';
