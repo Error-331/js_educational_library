@@ -1,6 +1,7 @@
 // external imports
 
 // internal imports
+import { IterableMapLikeEntity } from '../../declarations/collection_declarations';
 import { isNil, isUndefined, isObject, isArray } from '../misc/logic_utils';
 
 // implementation
@@ -22,7 +23,7 @@ function cloneArrayDeep(arrayToClone) {
     });
 }
 
-function cloneDeep(obj) {
+function cloneDeep<ObjectType = object>(obj: ObjectType): ObjectType {
     let newObj = Object.assign({}, obj);
 
     for (const objProp in newObj) {
@@ -108,6 +109,16 @@ function objectPropertiesToNormalize(obj) {
     return obj;
 }
 
+function mapToObject<ValueType>(customMap: IterableMapLikeEntity<ValueType>): Record<string, ValueType> {
+    const customObj: Record<string, ValueType> = {};
+
+    for(const [key, value] of customMap.entries()) {
+        customObj[key] = value;
+    }
+
+    return customObj;
+}
+
 // exports
 export {
     cloneArrayDeep,
@@ -117,4 +128,5 @@ export {
     setPropValueByPath,
 
     objectPropertiesToNormalize,
+    mapToObject,
 }

@@ -9,6 +9,10 @@ type ArrayIterator<ArrayValueType, IteratorResultType> = ArrayIteratorFunction<A
 type CollectionIteratorFunction<CollectionType, IteratorResultType> = (value: CollectionType[keyof CollectionType], key: string | number, collection: CollectionType) => IteratorResultType;
 type CollectionIterator<CollectionType, IteratorResultType> = CollectionIteratorFunction<CollectionType, IteratorResultType>;
 
+type IterableMapLikeEntity<ValueType> = {
+    entries(): MapIterator<[string, ValueType]>;
+};
+
 // exports
 export {
     ArrayIteratorFunction,
@@ -16,4 +20,6 @@ export {
 
     CollectionIteratorFunction,
     CollectionIterator,
+
+    IterableMapLikeEntity,
 }
