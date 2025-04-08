@@ -2,9 +2,10 @@
 
 // internal imports
 import { StringFormatterFunction } from '../../../declarations/string_related_declarations';
+import { LINUX_LINE_BREAK_STRING, BASIC_SPECIAL_SYMBOLS } from '../../../constants/string_constants';
 
-import { curry } from '../../misc/functional_utils';
-import { isNil, isString, isFunction } from '../../misc/logic_utils';
+import { curry, chain, } from '../../misc/functional_utils';
+import { isNil, isString, isArray, isFunction } from '../../misc/logic_utils';
 
 // implementation
 function trimStringFormatter(strPart: string): string {
@@ -13,6 +14,14 @@ function trimStringFormatter(strPart: string): string {
     }
 
     return strPart.trim();
+}
+
+function removeLastLetterStringFormatter(strPart: string): string {
+    if (!isString(strPart)) {
+        throw new RangeError('Cannot remove last letter - provided string part is not a string');
+    }
+
+    return strPart.slice(0, -1);
 }
 
 function addPrefixStringFormatter(prefix: string, strPart: string): string {
@@ -39,12 +48,44 @@ function addPostfixStringFormatter(postfix: string, strPart: string): string {
     return `${strPart}${postfix}`;
 }
 
-async function stringByLineBreakFormatter(formatterFunction: StringFormatterFunction, lineBreak = '\n', strToFormat: string): Promise<string> {
+function capitalizeFirstLetterStringFormatter(strPart: string): string {
+    if (!isString(strPart)) {
+        throw new RangeError('Cannot capitalize first letter of the string - provided string part is not a string');
+    }
+
+    return strPart.charAt(0).toUpperCase() + String(strPart).slice(1);
+}
+
+function removeLastSpecialSymbolStringFormatter(specialSymbols: string | string[], strPart: string): string {
+    let specialSymbolsCopy = specialSymbols;
+
+    if (isString(specialSymbolsCopy)) {
+        specialSymbolsCopy = [specialSymbolsCopy];
+    }
+
+    if (!isArray(specialSymbolsCopy)) {
+        throw new RangeError('Cannot remove last special symbol of the string - provided special symbols list is not an array');
+    }
+
+    if (!isString(strPart)) {
+        throw new RangeError('Cannot remove last special symbol of the string - provided string part is not a string');
+    }
+
+    const firstSymbol = strPart[strPart.length - 1];
+
+    if (specialSymbols.includes(firstSymbol)) {
+        return removeLastLetterStringFormatter(strPart);
+    }
+
+    return strPart;
+}
+
+async function stringByLineBreakFormatter(formatterFunction: StringFormatterFunction, lineBreak: string, strToFormat: string): Promise<string> {
     if (!isString(strToFormat)) {
         throw new RangeError('Cannot format string by line break - provided value is not a string');
     }
 
-    let lineBreakCopy = '\n';
+    let lineBreakCopy = LINUX_LINE_BREAK_STRING;
 
     if (!isNil(lineBreak)) {
         if (!isString(lineBreak)) {
@@ -63,18 +104,41 @@ async function stringByLineBreakFormatter(formatterFunction: StringFormatterFunc
 
 
 const trimStringFormatterFP = curry(trimStringFormatter);
+const removeLastLetterStringFormatterFP = curry(removeLastLetterStringFormatter);
 const addPrefixStringFormatterFP = curry(addPrefixStringFormatter);
 const addPostfixStringFormatterFP = curry(addPostfixStringFormatter);
+
+const capitalizeFirstLetterStringFormatterFP = curry(capitalizeFirstLetterStringFormatter);
+const removeLastSpecialSymbolStringFormatterFP = curry(removeLastSpecialSymbolStringFormatter);
+
+const cleanCapitalizedListItemStringFormatter = chain(
+    trimStringFormatterFP,
+    removeLastSpecialSymbolStringFormatterFP(BASIC_SPECIAL_SYMBOLS),
+    capitalizeFirstLetterStringFormatterFP,
+    addPrefixStringFormatterFP('- '),
+    addPostfixStringFormatterFP(';')
+);
+
 
 // exports
 export {
     trimStringFormatter,
+    removeLastLetterStringFormatter,
     addPrefixStringFormatter,
     addPostfixStringFormatter,
+
+    capitalizeFirstLetterStringFormatter,
+    removeLastSpecialSymbolStringFormatter,
 
     stringByLineBreakFormatter,
 
     trimStringFormatterFP,
+    removeLastLetterStringFormatterFP,
     addPrefixStringFormatterFP,
     addPostfixStringFormatterFP,
+
+    capitalizeFirstLetterStringFormatterFP,
+    removeLastSpecialSymbolStringFormatterFP,
+
+    cleanCapitalizedListItemStringFormatter,
 }

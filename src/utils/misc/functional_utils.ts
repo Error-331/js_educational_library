@@ -82,14 +82,14 @@ const defaultToNull = <FunctionType extends GenericFunctionType>(testValue: unkn
  * @template LastFunctionReturnType
  * @template FunctionsListType
  *
- * @returns {(...args: unknown[]): Promise<ReturnType<LastElementOfUnknownArgsFunctionsList<FunctionsListType>>>} function which executes the chain of functions (args will be passed to the first function in the chain).
+ * @returns {(...args: unknown[]): Promise<Awaited<ReturnType<LastElementOfUnknownArgsFunctionsList<FunctionsListType>>>>} function which executes the chain of functions (args will be passed to the first function in the chain).
  *
  */
 function chain<
     LastFunctionReturnType = unknown,
     FunctionsListType extends ListOfUnknownArgsFunctionsWithLastReturnType<LastFunctionReturnType> = ListOfUnknownArgsFunctionsWithLastReturnType<LastFunctionReturnType>>
     (...chainFunctions: FunctionsListType) {
-    return async (...args: unknown[]): Promise<ReturnType<LastElementOfUnknownArgsFunctionsList<FunctionsListType>>> => {
+    return async (...args: unknown[]): Promise<Awaited<ReturnType<LastElementOfUnknownArgsFunctionsList<FunctionsListType>>>> => {
         if (chainFunctions.length === 1) {
             return await chainFunctions[chainFunctions.length - 1](...args);
         }
