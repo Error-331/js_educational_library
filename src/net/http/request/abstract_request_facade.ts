@@ -38,7 +38,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
         }
 
         if (!isNil(config.url)) {
-            this.baseURL = config.baseURL
+            this.url = config.url;
         }
 
         if (!isNil(config.method)) {
@@ -85,7 +85,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
 
             method: this._method,
             headers: cloneDeep(this._headers),
-            params: cloneDeep(this._headers),
+            params: cloneDeep(this._params),
             timeout: this._timeout,
         }
     }
