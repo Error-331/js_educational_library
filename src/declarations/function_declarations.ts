@@ -7,6 +7,9 @@ type GenericFunctionType = (...args: any[]) => any;
 type GenericUnknownArgsFunctionType = (...args: unknown[]) => any;
 type ParametrisedReturnUnknownFunctionType<ReturnType> = (...args: unknown[]) => ReturnType;
 
+type GenericUnknownFunctionArgsButLastType<LastArgumentType> = [...unknown[], LastArgumentType];
+type GenericFunctionWithLastArgKnown<LastArgumentType, ReturnType> = (...args: GenericUnknownFunctionArgsButLastType<LastArgumentType>) => ReturnType;
+
 type RequiredFirstParameters<FunctionType extends GenericFunctionType> = Parameters<FunctionType> extends [
         infer HeadParameters,
         ...infer TailParameters
@@ -41,12 +44,14 @@ type CurriedFunction<FunctionType extends GenericFunctionType> = <
 type LastElementOfUnknownArgsFunctionsList<FunctionListType extends GenericUnknownArgsFunctionType[]> = FunctionListType extends [...infer L, infer R] ? R : never;
 type ListOfUnknownArgsFunctionsWithLastReturnType<ReturnType> = [...GenericUnknownArgsFunctionType[], ParametrisedReturnUnknownFunctionType<ReturnType>];
 
-
 // exports
 export type {
     GenericFunctionType,
     GenericUnknownArgsFunctionType,
     ParametrisedReturnUnknownFunctionType,
+
+    GenericUnknownFunctionArgsButLastType,
+    GenericFunctionWithLastArgKnown,
 
     RequiredFirstParameters,
     RemainingParameters,

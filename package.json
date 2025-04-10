@@ -20,6 +20,7 @@
   },
   "type": "module",
   "scripts": {
+    "build": "tsc",
     "test": "jest"
   },
   "license": "MIT",

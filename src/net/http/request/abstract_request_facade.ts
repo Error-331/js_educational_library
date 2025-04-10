@@ -14,6 +14,7 @@ import { HTTP_REQUEST_TIMEOUT } from '../../../constants/net/http/request_consta
 import { HTTPResponseSchema } from '../../../declarations/net/http/response_declarations';
 import { HTTPHeadersCollection } from '../../../declarations/net/http/headers_declarations';
 
+import { removeLastSpecialSymbolStringFormatter } from '../../../utils/primitives/string/basic_string_formatting_utils';
 import { cloneDeep } from '../../../utils/primitives/object_utils';
 import { isNil } from '../../../utils/misc/logic_utils';
 
@@ -60,15 +61,14 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
 
     protected prepareRequestURL(): string {
         if (isNil(this.baseURL) && isNil(this.url)) {
-            // throw error;
+            throw new RangeError('Cannot prepare request URL - both base URL and URL part are unknown');
         } else if (!isNil(this.baseURL) && isNil(this.url)) {
             return this.baseURL;
         } else if (isNil(this.baseURL) && !isNil(this.url)) {
             return this.url;
         } else {
-            // TODO: this._baseURL.slice(0, -1) to utils
-            const baseURL = this._baseURL[this._baseURL.length - 1] === '/' ? this._baseURL.slice(0, -1) : this._baseURL;
-            const url = this._url[this._url.length - 1] === '/' ? this._url.slice(0, -1) : this._url;
+            const baseURL = removeLastSpecialSymbolStringFormatter('/', this._baseURL);
+            const url = removeLastSpecialSymbolStringFormatter('/', this._url);
 
             return `${baseURL}/${url}`;
         }

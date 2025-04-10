@@ -74,29 +74,35 @@ const defaultTo = <FunctionType extends GenericFunctionType>(defaultValue: unkno
  */
 const defaultToNull = <FunctionType extends GenericFunctionType>(testValue: unknown) => defaultTo<FunctionType>(null)(testValue);
 
-
+/**
+ * Function that accepts a list of functions (which will be chained) and return a new function which will execute those functions one by one passing the result of execution along the chain.
+ *
+ * @param {FunctionsListType} chainFunctions - list of functions which will be chained.
+ *
+ * @template LastFunctionReturnType
+ * @template FunctionsListType
+ *
+ * @returns {(...args: unknown[]): Promise<Awaited<ReturnType<LastElementOfUnknownArgsFunctionsList<FunctionsListType>>>>} function which executes the chain of functions (args will be passed to the first function in the chain).
+ *
+ */
 function chain<
     LastFunctionReturnType = unknown,
     FunctionsListType extends ListOfUnknownArgsFunctionsWithLastReturnType<LastFunctionReturnType> = ListOfUnknownArgsFunctionsWithLastReturnType<LastFunctionReturnType>>
     (...chainFunctions: FunctionsListType) {
-    return (...args: unknown[]): ReturnType<LastElementOfUnknownArgsFunctionsList<FunctionsListType>> => {
+    return async (...args: unknown[]): Promise<Awaited<ReturnType<LastElementOfUnknownArgsFunctionsList<FunctionsListType>>>> => {
         if (chainFunctions.length === 1) {
-            return chainFunctions[chainFunctions.length - 1](...args);
+            return await chainFunctions[chainFunctions.length - 1](...args);
         }
 
-        let res: unknown = chainFunctions[0](...args);
+        let res: unknown = await chainFunctions[0](...args);
 
         for (let funcIdx = 1; funcIdx < chainFunctions.length - 1; funcIdx++) {
-            res = chainFunctions[funcIdx](res);
+            res = await chainFunctions[funcIdx](res);
         }
 
-        return chainFunctions[chainFunctions.length - 1](res);
+        return await chainFunctions[chainFunctions.length - 1](res);
     };
 }
-
-const b = chain<number>(() => '3', () => '3', () => 5)
-
-//chain<number>([() => '3', () => '3', () => 5])
 
 const lens = (getter, setter) => {
     return ({
@@ -142,6 +148,8 @@ export {
 
     defaultTo,
     defaultToNull,
+
+    chain,
 
     lens,
     lensPath,
