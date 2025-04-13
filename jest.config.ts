@@ -17,9 +17,16 @@ const config: Config = {
         './tests/data_structures/',
         './tests/errors/',
         './tests/state_machines/',
-        './tests/utils/',
+        './tests/utils/async',
+        './tests/utils/hashing',
+        './tests/utils/misc',
+        './tests/utils/physics',
+        //'./tests/utils/primitives',
+        './tests/utils/testing',
+        './tests/utils/validators',
         './tests/validators/',
-        './tests/net/'
+        './tests/net/',
+       // './tests/registers/firebase'
     ],
 
     roots: [

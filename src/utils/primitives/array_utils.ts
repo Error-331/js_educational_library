@@ -184,6 +184,44 @@ function concatSortedNumbers(...arraysToConcat) {
     return concatSorted(defaultCompare, ...arraysToConcat);
 }
 
+/**
+ * Method that checks values in the array on whether at least one of them meet the predicate.
+ *
+ * @param {ArrayLike<ArrayValueType>} collection - array of values to check.
+ * @param {ArrayIterator<ArrayValueType, boolean>} predicate - function which checks incoming values from the array (receives three params: current value, index and the whole array).
+ *
+ * @throws {RangeError} if none-array value is passed or predicate is not a function.
+
+ * @template ArrayValueType
+ *
+ * @returns {boolean} value that indicates whether at least one value of the array meet the predicate.
+ *
+ */
+
+function arraySome<ArrayValueType>(collection: ArrayLike<ArrayValueType>, predicate: ArrayIterator<ArrayValueType, boolean>): boolean {
+    if (!isArray(collection)) {
+        throw new RangeError('Cannot perform "some" check on collection - collection is not a proper array');
+    }
+
+    if (!isFunction(predicate)) {
+        throw new RangeError('Cannot perform "some" check on collection - predicate is not a function');
+    }
+
+    for (let idx = 0; idx < collection.length; idx++) {
+        const result = predicate(collection[idx], idx, collection);
+
+        if (!isBoolean(result)) {
+            throw new RangeError('Cannot perform "some" check on collection - predicate function returned none-boolean value');
+        }
+
+        if (result === true) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function arrayEvery<ArrayValueType>(collection: ArrayLike<ArrayValueType>, predicate: ArrayIterator<ArrayValueType, boolean>): boolean {
     if (!isArray(collection)) {
         throw new RangeError('Cannot perform "every" check on collection - collection is not a proper array');
@@ -263,6 +301,8 @@ export {
 
     concatSorted,
     concatSortedNumbers,
+
+    arraySome,
 
     arrayEvery,
     objectEvery,

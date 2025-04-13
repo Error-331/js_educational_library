@@ -10,6 +10,7 @@ import { Auth, getAuth } from 'firebase-admin/auth';
 import { FIREBASE_DEFAULT_ADMIN_APP_NAME } from '../../constants/registers/firebase_registers_constants';
 
 import { readJSONFileSync } from '../../utils/misc/file_utils';
+import { arraySome } from '../../utils/primitives/array_utils';
 import { isNil, isString } from '../../utils/misc/logic_utils';
 
 // implementation
@@ -51,8 +52,12 @@ class FirebaseAdminRegistry {
      */
 
     protected prepareAppOptions(): AppOptions | undefined {
-        // TODO: replace with some()
-        if (!isNil(process.env.FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH) || !isNil(process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {
+        const hasConfigs= arraySome<string | undefined>([
+            process.env.FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH,
+            process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH
+        ], isString);
+
+        if (hasConfigs) {
             let configObj: AppOptions = {};
 
             if (!isNil(process.env.FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH)) {
