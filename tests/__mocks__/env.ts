@@ -12,5 +12,14 @@ const env = {
     FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH: './tests/__mocks__/firebase_admin_service_account.json',
 };
 
+function setEnvVars(): void {
+    process.env = Object.assign({}, process.env, env);
+}
+
+function resetEnvVars(): void {
+    process.env = {};
+}
+
 // exports
 export default env;
+export { setEnvVars, resetEnvVars };

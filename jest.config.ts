@@ -23,7 +23,7 @@ const config: Config = {
     ],
 
     roots: [
-        './tests'
+        './tests/'
     ]
 };
 
