@@ -15,7 +15,7 @@ import { isNil, isString } from '../../utils/misc/logic_utils';
 // implementation
 /**
  * Register that instantiates Firebase Admin app and hold reference to it.
- * Current class implements Singleton pattern which allows to avoid reinitialization of Firebase Aamin app and be accessible from every part of the application.
+ * Current class implements Singleton pattern which allows to avoid reinitialization of Firebase Admin app and be accessible from every part of the application.
  *
  * @class
  *

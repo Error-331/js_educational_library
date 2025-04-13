@@ -10,6 +10,9 @@ import {
     MockFirebaseClientAdminAppOptions,
 } from '../.jest/declarations/firebase_mock_declarations';
 
+import { FIREBASE_DEFAULT_ADMIN_APP_NAME } from '../../src/constants/registers/firebase_registers_constants';
+import FirebaseAdminDefaultAdditionalConfig from './firebase_admin_default_app_additional_config.json';
+
 import { getApps, __addApp } from  './firebase-admin/app';
 import { __addAuth } from './firebase-admin/auth';
 
@@ -69,5 +72,19 @@ const admin = {
     }
 };
 
+function __addDefaultApp() {
+    const defaultAppConfig = {
+        name: FIREBASE_DEFAULT_ADMIN_APP_NAME,
+        options: {
+            ...FirebaseAdminDefaultAdditionalConfig,
+            credential: admin.credential.cert('./tests/__mocks__/firebase_admin_default_service_account.json'),
+        }
+    };
+
+    __addApp(defaultAppConfig);
+    __addAuth(defaultAppConfig);
+}
+
 // exports
 export default admin;
+export { __addDefaultApp }

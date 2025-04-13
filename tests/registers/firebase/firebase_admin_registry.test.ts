@@ -1,8 +1,10 @@
 // external imports
 
 // internal imports
-import { __resetMock as resetFirebaseAdminAppMock, __addDefaultApp as addDefaultFirebaseAdminAppMock } from '../../__mocks__/firebase-admin/app';
+import { __resetMock as resetFirebaseAdminAppMock } from '../../__mocks__/firebase-admin/app';
 import { __resetMock as resetFirebaseAdminAuthMock } from '../../__mocks__/firebase-admin/auth';
+
+import { __addDefaultApp as addDefaultFirebaseAdminAppMock } from '../../__mocks__/firebase-admin';
 
 import FirebaseAdminRegistry from '../../../src/registers/firebase/firebase_admin_registry';
 
@@ -52,7 +54,7 @@ describe('Firebase admin registry tests...', () => {
             }
 
             expect(returnedOptions).toStrictEqual(properOptions);
-         //   expect(firebaseAdminRegistry.auth.app.name).toEqual(env.FIREBASE_ADMIN_APP_NAME);
+            expect(firebaseAdminRegistry.auth.app.name).toEqual(FIREBASE_DEFAULT_ADMIN_APP_NAME);
         });
 
         test('Should create an instance of Firebase Admin Registry based o named app...', async () => {
