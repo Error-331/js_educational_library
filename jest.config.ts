@@ -21,7 +21,7 @@ const config: Config = {
         './tests/utils/hashing',
         './tests/utils/misc',
         './tests/utils/physics',
-        //'./tests/utils/primitives',
+        './tests/utils/primitives',
         './tests/utils/testing',
         './tests/utils/validators',
         './tests/validators/',
