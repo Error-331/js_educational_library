@@ -1,6 +1,6 @@
 // external imports
 import { FirebaseApp, FirebaseOptions, initializeApp, getApp, getApps } from 'firebase/app';
-import { Auth, getAuth } from 'firebase/auth';
+import { Auth, getAuth, connectAuthEmulator } from 'firebase/auth';
 
 // internal imports
 import { FIREBASE_DEFAULT_CLIENT_APP_NAME } from '../../constants/registers/firebase_registers_constants';
@@ -23,7 +23,37 @@ class FirebaseClientRegistry {
     private constructor() {}
 
     /**
+     * Method that will try to find initialized Firebase client application by name if any.
+     *
+     * @param {string} appName - name of the application.
+     *
+     * @static
+     *
+     * @returns {FirebaseApp | undefined} Firebase client app instance if found, undefined if not.
+     *
+     */
+
+    public static findAppByName(appName: string): FirebaseApp | undefined {
+        return getApps().find(firebaseApp => firebaseApp.name === appName);
+    }
+
+    /**
+     * Method that will try to find default initialized Firebase client application if any.
+     *
+     * @static
+     *
+     * @returns {FirebaseApp | undefined} Firebase client app instance if found, undefined if not.
+     *
+     */
+
+    public static findDefaultAppByName(): FirebaseApp | undefined {
+        return this.findAppByName(FIREBASE_DEFAULT_CLIENT_APP_NAME);
+    }
+
+    /**
      * Method returns current (and only) instance of the class.
+     *
+     * @static
      *
      * @returns {FirebaseClientRegistry} current instance of the class.
      *
@@ -38,18 +68,29 @@ class FirebaseClientRegistry {
     }
 
     /**
+     * Method connects current Firebase client authentication object to emulator which endpoint specified at provided location.
+     *
+     * @param {string} url - HTTP endpoint of authentication emulator.
+     *
+     */
+
+    public connectEmulatorToAuth(url: string): void {
+        connectAuthEmulator(this.auth, url);
+    }
+
+    /**
      * Method that initializes current class instance.
      *
      * @throws {RangeError} if application name is not set (@see {@link process.env.FIREBASE_CLIENT_APP_NAME}).
      *
      */
 
-    protected init(): void {
+    public init(): void {
         if (!isString(this.appName)) {
             throw new RangeError('Cannot initialize Firebase application - name is not specified');
         }
 
-        const firebaseApp = getApps().find(firebaseApp => firebaseApp.name === this.appName);
+        const firebaseApp = FirebaseClientRegistry.findAppByName(this.appName);
         if (isNil(firebaseApp)) {
             initializeApp(this._options, this.appName);
         }
@@ -106,11 +147,13 @@ class FirebaseClientRegistry {
     /**
      * Method that sets current Firebase Client application name.
      *
+     * @param {string} name - application name, this name will be used to initialize an app (@see {@link initializeApp()}) and can be used with @see {@link findAppByName()}.
+     *
      * @throws {RangeError} if provided name is not a string.
      *
      */
 
-    set appName(name:string) {
+    set appName(name: string) {
         if (!isString(name)) {
             throw new RangeError('Cannot set Firebase client app name - value must be of type string');
         }
@@ -120,6 +163,8 @@ class FirebaseClientRegistry {
 
     /**
      * Method that sets current Firebase Client application options.
+     *
+     * @param {FirebaseOptions} options - options that are used during Firebase client app initialization @see {@link initializeApp()} (usually can be found at `https://{some_hosted_site}__/firebase/init.json`).
      *
      * @throws {RangeError} if provided options are not represented as object.
      *
