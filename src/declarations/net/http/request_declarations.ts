@@ -2,6 +2,8 @@
 import { Stream } from 'stream'
 
 // internal imports
+import { GenericObject } from '../../collection_declarations';
+
 import { HTTPHeadersObject, HTTPHeadersCollection } from './headers_declarations';
 import { HTTPResponseSchema } from './response_declarations';
 
@@ -15,6 +17,7 @@ type HTTPRequestConfig = {
     method: HTTPRequestMethod,
     headers?: HTTPHeadersCollection,
     params?: HTTPRequestParams,
+    data?: GenericObject,
     timeout?: number, // in milliseconds
 }
 

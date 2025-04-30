@@ -1,6 +1,8 @@
 // external imports
 
 // internal imports
+import { GenericObject } from '../../../declarations/collection_declarations';
+
 import {
     HTTPRequestMethod,
     HTTPRequestParams,
@@ -26,6 +28,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
     protected _method: HTTPRequestMethod = 'get';
     protected _headers: HTTPHeadersCollection = {};
     protected _params: HTTPRequestParams = {};
+    protected _data: GenericObject;
     protected _timeout: number = HTTP_REQUEST_TIMEOUT;
 
     constructor(config: HTTPRequestConfig) {
@@ -52,6 +55,10 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
 
         if (!isNil(config.params)) {
             this.params = config.params;
+        }
+
+        if (!isNil(config.data)) {
+            this.data = config.data;
         }
 
         if (!isNil(config.timeout)) {
@@ -85,6 +92,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
 
             method: this._method,
             headers: cloneDeep(this._headers),
+            data: cloneDeep(this._data),
             params: cloneDeep(this._params),
             timeout: this._timeout,
         }
@@ -174,6 +182,11 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
     set params(params: HTTPRequestParams) {
         //validate
         this._params = params;
+    }
+
+    set data(data: {[key: string]: unknown}) {
+        //validate
+        this._data = data;
     }
 
     set timeout(timeout: number) {
