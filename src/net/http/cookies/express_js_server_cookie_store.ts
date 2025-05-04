@@ -10,7 +10,7 @@ import {
 } from '../../../declarations/net/http/cookie_declarations';
 import AbstractJWTCookieStore from './abstract_jwt_cookie_store';
 
-import { isNil, isString } from '../../../utils/misc/logic_utils';
+import { isNil, isNumber, isString } from '../../../utils/misc/logic_utils';
 import { cloneDeep } from '../../../utils/primitives/object_utils';
 
 // implementation
@@ -59,7 +59,12 @@ class ExpressJSServerCookieStore extends AbstractJWTCookieStore implements Cooki
             newSetCookieOptions = this.mergeSetCookieOptions(newSetCookieOptions, setCookieOptions);
         }
 
-        this.response.cookie( cookieName, cookieValue, newSetCookieOptions)
+        // express JS accepts maxAge in milliseconds
+        if (!isNil(newSetCookieOptions.maxAge) && isNumber(newSetCookieOptions.maxAge)) {
+            newSetCookieOptions.maxAge *= 1000;
+        }
+
+        this.response.cookie(cookieName, cookieValue, newSetCookieOptions)
     }
 }
 
