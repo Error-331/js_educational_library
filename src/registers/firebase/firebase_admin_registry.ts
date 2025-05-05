@@ -112,6 +112,18 @@ class FirebaseAdminRegistry {
     }
 
     /**
+     * Method that returns current Firebase Admin application name project ID ().
+     *
+     * @returns {string | undefined} project ID.
+     *
+     */
+
+    get projectId(): string {
+        this.init();
+        return this.app.options.projectId;
+    }
+
+    /**
      * Method that returns current Firebase Admin application.
      * Method will also try to initialize Firebase Admin application if it was not initialized previously.
      *

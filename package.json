@@ -6,6 +6,7 @@
     ".": "./src/index.ts",
 
     "./decralations/net/http/*": "./src/decralations/net/http/*.ts",
+    "./decralations/security/*": "./src/decralations/security/*.ts",
 
     "./constants/net/http/*": "./src/constants/net/http/*.ts",
     "./constants/registers/*": "./src/constants/registers/*.ts",
@@ -18,7 +19,7 @@
 
     "./registers/firebase/*": "./src/registers/firebase/*.ts",
 
-    "./security/authentication/strategies/firebase/*": "./src/security/authentication/strategies/firebase/*.ts",
+    "./security/authentication/strategies/firebase/server/*": "./src/security/authentication/strategies/firebase/server/*.ts",
 
     "./package.json": "./package.json"
   },
