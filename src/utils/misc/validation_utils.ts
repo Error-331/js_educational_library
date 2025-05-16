@@ -33,7 +33,16 @@ function createValidationError<ZodSafeParseReturnTypeInput, ZodSafeParseReturnTy
     return new ValidationError(message, issues);
 }
 
+function createAndThrowValidationError<ZodSafeParseReturnTypeInput, ZodSafeParseReturnTypeOutput>(
+    zodSafeValue: SafeParseReturnType<ZodSafeParseReturnTypeInput, ZodSafeParseReturnTypeOutput>,
+    inputName?: string,
+    message: string = 'Validation error'
+) {
+    throw createValidationError<ZodSafeParseReturnTypeInput, ZodSafeParseReturnTypeOutput>(zodSafeValue, inputName, message);
+}
+
 // exports
 export {
     createValidationError,
+    createAndThrowValidationError,
 }
