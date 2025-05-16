@@ -5,6 +5,8 @@
   "exports": {
     ".": "./src/index.ts",
 
+    "./decralations/*": "./src/decralations/*.ts",
+    "./decralations/error/*": "./src/decralations/error/*.ts",
     "./decralations/net/http/*": "./src/decralations/net/http/*.ts",
     "./decralations/security/*": "./src/decralations/security/*.ts",
 

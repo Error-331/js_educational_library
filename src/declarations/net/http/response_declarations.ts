@@ -1,9 +1,18 @@
 // external imports
 
 // internal imports
+import { SerializedErrors } from '../../error/serializable_error_declarations';
 
 // implementation
-type HTTPResponseSchema<ResponseDataType> = {
+type HTTPResponseErrors = SerializedErrors | void[];
+
+type HTTPResponseDataSchema<ResponseDataType = unknown> = {
+    success: boolean,
+    errors: HTTPResponseErrors,
+    data: ResponseDataType,
+};
+
+type HTTPResponseSchema<ResponseDataType = HTTPResponseDataSchema> = {
     data: ResponseDataType;
     statusCode: number;
     statusText: string;
@@ -11,5 +20,7 @@ type HTTPResponseSchema<ResponseDataType> = {
 
 // exports
 export {
+    HTTPResponseErrors,
+    HTTPResponseDataSchema,
     HTTPResponseSchema,
 }
