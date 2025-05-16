@@ -2,6 +2,7 @@
 
 // internal imports
 import { ZodIssueWithInputData } from '../declarations/validation_declarations';
+import { SerializedValidationError } from '../declarations/error/serializable_error_declarations';
 
 // implementation
 
@@ -32,6 +33,14 @@ class ValidationError extends Error {
         this._issues = issues;
 
         Object.setPrototypeOf(this, ValidationError.prototype);
+    }
+
+    serialize(): SerializedValidationError {
+        return {
+            name: this.name,
+            message: this.message,
+            issues: this.issues
+        }
     }
 
     /**

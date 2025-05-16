@@ -1,10 +1,10 @@
 // external imports
 
 // internal imports
+import { SerializedHTTPError } from '../declarations/error/serializable_error_declarations';
 
 // implementation
 class HTTPError extends Error {
-
     protected _httpCode: number;
 
     constructor(message: string, httpCode: number) {
@@ -16,7 +16,15 @@ class HTTPError extends Error {
         Object.setPrototypeOf(this, HTTPError.prototype);
     }
 
-    get httpCode() {
+    serialize(): SerializedHTTPError {
+        return {
+            name: this.name,
+            message: this.message,
+            httpCode: this.httpCode,
+        }
+    }
+
+    get httpCode(): number {
         return this._httpCode
     }
 }
