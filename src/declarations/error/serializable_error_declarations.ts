@@ -1,5 +1,6 @@
 // external imports
 import { ZodIssueWithInputData } from '../validation_declarations';
+import { CustomErrorName } from './custom_error_declarations';
 
 // internal imports
 
@@ -9,7 +10,7 @@ type SerializedGenericError = {
 }
 
 type SerializedCustomError = SerializedGenericError & {
-    name: string;
+    name: CustomErrorName;
 }
 
 type SerializedValidationError = SerializedCustomError & {
