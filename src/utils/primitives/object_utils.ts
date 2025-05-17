@@ -5,14 +5,6 @@ import { GenericObject, IterableMapLikeEntity } from '../../declarations/collect
 import { isNil, isUndefined, isArray, isObject } from '../misc/logic_utils';
 
 // implementation
-function isIterableObject(iterableObjectLike: unknown): iterableObjectLike is GenericObject {
-    if (typeof iterableObjectLike !== 'object') {
-        return false;
-    }
-
-    return Object.keys(iterableObjectLike).length > 0;
-}
-
 function checkObjectKeys(objectLike: unknown, keysValidators: {[key: string]: (arg: unknown) => boolean}): boolean {
     if (!isIterableObject(objectLike)) {
         return false;
@@ -27,6 +19,18 @@ function checkObjectKeys(objectLike: unknown, keysValidators: {[key: string]: (a
     }
 
     return true;
+}
+
+function isIterableObject(iterableObjectLike: unknown): iterableObjectLike is GenericObject {
+    if (typeof iterableObjectLike !== 'object') {
+        return false;
+    }
+
+    return Object.keys(iterableObjectLike).length > 0;
+}
+
+function isObjectOfType<ObjectType>(objectLike: unknown, keysValidators: {[key: string]: (arg: unknown) => boolean}): objectLike is ObjectType {
+    return checkObjectKeys(objectLike, keysValidators);
 }
 
 function cloneArrayDeep(arrayToClone) {
@@ -145,8 +149,10 @@ function mapToObject<ValueType>(customMap: IterableMapLikeEntity<ValueType>): Re
 
 // exports
 export {
-    isIterableObject,
     checkObjectKeys,
+
+    isIterableObject,
+    isObjectOfType,
 
     cloneArrayDeep,
     cloneDeep,
