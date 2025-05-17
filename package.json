@@ -13,6 +13,7 @@
 
     "./constants/net/http/*": "./src/constants/net/http/*.ts",
     "./constants/registers/*": "./src/constants/registers/*.ts",
+    "./constants/validation/*": "./src/constants/validation/*.ts",
 
     "./errors/*": "./src/errors/*.ts",
     "./utils/misc/*": "./src/utils/misc/*.ts",
@@ -26,6 +27,8 @@
     "./registers/firebase/*": "./src/registers/firebase/*.ts",
 
     "./security/authentication/strategies/firebase/server/*": "./src/security/authentication/strategies/firebase/server/*.ts",
+
+    "./validators/net/http/*": "./src/validators/net/http/*.ts",
 
     "./package.json": "./package.json"
   },
