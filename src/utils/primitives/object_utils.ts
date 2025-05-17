@@ -1,10 +1,34 @@
 // external imports
 
 // internal imports
-import { IterableMapLikeEntity } from '../../declarations/collection_declarations';
-import { isNil, isUndefined, isObject, isArray } from '../misc/logic_utils';
+import { GenericObject, IterableMapLikeEntity } from '../../declarations/collection_declarations';
+import { isNil, isUndefined, isArray, isObject } from '../misc/logic_utils';
 
 // implementation
+function isIterableObject(iterableObjectLike: unknown): iterableObjectLike is GenericObject {
+    if (typeof iterableObjectLike !== 'object') {
+        return false;
+    }
+
+    return Object.keys(iterableObjectLike).length > 0;
+}
+
+function checkObjectKeys(objectLike: unknown, keysValidators: {[key: string]: (arg: unknown) => boolean}): boolean {
+    if (!isIterableObject(objectLike)) {
+        return false;
+    }
+
+    for (const key in keysValidators) {
+        const validator = keysValidators[key];
+
+        if (!(key in objectLike) && !validator(objectLike[key])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 function cloneArrayDeep(arrayToClone) {
     if (isNil(arrayToClone)) {
         throw new Error('Cannot clone an array - array is not provided');
@@ -121,6 +145,9 @@ function mapToObject<ValueType>(customMap: IterableMapLikeEntity<ValueType>): Re
 
 // exports
 export {
+    isIterableObject,
+    checkObjectKeys,
+
     cloneArrayDeep,
     cloneDeep,
 
