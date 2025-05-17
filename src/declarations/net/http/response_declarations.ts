@@ -1,14 +1,16 @@
 // external imports
 
 // internal imports
+import { DeserializedErrors} from '../../error/general_error_declarations';
 import { SerializedErrors } from '../../error/serializable_error_declarations';
 
 // implementation
-type HTTPResponseErrors = SerializedErrors | void[];
+type HTTPResponseDeserializedErrors = DeserializedErrors | void[];
+type HTTPResponseSerializedErrors = SerializedErrors | void[];
 
-type HTTPResponseDataSchema<ResponseDataType = unknown> = {
+type HTTPResponseDataSchema<Deserialized extends boolean = false, ResponseDataType = unknown> = {
     success: boolean,
-    errors: HTTPResponseErrors,
+    errors: Deserialized extends true ? HTTPResponseDeserializedErrors : HTTPResponseSerializedErrors,
     data: ResponseDataType | undefined | null,
 };
 
@@ -20,7 +22,9 @@ type HTTPResponseSchema<ResponseDataType = HTTPResponseDataSchema> = {
 
 // exports
 export {
-    HTTPResponseErrors,
+    HTTPResponseDeserializedErrors,
+    HTTPResponseSerializedErrors,
+
     HTTPResponseDataSchema,
     HTTPResponseSchema,
 }

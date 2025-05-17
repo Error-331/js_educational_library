@@ -10,7 +10,7 @@ import HTTPError from '../../errors/http_error';
 import ValidationError from '../../errors/validation_error';
 
 import { isObjectOfType } from '../primitives/object_utils';
-import { isNumber, isArray } from './logic_utils';
+import { isNumber, isArray, isObject } from './logic_utils';
 
 // implementation
 function isError(error: PossibleError): error is Error {
@@ -73,11 +73,15 @@ function deserializeErrors(serializedErrors: SerializedError[] | void[]): Deseri
     return deserializedErrors;
 }
 
-function joinValidationErrorIssues(errors: DeserializedError[]): ZodIssueWithInputData[] {
+function joinValidationErrorIssues(errors: DeserializedError[] | void[]): ZodIssueWithInputData[] {
     let issues: ZodIssueWithInputData[] = [];
 
+    if (errors.length <= 0) {
+        return [];
+    }
+
     errors
-        .filter(error => error.name === CustomErrorName.ValidationError)
+        .filter(error => isObject(error) && (error.name === CustomErrorName.ValidationError))
         .forEach((error: ValidationError) => {
             issues = issues.concat(error.issues)
         })

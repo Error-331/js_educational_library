@@ -3,7 +3,7 @@
 // internal imports
 
 // implementation
-type GenericObject = {[key: string | number]: unknown};
+type GenericObject<DataType = unknown> = { [key: string | number]: DataType };
 
 type ArrayIteratorFunction<ArrayValueType, IteratorResultType> = (value: ArrayValueType, index: number, collection: ArrayLike<ArrayValueType>) => IteratorResultType;
 type ArrayIterator<ArrayValueType, IteratorResultType> = ArrayIteratorFunction<ArrayValueType, IteratorResultType>;
