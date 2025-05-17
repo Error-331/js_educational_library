@@ -16,6 +16,7 @@
     "./errors/*": "./src/errors/*.ts",
     "./utils/misc/*": "./src/utils/misc/*.ts",
     "./utils/net/http/*": "./src/utils/net/http/*.ts",
+    "./utils/primitives/*": "./src/utils/primitives/*.ts",
 
     "./net/http/cookies/*": "./src/net/http/cookies/*.ts",
     "./net/http/request/*": "./src/net/http/request/*.ts",
