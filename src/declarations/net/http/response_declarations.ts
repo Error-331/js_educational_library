@@ -9,7 +9,7 @@ type HTTPResponseErrors = SerializedErrors | void[];
 type HTTPResponseDataSchema<ResponseDataType = unknown> = {
     success: boolean,
     errors: HTTPResponseErrors,
-    data: ResponseDataType,
+    data: ResponseDataType | undefined | null,
 };
 
 type HTTPResponseSchema<ResponseDataType = HTTPResponseDataSchema> = {

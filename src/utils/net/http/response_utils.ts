@@ -8,7 +8,7 @@ import { serializeError } from '../../misc/error_utils';
 import { isNil } from '../../misc/logic_utils';
 
 // implementation
-function prepareHTTPResponse<ResponseDataType = unknown>(data: ResponseDataType, error?: PossibleError): HTTPResponseDataSchema<ResponseDataType> {
+function prepareHTTPResponse<ResponseDataType = unknown>(data?: ResponseDataType, error?: PossibleError): HTTPResponseDataSchema<ResponseDataType> {
     const success = isNil(error);
     let errors: HTTPResponseErrors = [];
 

@@ -7,6 +7,10 @@ import HTTPError from '../../errors/http_error';
 import ValidationError from '../../errors/validation_error';
 
 // implementation
+function isError(error: PossibleError): error is Error {
+    return error instanceof Error;
+}
+
 function isSerializableError(error: PossibleError): error is SerializableError {
     if (error instanceof HTTPError) {
         return true
@@ -20,8 +24,10 @@ function isSerializableError(error: PossibleError): error is SerializableError {
 function serializeError(error: PossibleError) {
     if (isSerializableError(error)) {
         return error.serialize();
+    } else if (isError(error)) {
+        return { message: error?.message };
     } else {
-        return { message: error.message };
+        return { message: 'Unknown error' };
     }
 }
 

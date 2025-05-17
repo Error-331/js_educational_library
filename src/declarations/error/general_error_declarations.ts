@@ -6,7 +6,7 @@ import ValidationError from '../../errors/validation_error';
 
 // implementation
 type SerializableError = HTTPError | ValidationError;
-type PossibleError = Error | HTTPError | ValidationError;
+type PossibleError = Error | HTTPError | ValidationError | unknown;
 
 // exports
 export {
