@@ -1,15 +1,16 @@
 // external imports
 
 // internal imports
+import { ZodIssueWithInputData } from '../../declarations/validation_declarations';
 import { CustomErrorName } from '../../declarations/error/custom_error_declarations';
-import { SerializableError, PossibleError } from '../../declarations/error/general_error_declarations';
+import { SerializableError, DeserializedError, PossibleError } from '../../declarations/error/general_error_declarations';
 import { SerializedError } from '../../declarations/error/serializable_error_declarations';
 
 import HTTPError from '../../errors/http_error';
 import ValidationError from '../../errors/validation_error';
 
 import { isObjectOfType } from '../primitives/object_utils';
-import { isNumber, isString, isArray } from './logic_utils';
+import { isNumber, isArray } from './logic_utils';
 
 // implementation
 function isError(error: PossibleError): error is Error {
@@ -36,7 +37,11 @@ function serializeError(error: PossibleError): SerializedError {
     }
 }
 
-function deserializeError(serializedError: SerializedError) {
+function deserializeError(serializedError: SerializedError | void): DeserializedError {
+    if (!serializedError) {
+        return;
+    }
+
     if (!('name' in serializedError)) {
         return new Error(serializedError.message);
     }
@@ -58,14 +63,26 @@ function deserializeError(serializedError: SerializedError) {
     }
 }
 
-function deserializeErrors(serializedErrors: SerializedError[] | void[]) {
-    const deserializedErrors = [];
+function deserializeErrors(serializedErrors: SerializedError[] | void[]): DeserializedError[] {
+    const deserializedErrors: DeserializedError[] = [];
 
     for (let serializedError of serializedErrors) {
-        deserializedErrors.push(serializeError(serializedError))
+        deserializedErrors.push(deserializeError(serializedError));
     }
 
     return deserializedErrors;
+}
+
+function joinValidationErrorIssues(errors: DeserializedError[]): ZodIssueWithInputData[] {
+    let issues: ZodIssueWithInputData[] = [];
+
+    errors
+        .filter(error => error.name === CustomErrorName.ValidationError)
+        .forEach((error: ValidationError) => {
+            issues = issues.concat(error.issues)
+        })
+
+    return issues;
 }
 
 // exports
@@ -75,5 +92,7 @@ export {
 
     deserializeError,
     deserializeErrors,
+
+    joinValidationErrorIssues,
 }
 
