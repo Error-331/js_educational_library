@@ -10,12 +10,15 @@
     "./declarations/net/http/*": "./src/declarations/net/http/*.ts",
     "./declarations/security/*": "./src/declarations/security/*.ts",
     "./declarations/ui/*": "./src/declarations/ui/*.ts",
+    "./declarations/vendor/*": "./src/declarations/vendor/*.ts",
 
     "./constants/net/http/*": "./src/constants/net/http/*.ts",
     "./constants/registers/*": "./src/constants/registers/*.ts",
     "./constants/validation/*": "./src/constants/validation/*.ts",
 
     "./errors/*": "./src/errors/*.ts",
+
+    "./utils/browser/*": "./src/utils/browser/*.ts",
     "./utils/misc/*": "./src/utils/misc/*.ts",
     "./utils/net/http/*": "./src/utils/net/http/*.ts",
     "./utils/primitives/*": "./src/utils/primitives/*.ts",
@@ -24,6 +27,7 @@
     "./net/http/cookies/*": "./src/net/http/cookies/*.ts",
     "./net/http/request/*": "./src/net/http/request/*.ts",
 
+    "./registers/facebook/*": "./src/registers/facebook/*.ts",
     "./registers/firebase/*": "./src/registers/firebase/*.ts",
 
     "./security/authentication/strategies/firebase/server/*": "./src/security/authentication/strategies/firebase/server/*.ts",
