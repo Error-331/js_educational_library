@@ -14,7 +14,7 @@ type HTTPRequestParams = string | object | ArrayBufferView | URLSearchParams | F
 type HTTPRequestConfig = {
     baseURL?: string,
     url?: string,
-    method: HTTPRequestMethod,
+    method?: HTTPRequestMethod,
     headers?: HTTPHeadersCollection,
     params?: HTTPRequestParams,
     data?: GenericObject,

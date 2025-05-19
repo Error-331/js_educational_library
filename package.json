@@ -20,6 +20,7 @@
 
     "./utils/browser/*": "./src/utils/browser/*.ts",
     "./utils/misc/*": "./src/utils/misc/*.ts",
+    "./utils/net/*": "./src/utils/net/*.ts",
     "./utils/net/http/*": "./src/utils/net/http/*.ts",
     "./utils/primitives/*": "./src/utils/primitives/*.ts",
     "./utils/ui/*": "./src/utils/ui/*.ts",
