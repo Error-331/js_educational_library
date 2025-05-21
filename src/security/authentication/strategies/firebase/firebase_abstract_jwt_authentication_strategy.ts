@@ -19,6 +19,24 @@ import { isNil } from '../../../../utils/misc/logic_utils';
 abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthenticationStrategy {
     protected cookieStore: CookieStore & JWTCookieStore;
 
+    /**
+     * GCP decoded token structure (possible):
+     *
+     * decodedIdToken {
+     *      provider_id: 'anonymous',
+     *      auth_time: 111111,
+     *      user_id: 'some_id',
+     *      firebase: { identities: {}, sign_in_provider: 'anonymous' },
+     *      iat: 111111,
+     *      exp: 111111,
+     *      aud: 'some_project',
+     *      iss: 'https://session.firebase.google.com/some_project',
+     *      sub: 'some_sub',
+     *      uid: 'some_uid'
+     * }
+     *
+     */
+
     static async decodeAuthToken(authToken: string, tokenType: FirebaseAuthTokenType): Promise<DecodedIdToken> {
         if (isNil(authToken)) {
             throw new HTTPError('Cannot decode authentication token - token is not set', 400);

@@ -2,7 +2,12 @@
 import { DecodedIdToken } from 'firebase-admin/auth';
 
 // internal imports
-import { AuthenticationProvider, AuthenticationVendor, UserAuthenticationStateInfo } from '../../../../../declarations/security/authentication_declarations';
+import {
+    AuthenticationProvider,
+    AuthenticationSignInStrategy,
+    AuthenticationVendor,
+    UserAuthenticationStateInfo
+} from '../../../../../declarations/security/authentication_declarations';
 import { FirebaseAuthTokenType } from '../../../../../declarations/security/firebase_authentication_declarations';
 
 import HTTPError from '../../../../../errors/http_error';
@@ -11,7 +16,7 @@ import FirebaseAbstractJWTAuthenticationStrategy from '../firebase_abstract_jwt_
 import { isNil } from '../../../../../utils/misc/logic_utils';
 
 // implementation
-class FirebaseAnonymousJWTServerAuthenticationStrategy extends FirebaseAbstractJWTAuthenticationStrategy {
+class FirebaseAnonymousJWTServerAuthenticationStrategy extends FirebaseAbstractJWTAuthenticationStrategy implements AuthenticationSignInStrategy<string>{
     protected verifyDecodedAuthTokenProviderId(decodedAuthToken: DecodedIdToken): boolean {
         return decodedAuthToken.provider_id === 'anonymous';
     }
@@ -29,23 +34,6 @@ class FirebaseAnonymousJWTServerAuthenticationStrategy extends FirebaseAbstractJ
     private async verifyAccessToken(accessToken: string): Promise<DecodedIdToken> {
         return this.verifyAuthToken(accessToken, FirebaseAuthTokenType.AccessToken)
     }
-
-    /*
-
-        decodedIdToken {
-            provider_id: 'anonymous',
-            auth_time: 111111,
-            user_id: 'some_id',
-            firebase: { identities: {}, sign_in_provider: 'anonymous' },
-            iat: 111111,
-            exp: 111111,
-            aud: 'some_project',
-            iss: 'https://session.firebase.google.com/some_project',
-            sub: 'some_sub',
-            uid: 'some_uid'
-        }
-
-    */
 
     public async getUserAuthenticationStateInfo(): Promise<UserAuthenticationStateInfo> {
         const stateInfo: UserAuthenticationStateInfo = {
@@ -78,11 +66,15 @@ class FirebaseAnonymousJWTServerAuthenticationStrategy extends FirebaseAbstractJ
         }
     }
 
-    public async signIn(accessToken: string) {
+    public async signIn(accessToken: string): Promise<UserAuthenticationStateInfo> {
         await this.verifyAccessToken(accessToken);
         await this.addSessionCookie(accessToken);
 
-        return;
+        return {
+            authenticated: true,
+            vendor: AuthenticationVendor.Firebase,
+            provider: AuthenticationProvider.Anonymous
+        };
     }
 }
 
