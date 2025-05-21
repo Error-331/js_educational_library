@@ -5,18 +5,23 @@
 // implementation
 enum AuthenticationVendor {
     Firebase = 'Firebase',
+    Facebook = 'Facebook',
     Unknown = 'Unknown',
 }
 
 enum AuthenticationProvider {
     Anonymous = 'Anonymous',
+    Business = 'Business',
     Unknown = 'Unknown',
 }
 
 type EmailPasswordSingInParams = [email: string, password: string];
 
 interface AuthenticationSignInStrategy<SignInParams> {
-    signIn(...args: SignInParams[]): Promise<void>;
+    verifyUser(): Promise<boolean>;
+    getUserAuthenticationStateInfo(): Promise<UserAuthenticationStateInfo>;
+
+    signIn(...args: SignInParams[]): Promise<void | UserAuthenticationStateInfo>;
     signOut(): Promise<void>;
 }
 

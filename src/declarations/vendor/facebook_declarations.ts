@@ -32,7 +32,7 @@ type FacebookClientSDKAuthResponse = {
     signedRequest?: string;
 };
 
-type FacebookClientSDKBusinessAuthUserResponse = {
+type FacebookClientSDKAuthUserResponse = {
     authResponse: FacebookClientSDKAuthResponse;
     status: FacebookClientSDKAuthResponseStatus;
 }
@@ -45,5 +45,5 @@ export {
     FacebookClientSDKRegistryOptions,
     FacebookClientSDKLoginOptions,
     FacebookClientSDKAuthResponse,
-    FacebookClientSDKBusinessAuthUserResponse,
+    FacebookClientSDKAuthUserResponse,
 }

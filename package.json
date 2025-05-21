@@ -31,6 +31,7 @@
     "./registers/facebook/*": "./src/registers/facebook/*.ts",
     "./registers/firebase/*": "./src/registers/firebase/*.ts",
 
+    "./security/authentication/strategies/facebook/client/*": "./src/security/authentication/strategies/facebook/client/*.ts",
     "./security/authentication/strategies/firebase/server/*": "./src/security/authentication/strategies/firebase/server/*.ts",
 
     "./validators/net/http/*": "./src/validators/net/http/*.ts",
