@@ -1,9 +1,9 @@
 // external imports
-import { SafeParseReturnType } from 'zod/lib/types';
-import { ZodIssue } from 'zod';
+import { ZodIssue, ZodIssueCode, SafeParseReturnType } from 'zod';
 
 // internal imports
 import ValidationError from '../../errors/validation_error';
+import { isArray } from "./logic_utils";
 
 // implementation
 /**
@@ -33,16 +33,69 @@ function createValidationError<ZodSafeParseReturnTypeInput, ZodSafeParseReturnTy
     return new ValidationError(message, issues);
 }
 
+function createValidationErrorByZodIssue(
+    zodIssue: ZodIssue,
+    inputName?: string,
+    message: string = 'Validation error'
+) {
+    const issue =  Object.assign({ inputName }, zodIssue);
+    return new ValidationError(message, [ issue ]);
+}
+
 function createAndThrowValidationError<ZodSafeParseReturnTypeInput, ZodSafeParseReturnTypeOutput>(
     zodSafeValue: SafeParseReturnType<ZodSafeParseReturnTypeInput, ZodSafeParseReturnTypeOutput>,
     inputName?: string,
     message: string = 'Validation error'
-) {
+): void {
     throw createValidationError<ZodSafeParseReturnTypeInput, ZodSafeParseReturnTypeOutput>(zodSafeValue, inputName, message);
+}
+
+function createAndThrowValidationErrorByZodIssue(
+    zodIssue: ZodIssue,
+    inputName?: string,
+    message: string = 'Validation error'
+): void {
+    throw createValidationErrorByZodIssue(zodIssue, inputName, message);
+}
+
+function createCustomZodIssueAndThrowValidationError(
+    path: string[],
+    inputName?: string,
+    message: string = 'Unknown error'
+): void {
+    throw createValidationErrorByZodIssue(createCustomZodIssue(path, message), inputName, message);
+}
+
+/**
+ *
+ * const errorResult = {
+ *     path: ['email'],
+ *     message: 'Error message'
+ *     code: 'custom',
+ * }
+ *
+ */
+
+function createCustomZodIssue(path: string[], message: string = 'Unknown error'): ZodIssue {
+    if (!isArray(path)) {
+        throw new Error('Cannot create custom Zod issue - path must be of type array');
+    }
+
+    return {
+        path,
+        message,
+        code: ZodIssueCode.custom,
+    }
 }
 
 // exports
 export {
     createValidationError,
+    createValidationErrorByZodIssue,
+
     createAndThrowValidationError,
+    createAndThrowValidationErrorByZodIssue,
+    createCustomZodIssueAndThrowValidationError,
+
+    createCustomZodIssue,
 }
