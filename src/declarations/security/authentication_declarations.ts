@@ -22,11 +22,13 @@ interface UserAuthenticationStateInfo {
     provider?: AuthenticationProvider;
 }
 
-interface AuthenticationSignInStrategy<SignInParams> {
+interface AuthenticationSignInStrategy<SignInParams, SignUpParams = void> {
     verifyUser(): Promise<boolean>;
     getUserAuthenticationStateInfo(): Promise<UserAuthenticationStateInfo>;
 
     signIn(...args: SignInParams[]): Promise<UserAuthenticationStateInfo>;
+    signUp(...args: SignUpParams[]): Promise<UserAuthenticationStateInfo>;
+
     signOut(): Promise<void>;
 }
 

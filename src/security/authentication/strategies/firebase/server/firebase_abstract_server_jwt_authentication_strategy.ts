@@ -2,25 +2,25 @@
 import { DecodedIdToken } from 'firebase-admin/auth';
 
 // internal imports
-import { CookieStore, SetCookieOptions, JWTCookieStore } from '../../../../declarations/net/http/cookie_declarations';
+import { CookieStore, SetCookieOptions, JWTCookieStore } from '../../../../../declarations/net/http/cookie_declarations';
 import {
     AuthenticationVendor,
     AuthenticationProvider,
     UserAuthenticationStateInfo
-} from '../../../../declarations/security/authentication_declarations';
-import { FirebaseAuthTokenType } from '../../../../declarations/security/firebase_authentication_declarations';
-import { JWT_COOKIE_DEFAULT_MAX_AGE } from '../../../../constants/net/http/cookie_constants';
+} from '../../../../../declarations/security/authentication_declarations';
+import { FirebaseAuthTokenType } from '../../../../../declarations/security/firebase_authentication_declarations';
+import { JWT_COOKIE_DEFAULT_MAX_AGE } from '../../../../../constants/net/http/cookie_constants';
 
-import HTTPError from '../../../../errors/http_error';
+import HTTPError from '../../../../../errors/http_error';
 
-import AbstractAuthenticationStrategy from './../abstract_authentication_strategy';
-import FirebaseAdminRegistry from '../../../../registers/firebase/firebase_admin_registry';
+import AbstractAuthenticationStrategy from '../../abstract_authentication_strategy';
+import FirebaseAdminRegistry from '../../../../../registers/firebase/firebase_admin_registry';
 
-import { convertSecondsToMilliseconds } from '../../../../utils/physics/time_utils';
-import { isNil } from '../../../../utils/misc/logic_utils';
+import { convertSecondsToMilliseconds } from '../../../../../utils/physics/time_utils';
+import { isNil } from '../../../../../utils/misc/logic_utils';
 
 // implementation
-abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthenticationStrategy {
+abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends AbstractAuthenticationStrategy {
     protected cookieStore: CookieStore & JWTCookieStore;
 
     /**
@@ -91,7 +91,7 @@ abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthent
     }
 
     protected async verifyAuthToken(authToken: string, tokenType: FirebaseAuthTokenType): Promise<DecodedIdToken> {
-        const decodedAuthToken = await FirebaseAbstractJWTAuthenticationStrategy.decodeAuthToken(authToken, tokenType);
+        const decodedAuthToken = await FirebaseAbstractServerJWTAuthenticationStrategy.decodeAuthToken(authToken, tokenType);
         return this.runAuthTokenVerificationStrategy(decodedAuthToken);
     }
 
@@ -149,10 +149,10 @@ abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthent
         }
 
         try {
-            const decodedAuthToken = await FirebaseAbstractJWTAuthenticationStrategy.decodeAuthToken(jwtValue, FirebaseAuthTokenType.JWTToken);
+            const decodedAuthToken = await FirebaseAbstractServerJWTAuthenticationStrategy.decodeAuthToken(jwtValue, FirebaseAuthTokenType.JWTToken);
 
             stateInfo.vendor = AuthenticationVendor.Firebase;
-            stateInfo.provider = FirebaseAbstractJWTAuthenticationStrategy.determineAuthProviderById(decodedAuthToken.firebase.sign_in_provider);
+            stateInfo.provider = FirebaseAbstractServerJWTAuthenticationStrategy.determineAuthProviderById(decodedAuthToken.firebase.sign_in_provider);
 
             try {
                 this.runAuthTokenVerificationStrategy(decodedAuthToken);
@@ -173,4 +173,4 @@ abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthent
 }
 
 // exports
-export default FirebaseAbstractJWTAuthenticationStrategy;
+export default FirebaseAbstractServerJWTAuthenticationStrategy;

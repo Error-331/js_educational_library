@@ -10,10 +10,10 @@ import {
 } from '../../../../../declarations/security/authentication_declarations';
 
 import HTTPError from '../../../../../errors/http_error';
-import FirebaseAbstractJWTAuthenticationStrategy from '../firebase_abstract_jwt_authentication_strategy';
+import FirebaseAbstractServerJWTAuthenticationStrategy from './firebase_abstract_server_jwt_authentication_strategy';
 
 // implementation
-class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWTAuthenticationStrategy implements AuthenticationSignInStrategy<string> {
+class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractServerJWTAuthenticationStrategy implements AuthenticationSignInStrategy<string> {
     protected verifyDecodedAuthTokenProviderId(decodedAuthToken: DecodedIdToken): boolean {
         return decodedAuthToken.firebase.sign_in_provider === 'password';
     }
@@ -37,6 +37,10 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWT
             vendor: AuthenticationVendor.Firebase,
             provider: AuthenticationProvider.EmailPassword,
         };
+    }
+
+    public async signUp(): Promise<UserAuthenticationStateInfo> {
+        return this.getUserAuthenticationStateInfo();
     }
 }
 

@@ -1,5 +1,5 @@
 // external imports
-import { ZodIssue } from 'zod';
+import { SafeParseReturnType, ZodIssue } from 'zod';
 
 // internal imports
 
@@ -8,7 +8,13 @@ type ZodIssueWithInputData = ZodIssue & {
     inputName?: string;
 }
 
+type EmailPasswordValidationSchemaInput = { email: string, password: string };
+type EmailPasswordValidatorType =  (data: EmailPasswordValidationSchemaInput) => SafeParseReturnType<EmailPasswordValidationSchemaInput, EmailPasswordValidationSchemaInput>;
+
 // exports
 export type {
     ZodIssueWithInputData,
+
+    EmailPasswordValidationSchemaInput,
+    EmailPasswordValidatorType,
 }

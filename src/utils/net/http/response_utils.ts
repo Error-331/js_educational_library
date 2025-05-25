@@ -10,19 +10,20 @@ import { checkObjectKeys, cloneDeep } from '../../primitives/object_utils'
 import { isNil, isBoolean, isNumber, isArray } from '../../misc/logic_utils';
 
 // implementation
-function isHTTPResponseData<Deserialized extends boolean = false>(responseData: unknown): responseData is HTTPResponseDataSchema<Deserialized> {
+function isHTTPResponseData<Deserialized extends boolean = false, DataType = unknown>(responseData: unknown): responseData is HTTPResponseDataSchema<Deserialized, DataType> {
     return checkObjectKeys(responseData, {
         success: isBoolean,
+        // data - TODO: we should actually check the data using validator
         errors: isArray,
     });
 }
 
-function parseHTTPResponseData(responseData: unknown): HTTPResponseDataSchema<true> {
-    if (!isHTTPResponseData<true>(responseData)) {
+function parseHTTPResponseData<DataType = unknown>(responseData: unknown): HTTPResponseDataSchema<true, DataType> {
+    if (!isHTTPResponseData<true, DataType>(responseData)) {
         throw new Error('"responseData" does not adhere to HTTPResponseDataSchema - cannot parse HTTP response data');
     }
 
-    const responseDataCopy: HTTPResponseDataSchema<true> = cloneDeep(responseData)
+    const responseDataCopy: HTTPResponseDataSchema<true, DataType> = cloneDeep(responseData)
 
     if (!responseDataCopy.success) {
         responseDataCopy.errors = deserializeErrors(responseDataCopy.errors)
@@ -46,7 +47,7 @@ function prepareHTTPResponseData<ResponseDataType = unknown>(data?: ResponseData
     }
 }
 
-function handleHTTPResponseData(statusCode: number, responseData: unknown, allowedResponseCodes = [ 200 ]) {
+function handleHTTPResponseData<DataType = unknown>(statusCode: number, responseData: unknown, allowedResponseCodes = [ 200 ]): DataType {
     if (!isNumber(statusCode)) {
         throw new RangeError('Status code is unknown - cannot handle HTTP response data');
     }
@@ -63,19 +64,19 @@ function handleHTTPResponseData(statusCode: number, responseData: unknown, allow
     }
 
     if (isValidData) {
-        const data = parseHTTPResponseData(responseData);
+        const parsedData = parseHTTPResponseData<DataType>(responseData);
 
-        if (data.success) {
-            return data;
+        if (parsedData.success) {
+            return parsedData.data;
         } else {
-            if (isError(data?.errors[0])) {
-                throw data?.errors[0];
+            if (isError(parsedData?.errors[0])) {
+                throw parsedData?.errors[0];
             } else {
                 throw new Error('Unknown response error');
             }
         }
     } else {
-        return responseData;
+        throw new Error('Unknown response data format');
     }
 }
 
