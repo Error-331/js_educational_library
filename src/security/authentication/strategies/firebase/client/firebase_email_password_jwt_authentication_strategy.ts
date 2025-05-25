@@ -64,7 +64,6 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy implements AuthenticationSi
         this.inputDataValidator = config.inputDataValidator;
     }
 
-
     protected transformAndThrowFirebaseAuthError(error: unknown): void {
         if (!isObject(error)) {
             throw new Error('Unknown Firebase auth error');
