@@ -11,21 +11,10 @@ enum AuthenticationVendor {
 
 enum AuthenticationProvider {
     Anonymous = 'Anonymous',
+    EmailPassword = 'EmailPassword',
     Business = 'Business',
     Unknown = 'Unknown',
 }
-
-type EmailPasswordSingInParams = [email: string, password: string];
-
-interface AuthenticationSignInStrategy<SignInParams> {
-    verifyUser(): Promise<boolean>;
-    getUserAuthenticationStateInfo(): Promise<UserAuthenticationStateInfo>;
-
-    signIn(...args: SignInParams[]): Promise<void | UserAuthenticationStateInfo>;
-    signOut(): Promise<void>;
-}
-
-interface AuthenticationEmailPasswordSignInStrategy extends AuthenticationSignInStrategy<EmailPasswordSingInParams> {}
 
 interface UserAuthenticationStateInfo {
     authenticated: boolean;
@@ -33,15 +22,19 @@ interface UserAuthenticationStateInfo {
     provider?: AuthenticationProvider;
 }
 
+interface AuthenticationSignInStrategy<SignInParams> {
+    verifyUser(): Promise<boolean>;
+    getUserAuthenticationStateInfo(): Promise<UserAuthenticationStateInfo>;
+
+    signIn(...args: SignInParams[]): Promise<UserAuthenticationStateInfo>;
+    signOut(): Promise<void>;
+}
+
 // exports
 export {
     AuthenticationVendor,
     AuthenticationProvider,
 
-    EmailPasswordSingInParams,
-
-    AuthenticationSignInStrategy,
-    AuthenticationEmailPasswordSignInStrategy,
-
     UserAuthenticationStateInfo,
+    AuthenticationSignInStrategy,
 }

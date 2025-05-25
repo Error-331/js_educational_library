@@ -13,16 +13,16 @@ import HTTPError from '../../../../../errors/http_error';
 import FirebaseAbstractJWTAuthenticationStrategy from '../firebase_abstract_jwt_authentication_strategy';
 
 // implementation
-class FirebaseAnonymousJWTServerAuthenticationStrategy extends FirebaseAbstractJWTAuthenticationStrategy implements AuthenticationSignInStrategy<string> {
+class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWTAuthenticationStrategy implements AuthenticationSignInStrategy<string> {
     protected verifyDecodedAuthTokenProviderId(decodedAuthToken: DecodedIdToken): boolean {
-        return decodedAuthToken.firebase.sign_in_provider === 'anonymous';
+        return decodedAuthToken.firebase.sign_in_provider === 'password';
     }
 
     protected runAuthTokenVerificationStrategy(decodedAuthToken: DecodedIdToken) {
         const decodedAuthTokenCopy = super.runAuthTokenVerificationStrategy(decodedAuthToken);
 
         if (!this.verifyDecodedAuthTokenProviderId(decodedAuthTokenCopy)) {
-            throw new HTTPError('Cannot verify anonymous user access token - wrong provider Id', 400);
+            throw new HTTPError('Cannot verify user access token - wrong provider Id', 400);
         }
 
         return decodedAuthTokenCopy;
@@ -35,10 +35,10 @@ class FirebaseAnonymousJWTServerAuthenticationStrategy extends FirebaseAbstractJ
         return {
             authenticated: true,
             vendor: AuthenticationVendor.Firebase,
-            provider: AuthenticationProvider.Anonymous,
+            provider: AuthenticationProvider.EmailPassword,
         };
     }
 }
 
 // exports
-export default FirebaseAnonymousJWTServerAuthenticationStrategy;
+export default FirebaseEmailPasswordJWTAuthenticationStrategy;

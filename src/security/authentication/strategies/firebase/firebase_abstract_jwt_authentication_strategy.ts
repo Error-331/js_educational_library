@@ -3,7 +3,11 @@ import { DecodedIdToken } from 'firebase-admin/auth';
 
 // internal imports
 import { CookieStore, SetCookieOptions, JWTCookieStore } from '../../../../declarations/net/http/cookie_declarations';
-import { AuthenticationProvider } from '../../../../declarations/security/authentication_declarations';
+import {
+    AuthenticationVendor,
+    AuthenticationProvider,
+    UserAuthenticationStateInfo
+} from '../../../../declarations/security/authentication_declarations';
 import { FirebaseAuthTokenType } from '../../../../declarations/security/firebase_authentication_declarations';
 import { JWT_COOKIE_DEFAULT_MAX_AGE } from '../../../../constants/net/http/cookie_constants';
 
@@ -58,6 +62,8 @@ abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthent
         switch (providerId) {
             case 'anonymous':
                 return AuthenticationProvider.Anonymous;
+            case 'password':
+                return AuthenticationProvider.EmailPassword;
             default:
                 return AuthenticationProvider.Unknown;
         }
@@ -87,6 +93,10 @@ abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthent
     protected async verifyAuthToken(authToken: string, tokenType: FirebaseAuthTokenType): Promise<DecodedIdToken> {
         const decodedAuthToken = await FirebaseAbstractJWTAuthenticationStrategy.decodeAuthToken(authToken, tokenType);
         return this.runAuthTokenVerificationStrategy(decodedAuthToken);
+    }
+
+    protected async verifyAccessToken(accessToken: string): Promise<DecodedIdToken> {
+        return this.verifyAuthToken(accessToken, FirebaseAuthTokenType.AccessToken);
     }
 
     protected async verifySessionToken(authToken: string): Promise<DecodedIdToken> {
@@ -124,6 +134,37 @@ abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthent
         }
 
         return true;
+    }
+
+    public async getUserAuthenticationStateInfo(): Promise<UserAuthenticationStateInfo> {
+        const stateInfo: UserAuthenticationStateInfo = {
+            authenticated: false,
+            vendor: AuthenticationVendor.Unknown,
+            provider: AuthenticationProvider.Unknown,
+        }
+
+        const jwtValue = await this.cookieStore.getJWTResponseCookie();
+        if (isNil(jwtValue)) {
+            return stateInfo;
+        }
+
+        try {
+            const decodedAuthToken = await FirebaseAbstractJWTAuthenticationStrategy.decodeAuthToken(jwtValue, FirebaseAuthTokenType.JWTToken);
+
+            stateInfo.vendor = AuthenticationVendor.Firebase;
+            stateInfo.provider = FirebaseAbstractJWTAuthenticationStrategy.determineAuthProviderById(decodedAuthToken.firebase.sign_in_provider);
+
+            try {
+                this.runAuthTokenVerificationStrategy(decodedAuthToken);
+            } catch (error: unknown) {
+                return stateInfo
+            }
+
+            stateInfo.authenticated = true;
+            return stateInfo;
+        } catch (error: unknown) {
+            return stateInfo;
+        }
     }
 
     public async signOut(): Promise<void> {
