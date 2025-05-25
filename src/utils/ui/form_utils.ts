@@ -6,7 +6,7 @@ import { ZodIssueWithInputData } from '../../declarations/validation_declaration
 import { DeserializedError } from '../../declarations/error/general_error_declarations';
 
 import { joinValidationErrorIssues } from '../misc/error_utils';
-import { isNil, isString } from '../misc/logic_utils';
+import { isNil, isString, isArray } from '../misc/logic_utils';
 
 // implementation
 function transformZodIssuesToFormErrorData(issues: ZodIssueWithInputData[]): UIFormErrorData {
@@ -29,7 +29,11 @@ function transformZodIssuesToFormErrorData(issues: ZodIssueWithInputData[]): UIF
     }, {})
 }
 
-function prepareFormInputErrorData(errors: DeserializedError[] | void[]): UIFormErrorData {
+function prepareFormInputErrorData(errors: DeserializedError |  DeserializedError[] | void[]): UIFormErrorData {
+    if (!isArray(errors)) {
+        errors = [ errors ];
+    }
+
     if (errors[0] === undefined) {
         return {};
     }

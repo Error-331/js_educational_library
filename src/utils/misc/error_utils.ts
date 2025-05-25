@@ -91,6 +91,7 @@ function joinValidationErrorIssues(errors: DeserializedError[] | void[]): ZodIss
 
 // exports
 export {
+    isError,
     isSerializableError,
     serializeError,
 
