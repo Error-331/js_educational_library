@@ -13,6 +13,7 @@
     "./declarations/ui/*": "./src/declarations/ui/*.ts",
     "./declarations/vendor/*": "./src/declarations/vendor/*.ts",
 
+    "./constants/*": "./src/constants/*.ts",
     "./constants/net/http/*": "./src/constants/net/http/*.ts",
     "./constants/registers/*": "./src/constants/registers/*.ts",
     "./constants/validation/*": "./src/constants/validation/*.ts",
