@@ -6,6 +6,7 @@
     ".": "./src/index.ts",
 
     "./declarations/*": "./src/declarations/*.ts",
+    "./declarations/database/*": "./src/declarations/database/*.ts",
     "./declarations/error/*": "./src/declarations/error/*.ts",
     "./declarations/net/http/*": "./src/declarations/net/http/*.ts",
     "./declarations/security/*": "./src/declarations/security/*.ts",
