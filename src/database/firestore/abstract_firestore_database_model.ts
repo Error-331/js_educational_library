@@ -12,12 +12,12 @@ import {
 } from 'firebase-admin/firestore';
 
 // internal imports
-import { DatabaseDocument } from '../../declarations/database/general_model_declarations';
+import { DatabaseDocument } from '../../declarations/database/general_database_model_declarations';
 import { AtLeast } from '../../declarations/utility_declarations';
 
-import { MODEL_PAGINATION_LIMIT } from '../../constants/models/general_model_constants';
+import { MODEL_PAGINATION_LIMIT } from '../../constants/database/general_database_model_constants';
 
-import AbstractDatabaseModel from '../../models/abstract_database_model';
+import AbstractDatabaseModel from '../abstract_database_model';
 import FirebaseAdminRegistry from '../../registers/firebase/firebase_admin_registry';
 
 import { createCurrentUTCTimestamp } from '../../utils/date/current_date_utils';

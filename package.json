@@ -5,6 +5,10 @@
   "exports": {
     ".": "./src/index.ts",
 
+    "./database/*": "./src/database/*.ts",
+    "./database/firebase_storage/*": "./src/database/firebase_storage/*.ts",
+    "./database/firestore/*": "./src/database/firestore/*.ts",
+
     "./declarations/*": "./src/declarations/*.ts",
     "./declarations/database/*": "./src/declarations/database/*.ts",
     "./declarations/error/*": "./src/declarations/error/*.ts",
@@ -14,6 +18,7 @@
     "./declarations/vendor/*": "./src/declarations/vendor/*.ts",
 
     "./constants/*": "./src/constants/*.ts",
+    "./constants/database/*": "./src/database/*.ts",
     "./constants/net/http/*": "./src/constants/net/http/*.ts",
     "./constants/registers/*": "./src/constants/registers/*.ts",
     "./constants/validation/*": "./src/constants/validation/*.ts",
@@ -27,10 +32,6 @@
     "./utils/net/http/*": "./src/utils/net/http/*.ts",
     "./utils/primitives/*": "./src/utils/primitives/*.ts",
     "./utils/ui/*": "./src/utils/ui/*.ts",
-
-    "./models/*": "./src/models/*.ts",
-    "./models/firebase_storage/*": "./src/models/firebase_storage/*.ts",
-    "./models/firestore/*": "./src/models/firestore/*.ts",
 
     "./net/http/cookies/*": "./src/net/http/cookies/*.ts",
     "./net/http/request/*": "./src/net/http/request/*.ts",

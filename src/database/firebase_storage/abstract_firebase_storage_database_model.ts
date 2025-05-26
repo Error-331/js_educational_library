@@ -4,12 +4,12 @@ import { posix } from 'node:path'
 
 // internal imports
 import { AtLeast } from '../../declarations/utility_declarations';
-import { WithDatabaseDocument } from '../../declarations/database/general_model_declarations';
-import { FirebaseStorageDatabaseEntity } from '../../declarations/database/firebase_model_declarations';
+import { WithDatabaseDocument } from '../../declarations/database/general_database_model_declarations';
+import { FirebaseStorageDatabaseEntity } from '../../declarations/database/firebase_database_model_declarations';
 
 import { REMOTE_FILE_READ_LINK_TTL_MINUTES } from '../../constants/remote_api_constants';
 
-import AbstractDatabaseModel from '../../models/abstract_database_model';
+import AbstractDatabaseModel from '../abstract_database_model';
 import FirebaseAdminRegistry from '../../registers/firebase/firebase_admin_registry';
 
 import { createDatePlusMinutesFromNow } from '../../utils/date/current_date_utils';

@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import { AbstractDatabaseDocument } from './general_model_declarations';
+import { AbstractDatabaseDocument } from './general_database_model_declarations';
 
 // implementation
 interface FirebaseStorageDatabaseFileMetadata {
