@@ -19,6 +19,7 @@
     "./errors/*": "./src/errors/*.ts",
 
     "./utils/browser/*": "./src/utils/browser/*.ts",
+    "./utils/date/*": "./src/utils/date/*.ts",
     "./utils/misc/*": "./src/utils/misc/*.ts",
     "./utils/net/*": "./src/utils/net/*.ts",
     "./utils/net/http/*": "./src/utils/net/http/*.ts",
@@ -52,7 +53,8 @@
     "next": "^15.2.2",
     "express": "^5.1.0",
     "firebase-admin": "^13.2.0",
-    "firebase": "^11.4.0"
+    "firebase": "^11.4.0",
+    "luxon": "^3.6.1"
   },
   "peerDependenciesMeta": {
     "zod": {
@@ -71,6 +73,9 @@
       "optional": true
     },
     "firebase": {
+      "optional": true
+    },
+    "luxon": {
       "optional": true
     }
   },
