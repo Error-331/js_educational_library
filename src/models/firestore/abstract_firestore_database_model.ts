@@ -1,0 +1,132 @@
+// external imports
+import {
+    UpdateData,
+    CollectionReference,
+    DocumentReference,
+    Firestore,
+    Query,
+    QuerySnapshot,
+    QueryDocumentSnapshot,
+    FirestoreDataConverter,
+    WithFieldValue,
+} from 'firebase-admin/firestore';
+
+// internal imports
+import { DatabaseDocument } from '../../declarations/database/general_model_declarations';
+import { AtLeast } from '../../declarations/utility_declarations';
+
+import { MODEL_PAGINATION_LIMIT } from '../../constants/models/general_model_constants';
+
+import AbstractDatabaseModel from '../../models/abstract_database_model';
+import FirebaseAdminRegistry from '../../registers/firebase/firebase_admin_registry';
+
+import { createCurrentUTCTimestamp } from '../../utils/date/current_date_utils';
+import { cloneDeep } from '../../utils/primitives/object_utils';
+import { isNil } from '../../utils/misc/logic_utils';
+
+// implementation
+abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocument>
+    extends AbstractDatabaseModel<WithFieldValue<EntityType>, WithFieldValue<EntityType>> {
+    protected async deleteQueryBatch(
+        database: Firestore,
+        query: Query<EntityType, EntityType>,
+        resolve: (value?: void | PromiseLike<void>) => void,
+    ): Promise<void> {
+        const snapshot = await query.get();
+        const batchSize = snapshot.size;
+
+        if (batchSize === 0) {
+            resolve();
+            return;
+        }
+
+        const batch = database.batch();
+        snapshot.docs.forEach((documentSnapshot) => batch.delete(documentSnapshot.ref));
+
+        await batch.commit();
+        setImmediate(() => {
+            this.deleteQueryBatch(database, query, resolve);
+        });
+    }
+
+    protected async loadCollectionInChunks(
+        resolve: (value: EntityType[]) => void,
+        reject: (error: unknown) => void,
+        collectionRef: CollectionReference<EntityType, EntityType> | Query<EntityType, EntityType> | null,
+        queryPreparationCB: (collectionRef: CollectionReference<EntityType, EntityType>) => Query<EntityType, EntityType>,
+        data: EntityType[]
+    ) {
+        let snapshot: QuerySnapshot<EntityType, EntityType>;
+        let collectionRefCopy: CollectionReference<EntityType, EntityType> | Query<EntityType, EntityType> | null;
+
+        try {
+            collectionRefCopy = collectionRef ?? queryPreparationCB(this.getCollectionReference());
+            snapshot = await collectionRefCopy.get();
+
+            snapshot.forEach((documentSnapshot: QueryDocumentSnapshot<EntityType, EntityType>) => data.push(documentSnapshot.data()));
+
+            if (snapshot.docs.length < MODEL_PAGINATION_LIMIT) {
+                return resolve(data)
+            } else if (snapshot.docs.length > MODEL_PAGINATION_LIMIT) {
+                reject(new RangeError(`Collection snapshot length cannot be greater than: ${MODEL_PAGINATION_LIMIT}`))
+                return;
+            }
+
+            const last = snapshot.docs[snapshot.docs.length - 1];
+            collectionRefCopy = queryPreparationCB(this.getCollectionReference()).startAfter(last);
+        } catch (error: unknown) {
+            reject(error);
+        }
+
+        setImmediate(() => {
+            this.loadCollectionInChunks(resolve, reject, collectionRefCopy, queryPreparationCB, data)
+        });
+    }
+
+    public async add(entity: Partial<WithFieldValue<EntityType>>): Promise<WithFieldValue<EntityType>> {
+        const entityClone = cloneDeep(entity);
+
+        entityClone.createdTimestamp = isNil(entityClone.createdTimestamp) ? createCurrentUTCTimestamp() : entityClone.createdTimestamp;
+        entityClone.updatedTimestamp = isNil(entityClone.updatedTimestamp) ? createCurrentUTCTimestamp() : entityClone.updatedTimestamp;
+
+        // TODO: add validate here
+        return await this.getCollectionReference().add(this.addDefaultValues(entityClone));
+    }
+
+    public async update(entity: AtLeast<EntityType, 'id'>): Promise<void> {
+        const entityClone = cloneDeep(entity);
+
+        entityClone.updatedTimestamp = isNil(entityClone.updatedTimestamp) ? createCurrentUTCTimestamp() : entityClone.updatedTimestamp;
+
+        const entityDocument = this.getDocumentReference(entityClone.id);
+        await entityDocument.update(entityClone as UpdateData<EntityType>);
+    }
+
+    public async deleteCollection(): Promise<void> {
+        const query = this.getCollectionReference().orderBy('__name__').limit(MODEL_PAGINATION_LIMIT);
+        const database = FirebaseAdminRegistry.getInstance().firestore;
+
+        return new Promise((resolve: (value?: void | PromiseLike<void>) => void, reject: (error: Error) => void) => {
+            this.deleteQueryBatch(database, query, resolve).catch(reject);
+        });
+    }
+
+    protected abstract getCollectionConverter(): FirestoreDataConverter<EntityType, Omit<WithFieldValue<EntityType>, 'id'>>;
+
+    protected getCollectionReference(): CollectionReference<EntityType, WithFieldValue<EntityType>> {
+        const collectionRef = FirebaseAdminRegistry.getInstance()
+            .firestore
+            .collection(`${this.collectionName}`);
+
+        const firestoreDataConverter = this.getCollectionConverter();
+        return isNil(firestoreDataConverter) ? collectionRef as CollectionReference<EntityType, WithFieldValue<EntityType>> : collectionRef.withConverter(firestoreDataConverter);
+    }
+
+    protected getDocumentReference(id: string | number): DocumentReference<EntityType, WithFieldValue<EntityType>> {
+        const database = FirebaseAdminRegistry.getInstance().firestore;
+        return database.doc( `${this.collectionName}/${id}`) as DocumentReference<EntityType, WithFieldValue<EntityType>>;
+    }
+}
+
+// exports
+export default AbstractFirestoreDatabaseModel;
