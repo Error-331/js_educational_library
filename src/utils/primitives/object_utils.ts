@@ -147,6 +147,21 @@ function mapToObject<ValueType>(customMap: IterableMapLikeEntity<ValueType>): Re
     return customObj;
 }
 
+function pick<SourceObjectType, KeysListType extends keyof SourceObjectType>(objectToPickFrom: SourceObjectType, propertiesList: KeysListType[]): Pick<SourceObjectType, KeysListType> {
+    if (!isObject(objectToPickFrom)) {
+        throw new RangeError('Cannot pick properties from object - provided value is not an object');
+    }
+
+    return Object.assign(
+        {},
+        ...propertiesList.map(key => {
+            if (objectToPickFrom && Object.prototype.hasOwnProperty.call(objectToPickFrom, key)) {
+                return { [key]: objectToPickFrom[key] };
+            }
+        })
+    );
+}
+
 // exports
 export {
     checkObjectKeys,
@@ -162,4 +177,6 @@ export {
 
     objectPropertiesToNormalize,
     mapToObject,
+
+    pick,
 }
