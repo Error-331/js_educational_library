@@ -43,7 +43,8 @@ class FirebaseAdminRegistry {
 
     /**
      * Method that prepares configuration object (options) for Firebase admin app initializer.
-     * Initialization of the Firebase Admin application involves loading of the service account JSON file in the location specified by the @see {@link process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH},
+     * Initialization of the Firebase Admin application involves loading of the service account JSON file in the location specified by the
+     * @see {@link process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH} or @see {@link process.env.GOOGLE_APPLICATION_CREDENTIALS}
      * additional configuration file specified by the @see {@link process.env.FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH}.
      * If none of the 'env' variables is found - 'undefined' will be returned and thus application will be initialized using default configuration.
      *
@@ -52,8 +53,9 @@ class FirebaseAdminRegistry {
      */
 
     protected prepareAppOptions(): AppOptions | undefined {
-        const hasConfigs= arraySome<string | undefined>([
+        const hasConfigs = arraySome<string | undefined>([
             process.env.FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH,
+            process.env.GOOGLE_APPLICATION_CREDENTIALS,
             process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH
         ], isString);
 
@@ -62,15 +64,20 @@ class FirebaseAdminRegistry {
 
             if (!isNil(process.env.FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH)) {
                 configObj = {
-                    ...readJSONFileSync(process.env.FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH)
+                    ...readJSONFileSync(process.env.FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH),
                 }
             }
 
-            if (!isNil(process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {
+            if (!isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
                 configObj = {
                     ...configObj,
-                    credential: admin.credential.cert(process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)
-                }
+                    credential: admin.credential.cert(process.env.GOOGLE_APPLICATION_CREDENTIALS),
+                };
+            } else if (!isNil(process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {
+                configObj = {
+                    ...configObj,
+                    credential: admin.credential.cert(process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH),
+                };
             }
 
             return configObj;
@@ -120,7 +127,7 @@ class FirebaseAdminRegistry {
 
     get projectId(): string {
         this.init();
-        return this.app.options.projectId;
+        return this.app.options.credential.projectId;
     }
 
     /**
