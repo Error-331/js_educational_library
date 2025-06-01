@@ -17,7 +17,7 @@ type HTTPRequestConfig = {
     method?: HTTPRequestMethod,
     headers?: HTTPHeadersCollection,
     params?: HTTPRequestParams,
-    data?: GenericObject,
+    data?: GenericObject | FormData,
     timeout?: number, // in milliseconds
 }
 

@@ -19,6 +19,7 @@ import { HTTPHeadersCollection } from '../../../declarations/net/http/headers_de
 import { removeLastSpecialSymbolStringFormatter } from '../../../utils/primitives/string/basic_string_formatting_utils';
 import { cloneDeep } from '../../../utils/primitives/object_utils';
 import { isNil } from '../../../utils/misc/logic_utils';
+import FormDataTransformer from "../form/form_data_transformer";
 
 // implementation
 abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<ResponseDataType> {
@@ -28,7 +29,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
     protected _method: HTTPRequestMethod = 'get';
     protected _headers: HTTPHeadersCollection = {};
     protected _params: HTTPRequestParams = {};
-    protected _data: GenericObject;
+    protected _data: GenericObject | FormData;
     protected _timeout: number = HTTP_REQUEST_TIMEOUT;
 
     constructor(config: HTTPRequestConfig) {
@@ -92,7 +93,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
 
             method: this._method,
             headers: cloneDeep(this._headers),
-            data: cloneDeep(this._data),
+            data: FormDataTransformer.isFormData(this._data) ?  FormDataTransformer.clone(this._data) : cloneDeep(this._data),
             params: cloneDeep(this._params),
             timeout: this._timeout,
         }
@@ -184,7 +185,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
         this._params = params;
     }
 
-    set data(data: {[key: string]: unknown}) {
+    set data(data: GenericObject | FormData) {
         //validate
         this._data = data;
     }

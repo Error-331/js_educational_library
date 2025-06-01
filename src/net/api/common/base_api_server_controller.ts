@@ -6,10 +6,13 @@ import { CommonServerRequest, CommonServerResponse, CommonServerReturn } from '.
 import HTTPError from '../../../errors/http_error';
 import ValidationError from '../../../errors/validation_error';
 
+import { GenericObject } from '../../../declarations/collection_declarations';
 import { SerializableError } from '../../../declarations/error/general_error_declarations';
 
+import FormDataTransformer from '../../http/form/form_data_transformer';
+
 import { prepareHTTPResponseData } from '../../../utils/net/http/response_utils';
-import { isNil, isString } from '../../../utils/misc/logic_utils';
+import { isNil, isString, isFunction } from '../../../utils/misc/logic_utils';
 
 // implementation
 class BaseAPIServerController {
@@ -47,6 +50,18 @@ class BaseAPIServerController {
             return this.serveError(req, res, 400, error);
         } else {
             return this.serveError(req, res, 500, new Error('Internal server error'));
+        }
+    }
+
+    // TODO: do something with req?.formData
+    static async extractFormData(req: CommonServerRequest): Promise<GenericObject> {
+        if (isFunction(req?.formData)) {
+            const currentFormData = await req.formData();
+            const formDataTransformer = new FormDataTransformer(currentFormData);
+
+            return formDataTransformer.toObject();
+        } else {
+            return {};
         }
     }
 }
