@@ -1,0 +1,36 @@
+// external imports
+
+// internal imports
+import { EnumLikeObjectType } from '../../declarations/collection_declarations';
+
+// implementation
+function checkKeyToStringKeyEnumType<OriginalEnumType extends EnumLikeObjectType<string>>(enumToCheck: EnumLikeObjectType, keys: string[]): enumToCheck is OriginalEnumType  {
+    for (const key of keys) {
+        const currentValue = enumToCheck[key];
+        if (currentValue === undefined || currentValue !== key) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function convertEnumToKeyToStringKeyEnum<OriginalEnumType, NewEnumType extends EnumLikeObjectType>(originalEnum: OriginalEnumType): NewEnumType {
+    const originalEnumKeys = Object.keys(originalEnum);
+    const newEnum: EnumLikeObjectType = originalEnumKeys.reduce<EnumLikeObjectType>((acc: EnumLikeObjectType, key: string) => {
+        acc[key] = key;
+        return acc;
+    }, {});
+
+    if (!checkKeyToStringKeyEnumType<NewEnumType>(newEnum, originalEnumKeys)) {
+        throw new Error('test');
+    }
+
+    return newEnum;
+}
+
+// exports
+export {
+    checkKeyToStringKeyEnumType,
+    convertEnumToKeyToStringKeyEnum,
+}

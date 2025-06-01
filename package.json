@@ -35,6 +35,7 @@
     "./utils/net/*": "./src/utils/net/*.ts",
     "./utils/net/http/*": "./src/utils/net/http/*.ts",
     "./utils/primitives/*": "./src/utils/primitives/*.ts",
+    "./utils/type/*": "./src/utils/type/*.ts",
     "./utils/ui/*": "./src/utils/ui/*.ts",
 
     "./net/api/common/*":  "./src/net/api/common/*.ts",
