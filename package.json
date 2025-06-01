@@ -12,7 +12,11 @@
     "./declarations/*": "./src/declarations/*.ts",
     "./declarations/database/*": "./src/declarations/database/*.ts",
     "./declarations/error/*": "./src/declarations/error/*.ts",
+
+    "./declarations/net/api/gcp/*": "./src/declarations/net/api/gcp/*.ts",
     "./declarations/net/http/*": "./src/declarations/net/http/*.ts",
+    "./declarations/net/*": "./src/declarations/net/api/*.ts",
+
     "./declarations/security/*": "./src/declarations/security/*.ts",
     "./declarations/ui/*": "./src/declarations/ui/*.ts",
     "./declarations/vendor/*": "./src/declarations/vendor/*.ts",
@@ -32,6 +36,9 @@
     "./utils/net/http/*": "./src/utils/net/http/*.ts",
     "./utils/primitives/*": "./src/utils/primitives/*.ts",
     "./utils/ui/*": "./src/utils/ui/*.ts",
+
+    "./net/api/common/*":  "./src/net/api/common/*.ts",
+    "./net/api/gcp/compute/*":  "./src/net/api/gcp/compute/*.ts",
 
     "./net/http/cookies/*": "./src/net/http/cookies/*.ts",
     "./net/http/request/*": "./src/net/http/request/*.ts",
@@ -55,15 +62,19 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "zod": "^3.24.1",
+    "@google-cloud/compute": "^5.2.0",
     "axios": "^1.8.4",
-    "next": "^15.2.2",
     "express": "^5.1.0",
-    "firebase-admin": "^13.2.0",
     "firebase": "^11.4.0",
-    "luxon": "^3.6.1"
+    "firebase-admin": "^13.2.0",
+    "luxon": "^3.6.1",
+    "next": "^15.2.2",
+    "zod": "^3.24.1"
   },
   "peerDependenciesMeta": {
+    "@google-cloud/compute": {
+      "optional": true
+    },
     "zod": {
       "optional": true
     },
@@ -87,24 +98,23 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^22.13.10",
-    "@types/react": "^19.1.5",
-    "@types/react-dom": "^19.1.5",
-    "@types/jest": "^29.5.14",
-    "@types/firebase": "^3.2.3",
-    "@types/express": "^5.0.1",
-    "@types/cookie-parser": "^1.4.8",
-    "@types/axios": "^0.14.4",
     "@babel/core": "^7.26.9",
     "@babel/preset-env": "^7.26.9",
     "@babel/preset-typescript": "^7.26.0",
-    "typescript": "^5.7.3",
-    "ts-node": "^10.9.2",
-    "jest": "^29.7.0",
+    "@types/axios": "^0.14.4",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/express": "^5.0.1",
+    "@types/firebase": "^3.2.3",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
+    "axios": "^1.8.4",
     "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
-    "zod": "^3.24.1",
-    "axios": "^1.8.4"
-  },
-  "dependencies": {}
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "zod": "^3.24.1"
+  }
 }
