@@ -47,7 +47,7 @@ function prepareHTTPResponseData<ResponseDataType = unknown>(data?: ResponseData
     }
 }
 
-function handleHTTPResponseData<DataType = unknown>(statusCode: number, responseData: unknown, allowedResponseCodes = [ 200 ]): DataType {
+function handleHTTPResponseData<DataType = unknown>(statusCode: number, responseData: unknown, allowedResponseCodes = [ 200, 400 ]): DataType {
     if (!isNumber(statusCode)) {
         throw new RangeError('Status code is unknown - cannot handle HTTP response data');
     }
