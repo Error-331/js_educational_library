@@ -24,6 +24,16 @@ type GCPInstanceRequestOperation = {
     done?: boolean;
 };
 
+type GCPInstanceRequestOperationExtended = GCPVMInstanceChangeStatusRequest & GCPInstanceRequestOperation & {
+    nextStatus: string;
+}
+
+type GCPInstanceCheckOperation = {
+    operation: string;
+    project: string;
+    zone: string;
+};
+
 enum GCPInstanceSimplifiedStatus {
     'Running' = 'Running',
     'Stopped' = 'Stopped',
@@ -38,7 +48,10 @@ export {
 
     GCPVMInstanceRequest,
     GCPVMInstanceChangeStatusRequest,
+
     GCPInstanceRequestOperation,
+    GCPInstanceRequestOperationExtended,
+    GCPInstanceCheckOperation,
 
     GCPInstanceSimplifiedStatus,
 }
