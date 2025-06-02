@@ -115,12 +115,10 @@
     "@types/node": "^22.13.10",
     "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
-    "axios": "^1.8.4",
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3",
-    "zod": "^3.24.1"
+    "typescript": "^5.7.3"
   }
 }

@@ -147,6 +147,7 @@ function mapToObject<ValueType>(customMap: IterableMapLikeEntity<ValueType>): Re
     return customObj;
 }
 
+// TODO: map returns object? - not good
 function pick<SourceObjectType, KeysListType extends keyof SourceObjectType>(objectToPickFrom: SourceObjectType, propertiesList: KeysListType[]): Pick<SourceObjectType, KeysListType> {
     if (!isObject(objectToPickFrom)) {
         throw new RangeError('Cannot pick properties from object - provided value is not an object');
@@ -160,6 +161,13 @@ function pick<SourceObjectType, KeysListType extends keyof SourceObjectType>(obj
             }
         })
     );
+}
+
+function omit<SourceObjectType extends object, KeysListType extends keyof SourceObjectType>(objectToOmitIn: SourceObjectType, propertiesList: KeysListType[]): Omit<SourceObjectType, KeysListType>  {
+    const objectToOmitInCopy = cloneDeep<SourceObjectType>(objectToOmitIn);
+
+    propertiesList.forEach((key) => delete objectToOmitInCopy[key])
+    return objectToOmitInCopy;
 }
 
 // exports
@@ -179,4 +187,5 @@ export {
     mapToObject,
 
     pick,
+    omit,
 }
