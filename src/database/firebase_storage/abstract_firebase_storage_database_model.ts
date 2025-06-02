@@ -1,5 +1,5 @@
 // external imports
-import { File, Bucket, DownloadResponse } from '@google-cloud/storage';
+import { File as StorageFile, Bucket, DownloadResponse } from '@google-cloud/storage';
 import { posix } from 'node:path'
 
 // internal imports
@@ -11,7 +11,9 @@ import { REMOTE_FILE_READ_LINK_TTL_MINUTES } from '../../constants/remote_api_co
 
 import AbstractDatabaseModel from '../abstract_database_model';
 import FirebaseAdminRegistry from '../../registers/firebase/firebase_admin_registry';
+import FormDataTransformer from '../../net/http/form/form_data_transformer';
 
+import { extractBinaryDataFromFile } from '../../utils/file/general_file_utils';
 import { createDatePlusMinutesFromNow } from '../../utils/date/current_date_utils';
 import { isNil } from '../../utils/misc/logic_utils';
 
@@ -30,7 +32,7 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
         return posix.join(`${this.collectionName}`, ID.toString());
     }
 
-    protected getFileRef(ID: string | number): File {
+    protected getFileRef(ID: string | number): StorageFile {
         if (isNil(ID)) {
             throw new RangeError('ID is not specified - cannot prepare file reference to Firebase storage');
         }
@@ -60,6 +62,26 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
             metadata: {},
             id: pathToFile,
         };
+    }
+
+    public async addByFormDataKey(formData: FormData, key: string): Promise<FirebaseStorageDatabaseEntity> {
+        const formDataTransformer = new FormDataTransformer(formData);
+        const fileData = formDataTransformer.getFileData(key);
+        const fileBinaryData = await formDataTransformer.getFileBinaryData(key);
+
+        return this.add({
+            fileName: fileData.name,
+            file: fileBinaryData,
+        });
+    }
+
+    public async addByFile(file: File): Promise<FirebaseStorageDatabaseEntity> {
+        const fileBinaryData = await extractBinaryDataFromFile(file);
+
+        return this.add({
+            fileName: file.name,
+            file: fileBinaryData,
+        });
     }
 
     public update(entity: AtLeast<WithDatabaseDocument<FirebaseStorageDatabaseEntity>, 'id'>): Promise<void> {

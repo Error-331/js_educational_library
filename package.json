@@ -32,6 +32,7 @@
 
     "./utils/browser/*": "./src/utils/browser/*.ts",
     "./utils/date/*": "./src/utils/date/*.ts",
+    "./utils/file/*": "./src/utils/file/*.ts",
     "./utils/misc/*": "./src/utils/misc/*.ts",
     "./utils/net/*": "./src/utils/net/*.ts",
     "./utils/net/http/*": "./src/utils/net/http/*.ts",
