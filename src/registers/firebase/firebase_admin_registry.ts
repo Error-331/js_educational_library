@@ -1,6 +1,6 @@
 // external imports
 import admin from 'firebase-admin';
-import { App, getApp, getApps, AppOptions } from 'firebase-admin/app';
+import { App, getApp, getApps, AppOptions, ServiceAccount } from 'firebase-admin/app';
 
 import { Firestore, getFirestore } from 'firebase-admin/firestore';
 import { Storage, getStorage } from 'firebase-admin/storage';
@@ -39,6 +39,41 @@ class FirebaseAdminRegistry {
         }
 
         return FirebaseAdminRegistry.instance;
+    }
+
+    public static checkShouldLoadServiceAccountCredentials(path?: string): boolean {
+        return !isNil(path) || !isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS) || isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH);
+    }
+
+    public static loadServiceAccountKey(path?: string): ServiceAccount | undefined {
+        if (!isNil(path)) {
+            return readJSONFileSync<ServiceAccount>(path);
+        }
+
+        if (!isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
+            return readJSONFileSync<ServiceAccount>(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+        } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {
+            return readJSONFileSync<ServiceAccount>(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH);
+        } else {
+            return undefined;
+        }
+    }
+
+    // TODO: add proper return type
+    public static loadServiceAccountCredentials(path?: string) {
+        const scKey = FirebaseAdminRegistry.loadServiceAccountKey(path);
+
+        if (isNil(scKey)) {
+            throw new RangeError('Cannot load service account credentials - service account key was not loaded correctly');
+        }
+
+        return {
+            projectId: scKey.projectId ?? this.instance?.projectId,
+            credentials: {
+                client_email: scKey.clientEmail,
+                private_key: scKey.privateKey,
+            },
+        }
     }
 
     /**

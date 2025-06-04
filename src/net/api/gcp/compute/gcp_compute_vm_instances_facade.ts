@@ -70,14 +70,17 @@ class GCPComputeVMInstancesFacade {
         return GoogleCloudComputeV1Types.AccessConfig.Type[accessConfigType];
     }
 
+    // TODO: refactor
     public async init(): Promise<void> {
+        const shouldLoadSCCredentials = FirebaseAdminRegistry.checkShouldLoadServiceAccountCredentials();
+
         if (isNil(this.instancesClient)) {
-            this.instancesClient = new InstancesClient();
+            this.instancesClient = new InstancesClient(shouldLoadSCCredentials ? FirebaseAdminRegistry.loadServiceAccountCredentials() : undefined);
             await this.instancesClient.initialize();
         }
 
         if (isNil(this.zoneOperationClient)) {
-            this.zoneOperationClient = new ZoneOperationsClient();
+            this.zoneOperationClient = new ZoneOperationsClient(shouldLoadSCCredentials ? FirebaseAdminRegistry.loadServiceAccountCredentials() : undefined);
             await this.zoneOperationClient.initialize();
         }
     }

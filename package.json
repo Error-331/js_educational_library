@@ -119,6 +119,8 @@
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "firebase": "^11.4.0",
+    "firebase-admin": "^13.2.0"
   }
 }
