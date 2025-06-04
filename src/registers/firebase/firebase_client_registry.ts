@@ -81,7 +81,7 @@ class FirebaseClientRegistry {
     /**
      * Method that initializes current class instance.
      *
-     * @throws {RangeError} if application name is not set (@see {@link process.env.FIREBASE_CLIENT_APP_NAME}).
+     * @throws {RangeError} if application name is not set (@see {@link process.env.JSEL_FIREBASE_CLIENT_APP_NAME}).
      *
      */
 

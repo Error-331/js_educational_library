@@ -44,8 +44,8 @@ class FirebaseAdminRegistry {
     /**
      * Method that prepares configuration object (options) for Firebase admin app initializer.
      * Initialization of the Firebase Admin application involves loading of the service account JSON file in the location specified by the
-     * @see {@link process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH} or @see {@link process.env.GOOGLE_APPLICATION_CREDENTIALS}
-     * additional configuration file specified by the @see {@link process.env.FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH}.
+     * @see {@link process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH} or @see {@link process.env.GOOGLE_APPLICATION_CREDENTIALS}
+     * additional configuration file specified by the @see {@link process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH}.
      * If none of the 'env' variables is found - 'undefined' will be returned and thus application will be initialized using default configuration.
      *
      * @returns {AppOptions | undefined} configuration object with app options or undefined.
@@ -54,17 +54,17 @@ class FirebaseAdminRegistry {
 
     protected prepareAppOptions(): AppOptions | undefined {
         const hasConfigs = arraySome<string | undefined>([
-            process.env.FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH,
+            process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH,
             process.env.GOOGLE_APPLICATION_CREDENTIALS,
-            process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH
+            process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH
         ], isString);
 
         if (hasConfigs) {
             let configObj: AppOptions = {};
 
-            if (!isNil(process.env.FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH)) {
+            if (!isNil(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH)) {
                 configObj = {
-                    ...readJSONFileSync(process.env.FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH),
+                    ...readJSONFileSync(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH),
                 }
             }
 
@@ -73,10 +73,10 @@ class FirebaseAdminRegistry {
                     ...configObj,
                     credential: admin.credential.cert(process.env.GOOGLE_APPLICATION_CREDENTIALS),
                 };
-            } else if (!isNil(process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {
+            } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {
                 configObj = {
                     ...configObj,
-                    credential: admin.credential.cert(process.env.FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH),
+                    credential: admin.credential.cert(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH),
                 };
             }
 
@@ -88,8 +88,8 @@ class FirebaseAdminRegistry {
 
     /**
      * Method that initializes current class instance.
-     * Method will try to find initialized Firebase Admin application by name (@see {@link process.env.FIREBASE_ADMIN_APP_NAME}) and if find none - will try to initialize it (@see {@link initializeApp}).
-     * If {@link process.env.FIREBASE_ADMIN_APP_NAME} is not specified - default app name will be used (@see {@link FIREBASE_DEFAULT_ADMIN_APP_NAME}).
+     * Method will try to find initialized Firebase Admin application by name (@see {@link process.env.JSEL_FIREBASE_ADMIN_APP_NAME}) and if find none - will try to initialize it (@see {@link initializeApp}).
+     * If {@link process.env.JSEL_FIREBASE_ADMIN_APP_NAME} is not specified - default app name will be used (@see {@link FIREBASE_DEFAULT_ADMIN_APP_NAME}).
      *
      * @throws {RangeError} if application name is not set (is not a string).
      *
@@ -107,7 +107,7 @@ class FirebaseAdminRegistry {
     }
 
     /**
-     * Method that returns current Firebase Admin application name (@see {@link process.env.FIREBASE_ADMIN_APP_NAME}).
+     * Method that returns current Firebase Admin application name (@see {@link process.env.JSEL_FIREBASE_ADMIN_APP_NAME}).
      * If application name is not set - default Firebase app name will be returned (@see {@link FIREBASE_DEFAULT_ADMIN_APP_NAME}).
      *
      * @returns {string | undefined} application name.
@@ -115,7 +115,7 @@ class FirebaseAdminRegistry {
      */
 
     get appName(): string {
-        return process.env.FIREBASE_ADMIN_APP_NAME ?? FIREBASE_DEFAULT_ADMIN_APP_NAME;
+        return process.env.JSEL_FIREBASE_ADMIN_APP_NAME ?? FIREBASE_DEFAULT_ADMIN_APP_NAME;
     }
 
     /**

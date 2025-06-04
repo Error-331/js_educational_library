@@ -60,8 +60,8 @@ describe('Firebase admin registry tests...', () => {
         test('Should create an instance of Firebase Admin Registry based o named app...', async () => {
             const firebaseAdminRegistry = FirebaseAdminRegistry.getInstance();
 
-            expect(firebaseAdminRegistry.appName).toEqual(env.FIREBASE_ADMIN_APP_NAME);
-            expect(firebaseAdminRegistry.app.name).toEqual(env.FIREBASE_ADMIN_APP_NAME);
+            expect(firebaseAdminRegistry.appName).toEqual(env.JSEL_FIREBASE_ADMIN_APP_NAME);
+            expect(firebaseAdminRegistry.app.name).toEqual(env.JSEL_FIREBASE_ADMIN_APP_NAME);
 
             const accessToken = await firebaseAdminRegistry.app.options.credential.getAccessToken();
             const returnedOptions = {
@@ -79,7 +79,7 @@ describe('Firebase admin registry tests...', () => {
             }
 
             expect(returnedOptions).toStrictEqual(properOptions);
-            expect(firebaseAdminRegistry.auth.app.name).toEqual(env.FIREBASE_ADMIN_APP_NAME);
+            expect(firebaseAdminRegistry.auth.app.name).toEqual(env.JSEL_FIREBASE_ADMIN_APP_NAME);
         });
     });
 });

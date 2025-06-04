@@ -37,16 +37,16 @@ describe('Firebase client registry tests...', () => {
         test('Should create an instance of Firebase Client Registry based o named app...', async () => {
             const firebaseClientRegistry = FirebaseClientRegistry.getInstance();
 
-            firebaseClientRegistry.appName = env.FIREBASE_CLIENT_APP_NAME;
+            firebaseClientRegistry.appName = env.JSEL_FIREBASE_CLIENT_APP_NAME;
             firebaseClientRegistry.options = FirebaseClientConfig;
 
-            expect(firebaseClientRegistry.appName).toEqual(env.FIREBASE_CLIENT_APP_NAME);
+            expect(firebaseClientRegistry.appName).toEqual(env.JSEL_FIREBASE_CLIENT_APP_NAME);
 
-            expect(firebaseClientRegistry.app.name).toEqual(env.FIREBASE_CLIENT_APP_NAME);
+            expect(firebaseClientRegistry.app.name).toEqual(env.JSEL_FIREBASE_CLIENT_APP_NAME);
             expect(firebaseClientRegistry.app.options).toStrictEqual(FirebaseClientConfig);
 
             expect(firebaseClientRegistry.auth.app).toStrictEqual(firebaseClientRegistry.app);
-            expect(firebaseClientRegistry.auth.name).toEqual(env.FIREBASE_CLIENT_APP_NAME);
+            expect(firebaseClientRegistry.auth.name).toEqual(env.JSEL_FIREBASE_CLIENT_APP_NAME);
             expect(firebaseClientRegistry.auth.config).toStrictEqual(FirebaseClientConfig);
         });
     });

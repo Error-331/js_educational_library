@@ -4,12 +4,12 @@
 
 // implementation
 const env = {
-    FIREBASE_CLIENT_APP_NAME: 'test_client_web_app',
-    FIREBASE_CLIENT_APP_CONFIG_JSON_PATH: './tests/__mocks__/firebase_client_app_config.json',
+    JSEL_FIREBASE_CLIENT_APP_NAME: 'test_client_web_app',
+    JSEL_FIREBASE_CLIENT_APP_CONFIG_JSON_PATH: './tests/__mocks__/firebase_client_app_config.json',
 
-    FIREBASE_ADMIN_APP_NAME: 'test_admin_web_app',
-    FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH: './tests/__mocks__/firebase_admin_app_additional_config.json',
-    FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH: './tests/__mocks__/firebase_admin_service_account.json',
+    JSEL_FIREBASE_ADMIN_APP_NAME: 'test_admin_web_app',
+    JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH: './tests/__mocks__/firebase_admin_app_additional_config.json',
+    JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH: './tests/__mocks__/firebase_admin_service_account.json',
 };
 
 function setEnvVars(): void {
