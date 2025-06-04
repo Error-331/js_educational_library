@@ -1,6 +1,6 @@
 // external imports
 import admin from 'firebase-admin';
-import { App, getApp, getApps, AppOptions, ServiceAccount } from 'firebase-admin/app';
+import { App, getApp, getApps, AppOptions, ServiceAccount, JWTInput } from 'firebase-admin/app';
 
 import { Firestore, getFirestore } from 'firebase-admin/firestore';
 import { Storage, getStorage } from 'firebase-admin/storage';
@@ -12,6 +12,7 @@ import { FIREBASE_DEFAULT_ADMIN_APP_NAME } from '../../constants/registers/fireb
 import { readJSONFileSync } from '../../utils/misc/file_utils';
 import { arraySome } from '../../utils/primitives/array_utils';
 import { isNil, isString } from '../../utils/misc/logic_utils';
+
 
 // implementation
 /**
@@ -42,18 +43,19 @@ class FirebaseAdminRegistry {
     }
 
     public static checkShouldLoadServiceAccountCredentials(path?: string): boolean {
-        return !isNil(path) || !isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS) || isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH);
+        return !isNil(path) || !isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS) || !isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH);
     }
 
-    public static loadServiceAccountKey(path?: string): ServiceAccount | undefined {
+    // TODO: proper return message
+    public static loadServiceAccountKey(path?: string): object | undefined {
         if (!isNil(path)) {
-            return readJSONFileSync<ServiceAccount>(path);
+            return readJSONFileSync(path);
         }
 
         if (!isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
-            return readJSONFileSync<ServiceAccount>(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+            return readJSONFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS);
         } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {
-            return readJSONFileSync<ServiceAccount>(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH);
+            return readJSONFileSync(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH);
         } else {
             return undefined;
         }
@@ -68,10 +70,10 @@ class FirebaseAdminRegistry {
         }
 
         return {
-            projectId: scKey.projectId ?? this.instance?.projectId,
+            projectId: scKey.project_id ?? this.instance?.projectId,
             credentials: {
-                client_email: scKey.clientEmail,
-                private_key: scKey.privateKey,
+                client_email: scKey.client_email,
+                private_key: scKey.private_key,
             },
         }
     }
