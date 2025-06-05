@@ -72,15 +72,15 @@ class GCPComputeVMInstancesFacade {
 
     // TODO: refactor
     public async init(): Promise<void> {
-        const shouldLoadSCCredentials = FirebaseAdminRegistry.checkShouldLoadServiceAccountCredentials();
+        const serviceAccountCredentials = FirebaseAdminRegistry.loadServiceAccountCredentials();
 
         if (isNil(this.instancesClient)) {
-            this.instancesClient = new InstancesClient(shouldLoadSCCredentials ? FirebaseAdminRegistry.loadServiceAccountCredentials() : undefined);
+            this.instancesClient = new InstancesClient(serviceAccountCredentials);
             await this.instancesClient.initialize();
         }
 
         if (isNil(this.zoneOperationClient)) {
-            this.zoneOperationClient = new ZoneOperationsClient(shouldLoadSCCredentials ? FirebaseAdminRegistry.loadServiceAccountCredentials() : undefined);
+            this.zoneOperationClient = new ZoneOperationsClient(serviceAccountCredentials);
             await this.zoneOperationClient.initialize();
         }
     }

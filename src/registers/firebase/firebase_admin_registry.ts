@@ -1,6 +1,6 @@
 // external imports
 import admin from 'firebase-admin';
-import { App, getApp, getApps, AppOptions, ServiceAccount, JWTInput } from 'firebase-admin/app';
+import { App, getApp, getApps, AppOptions, ServiceAccount, Credential } from 'firebase-admin/app';
 
 import { Firestore, getFirestore } from 'firebase-admin/firestore';
 import { Storage, getStorage } from 'firebase-admin/storage';
@@ -10,9 +10,7 @@ import { Auth, getAuth } from 'firebase-admin/auth';
 import { FIREBASE_DEFAULT_ADMIN_APP_NAME } from '../../constants/registers/firebase_registers_constants';
 
 import { readJSONFileSync } from '../../utils/misc/file_utils';
-import { arraySome } from '../../utils/primitives/array_utils';
-import { isNil, isString } from '../../utils/misc/logic_utils';
-
+import { isNil, isString, isObject } from '../../utils/misc/logic_utils';
 
 // implementation
 /**
@@ -24,6 +22,7 @@ import { isNil, isString } from '../../utils/misc/logic_utils';
  */
 class FirebaseAdminRegistry {
     private static instance: FirebaseAdminRegistry;
+    private static serviceAccountKey: ServiceAccount | undefined | null;
 
     private constructor() {}
 
@@ -42,20 +41,36 @@ class FirebaseAdminRegistry {
         return FirebaseAdminRegistry.instance;
     }
 
-    public static checkShouldLoadServiceAccountCredentials(path?: string): boolean {
-        return !isNil(path) || !isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS) || !isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH);
-    }
-
-    // TODO: proper return message
-    public static loadServiceAccountKey(path?: string): object | undefined {
-        if (!isNil(path)) {
-            return readJSONFileSync(path);
+    // TODO: proper types
+    public static extractServiceAccountCredentials(serviceAccountKey: Credential) {
+        if (isNil(serviceAccountKey)) {
+            throw new RangeError('Cannot extract service account credentials - service account key is not specified');
         }
 
-        if (!isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
-            return readJSONFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+        return {
+            projectId: serviceAccountKey.projectId ?? FirebaseAdminRegistry.instance?.projectId,
+            credentials: {
+                client_email: serviceAccountKey.clientEmail,
+                private_key: serviceAccountKey.privateKey,
+            },
+        }
+    }
+
+    public static loadServiceAccountKey(path?: string): Credential | undefined {
+        if (!isNil(path)) {
+            return admin.credential.cert(path);
+        }
+
+        const savedServiceAccountKey = FirebaseAdminRegistry.getServiceAccountKey();
+
+        if (!isNil(savedServiceAccountKey)) {
+            return admin.credential.cert(savedServiceAccountKey);
+        } else if (!isNil(process.env.JSEL_TT)) {
+            return admin.credential.cert(JSON.parse(process.env.JSEL_TT));
+        } else if (!isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
+            return admin.credential.cert(process.env.GOOGLE_APPLICATION_CREDENTIALS);
         } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {
-            return readJSONFileSync(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH);
+            return admin.credential.cert(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH);
         } else {
             return undefined;
         }
@@ -69,57 +84,38 @@ class FirebaseAdminRegistry {
             throw new RangeError('Cannot load service account credentials - service account key was not loaded correctly');
         }
 
-        return {
-            projectId: scKey.project_id ?? this.instance?.projectId,
-            credentials: {
-                client_email: scKey.client_email,
-                private_key: scKey.private_key,
-            },
-        }
+        return FirebaseAdminRegistry.extractServiceAccountCredentials(scKey);
     }
-
+    // TODO: change doc
     /**
      * Method that prepares configuration object (options) for Firebase admin app initializer.
      * Initialization of the Firebase Admin application involves loading of the service account JSON file in the location specified by the
      * @see {@link process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH} or @see {@link process.env.GOOGLE_APPLICATION_CREDENTIALS}
      * additional configuration file specified by the @see {@link process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH}.
-     * If none of the 'env' variables is found - 'undefined' will be returned and thus application will be initialized using default configuration.
+     * If none of the 'env' variables is found - 'undefined' for 'credential' field will be returned and thus application will be initialized using default service account.
      *
      * @returns {AppOptions | undefined} configuration object with app options or undefined.
      *
      */
 
     protected prepareAppOptions(): AppOptions | undefined {
-        const hasConfigs = arraySome<string | undefined>([
-            process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH,
-            process.env.GOOGLE_APPLICATION_CREDENTIALS,
-            process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH
-        ], isString);
-
-        if (hasConfigs) {
-            let configObj: AppOptions = {};
-
-            if (!isNil(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH)) {
-                configObj = {
-                    ...readJSONFileSync(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH),
-                }
+        let configObj: AppOptions = {};
+        if (!isNil(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH)) {
+            configObj = {
+                ...readJSONFileSync(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH),
             }
+        }
 
-            if (!isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
-                configObj = {
-                    ...configObj,
-                    credential: admin.credential.cert(process.env.GOOGLE_APPLICATION_CREDENTIALS),
-                };
-            } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {
-                configObj = {
-                    ...configObj,
-                    credential: admin.credential.cert(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH),
-                };
-            }
-
-            return configObj;
+        const credential = FirebaseAdminRegistry.loadServiceAccountKey();
+        if (isNil(credential)) {
+            return {
+                ...configObj,
+            };
         } else {
-            return undefined;
+            return {
+                ...configObj,
+                credential,
+            };
         }
     }
 
@@ -217,6 +213,18 @@ class FirebaseAdminRegistry {
     get auth(): Auth {
         this.init();
         return getAuth(this.app);
+    }
+
+    public static getServiceAccountKey(): ServiceAccount | undefined | null {
+        return FirebaseAdminRegistry.serviceAccountKey;
+    }
+
+    public static setServiceAccountKey(serviceAccount?: ServiceAccount | null): void {
+        if (!isObject(serviceAccount) && !isNil(serviceAccount)) {
+            throw new RangeError('Cannot set GCP service account key - provided service account is not nil and not an object')
+        }
+
+        FirebaseAdminRegistry.serviceAccountKey = serviceAccount;
     }
 }
 
