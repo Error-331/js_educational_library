@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import ChaCha20Poly1305Base64Encryptor from '../../../src/security/crypto/cha_cha_20_poly_1305_base64_encryptor';
+import ChaCha20Poly1305Base64Encryptor from '../../../../src/security/crypto/encryptors/cha_cha_20_poly_1305_base64_encryptor';
 
 import {
     textToEncrypt1,

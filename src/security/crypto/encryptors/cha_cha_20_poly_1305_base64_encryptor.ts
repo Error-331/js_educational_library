@@ -3,8 +3,10 @@ import crypto from 'crypto';
 import { Buffer } from 'buffer';
 
 // internal imports
+import { SimpleAsyncTextEncryptor, SimpleSyncTextDecryptor } from '../../../declarations/security/crypto_declarations';
+
 import AbstractEncryptor from './abstract_encryptor';
-import { isObject, isString } from '../../utils/misc/logic_utils';
+import { isObject, isString } from '../../../utils/misc/logic_utils';
 
 // implementation
 
@@ -25,7 +27,7 @@ import { isObject, isString } from '../../utils/misc/logic_utils';
  * - Decrypt encrypted data with `decryptString` or `decryptJSON`.
  */
 
-class ChaCha20Poly1305Base64Encryptor extends AbstractEncryptor {
+class ChaCha20Poly1305Base64Encryptor extends AbstractEncryptor implements SimpleAsyncTextEncryptor, SimpleSyncTextDecryptor {
     /**
      * Generates a random encryption key for ChaCha20-Poly1305 in Base64 format.
      * The key is a 256-bit (32-byte) random value encoded as a Base64 string.
@@ -74,7 +76,6 @@ class ChaCha20Poly1305Base64Encryptor extends AbstractEncryptor {
         const tag = cipher.getAuthTag();
         return Buffer.concat([nonce, tag, encrypted]).toString('base64');
     }
-    
 
     /**
      * Encrypts a provided JSON object using ChaCha20-Poly1305 encryption, returning a Base64-encoded result.

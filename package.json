@@ -57,6 +57,7 @@
     "./security/authentication/strategies/firebase/server/*": "./src/security/authentication/strategies/firebase/server/*.ts",
 
     "./security/crypto/*": "./src//security/crypto/*.ts",
+    "./security/crypto/encryptors/*": "./src//security/crypto/encryptors/*.ts",
 
     "./validators/net/http/*": "./src/validators/net/http/*.ts",
     "./validators/security/*": "./src/validators/security/*.ts",
