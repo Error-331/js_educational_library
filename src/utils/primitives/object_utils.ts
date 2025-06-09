@@ -163,10 +163,11 @@ function pick<SourceObjectType, KeysListType extends keyof SourceObjectType>(obj
     );
 }
 
-function omit<SourceObjectType extends object, KeysListType extends keyof SourceObjectType>(objectToOmitIn: SourceObjectType, propertiesList: KeysListType[]): Omit<SourceObjectType, KeysListType>  {
+function omit<SourceObjectType extends object, KeysListType extends keyof SourceObjectType>(objectToOmitIn: SourceObjectType, propertiesList: KeysListType | KeysListType[]): Omit<SourceObjectType, KeysListType>  {
     const objectToOmitInCopy = cloneDeep<SourceObjectType>(objectToOmitIn);
+    let preparedPropertiesList: KeysListType[] = isArray<KeysListType>(propertiesList) ? propertiesList : [propertiesList];
 
-    propertiesList.forEach((key) => delete objectToOmitInCopy[key])
+    preparedPropertiesList.forEach((key) => delete objectToOmitInCopy[key]);
     return objectToOmitInCopy;
 }
 

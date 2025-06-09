@@ -27,10 +27,11 @@ import { isNil, isString, isObject } from '../../utils/misc/logic_utils';
 class FirebaseAdminRegistry {
     private static instance: FirebaseAdminRegistry;
     private static serviceAccountKey: ServiceAccount | undefined | null;
+    private static appAdditionalConfiguration: AppOptions | undefined | null;
 
     private constructor() {}
 
-    private static extractFirebaseAdminServiceAccountJSON() {
+    private static extractFirebaseAdminServiceAccountJSON(): Credential {
         if (isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON)) {
             throw new RangeError('Cannot extract service account JSON - "JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON" environment variable is not set');
         }
@@ -44,6 +45,22 @@ class FirebaseAdminRegistry {
             return admin.credential.cert(serviceAccount);
         } else {
             return admin.credential.cert(JSON.parse(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON));
+        }
+    }
+
+    private static extractFirebaseAdminAppAdditionalConfigurationJSON(): AppOptions {
+        if (isNil(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON)) {
+            throw new RangeError('Cannot extract app additional configuration JSON - "JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON" environment variable is not set');
+        }
+
+        if (!isNil(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_CRYPTO_CONFIG)) {
+            const cryptoConfig: SimpleTextEncryptor = JSON.parse(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_CRYPTO_CONFIG);
+            const encryptorFactory = new SimpleTextEncryptorFactory();
+            const encryptor = encryptorFactory.createEncryptor(cryptoConfig.encryptorName);
+
+            return encryptor.decryptJSON<AppOptions>(cryptoConfig.key, process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON);
+        } else {
+            return JSON.parse(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON);
         }
     }
 
@@ -107,34 +124,47 @@ class FirebaseAdminRegistry {
 
         return FirebaseAdminRegistry.extractServiceAccountCredentials(scKey);
     }
-    // TODO: change doc
+
+    public static loadAppAdditionalConfiguration(path?: string): AppOptions | undefined {
+        if (!isNil(path)) {
+            return readJSONFileSync(path);
+        }
+
+        const appAdditionalConfiguration = FirebaseAdminRegistry.getAppAdditionalConfiguration();
+
+        if (!isNil(appAdditionalConfiguration)) {
+            return appAdditionalConfiguration;
+        } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON)) {
+            return FirebaseAdminRegistry.extractFirebaseAdminAppAdditionalConfigurationJSON();
+        } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH)) {
+            return readJSONFileSync(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH);
+        } else {
+            return undefined;
+        }
+    }
+
     /**
-     * Method that prepares configuration object (options) for Firebase admin app initializer.
-     * Initialization of the Firebase Admin application involves loading of the service account JSON file in the location specified by the
-     * @see {@link process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH} or @see {@link process.env.GOOGLE_APPLICATION_CREDENTIALS}
-     * additional configuration file specified by the @see {@link process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH}.
-     * If none of the 'env' variables is found - 'undefined' for 'credential' field will be returned and thus application will be initialized using default service account.
+     * Prepares and returns the Firebase App options used for initializing the Firebase Admin application.
+     * The options are constructed based on the loaded service account credentials and additional app configuration.
      *
-     * @returns {AppOptions | undefined} configuration object with app options or undefined.
+     * If no service account credentials can be loaded, the method returns the additional app configuration only.
+     * Otherwise, it includes both the credentials and additional configuration in the resulting options.
+     *
+     * @returns {AppOptions | undefined} Firebase App options that include credentials and/or additional configuration,or `undefined` if no configuration could be prepared.
      *
      */
 
     protected prepareAppOptions(): AppOptions | undefined {
-        let configObj: AppOptions = {};
-        if (!isNil(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH)) {
-            configObj = {
-                ...readJSONFileSync(process.env.JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH),
-            }
-        }
-
         const credential = FirebaseAdminRegistry.loadServiceAccountKey();
+        const appAdditionalConfiguration = FirebaseAdminRegistry.loadAppAdditionalConfiguration();
+
         if (isNil(credential)) {
             return {
-                ...configObj,
+                ...appAdditionalConfiguration,
             };
         } else {
             return {
-                ...configObj,
+                ...appAdditionalConfiguration,
                 credential,
             };
         }
@@ -238,6 +268,10 @@ class FirebaseAdminRegistry {
 
     public static getServiceAccountKey(): ServiceAccount | undefined | null {
         return FirebaseAdminRegistry.serviceAccountKey;
+    }
+
+    public static getAppAdditionalConfiguration(): AppOptions | undefined | null {
+        return FirebaseAdminRegistry.appAdditionalConfiguration;
     }
 
     public static setServiceAccountKey(serviceAccount?: ServiceAccount | null): void {
