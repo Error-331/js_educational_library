@@ -7,7 +7,7 @@ import {
     AuthenticationSignInStrategy,
     AuthenticationVendor,
     UserAuthenticationStateInfo
-} from '../../../../../declarations/security/authentication_declarations';
+} from '../../../../../declarations/security/authentication/general_authentication_declarations';
 
 import HTTPError from '../../../../../errors/http_error';
 import FirebaseAbstractServerJWTAuthenticationStrategy from './firebase_abstract_server_jwt_authentication_strategy';

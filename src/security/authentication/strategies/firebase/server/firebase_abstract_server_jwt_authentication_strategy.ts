@@ -7,8 +7,8 @@ import {
     AuthenticationVendor,
     AuthenticationProvider,
     UserAuthenticationStateInfo
-} from '../../../../../declarations/security/authentication_declarations';
-import { FirebaseAuthTokenType } from '../../../../../declarations/security/firebase_authentication_declarations';
+} from '../../../../../declarations/security/authentication/general_authentication_declarations';
+import { FirebaseAuthTokenType } from '../../../../../declarations/security/authentication/firebase_authentication_declarations';
 import { JWT_COOKIE_DEFAULT_MAX_AGE } from '../../../../../constants/net/http/cookie_constants';
 
 import HTTPError from '../../../../../errors/http_error';

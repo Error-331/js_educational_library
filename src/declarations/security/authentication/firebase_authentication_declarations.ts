@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import { EmailPasswordValidatorType } from '../validation_declarations';
+import { EmailPasswordValidatorType } from '../../validation_declarations';
 
 // implementation
 enum FirebaseAuthTokenType {

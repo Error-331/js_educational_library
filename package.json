@@ -18,6 +18,7 @@
     "./declarations/net/*": "./src/declarations/net/api/*.ts",
 
     "./declarations/security/*": "./src/declarations/security/*.ts",
+    "./declarations/security/authentication/*": "./src/declarations/security/authentication/*.ts",
     "./declarations/security/crypto/*": "./src/declarations/security/crypto/*.ts",
 
     "./declarations/ui/*": "./src/declarations/ui/*.ts",

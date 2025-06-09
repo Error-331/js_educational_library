@@ -2,8 +2,8 @@
 import { UserCredential, AuthErrorCodes, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
 // internal imports
-import { UserAuthenticationStateInfo, AuthenticationSignInStrategy } from '../../../../../declarations/security/authentication_declarations';
-import { FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration } from '../../../../../declarations/security/firebase_authentication_declarations';
+import { UserAuthenticationStateInfo, AuthenticationSignInStrategy } from '../../../../../declarations/security/authentication/general_authentication_declarations';
+import { FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration } from '../../../../../declarations/security/authentication/firebase_authentication_declarations';
 import { EmailPasswordValidatorType } from '../../../../../declarations/validation_declarations';
 
 import AxiosRequestFacade from '../../../../../net/http/request/axios_request_facade';
