@@ -7,7 +7,11 @@ import { Storage, getStorage } from 'firebase-admin/storage';
 import { Auth, getAuth } from 'firebase-admin/auth';
 
 // internal imports
+import { SimpleTextEncryptor } from '../../declarations/security/crypto/encryptors_declarations';
+
 import { FIREBASE_DEFAULT_ADMIN_APP_NAME } from '../../constants/registers/firebase_registers_constants';
+
+import SimpleTextEncryptorFactory from '../../security/crypto/factories/simple_text_encryptor_factory';
 
 import { readJSONFileSync } from '../../utils/misc/file_utils';
 import { isNil, isString, isObject } from '../../utils/misc/logic_utils';
@@ -25,6 +29,23 @@ class FirebaseAdminRegistry {
     private static serviceAccountKey: ServiceAccount | undefined | null;
 
     private constructor() {}
+
+    private static extractFirebaseAdminServiceAccountJSON() {
+        if (isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON)) {
+            throw new RangeError('Cannot extract service account JSON - "JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON" environment variable is not set');
+        }
+
+        if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_CRYPTO_CONFIG)) {
+            const cryptoConfig: SimpleTextEncryptor = JSON.parse(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_CRYPTO_CONFIG);
+            const encryptorFactory = new SimpleTextEncryptorFactory();
+            const encryptor = encryptorFactory.createEncryptor(cryptoConfig.encryptorName);
+            const serviceAccount = encryptor.decryptJSON<ServiceAccount>(cryptoConfig.key, process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON);
+
+            return admin.credential.cert(serviceAccount);
+        } else {
+            return admin.credential.cert(JSON.parse(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON));
+        }
+    }
 
     /**
      * Method returns current (and only) instance of the class.
@@ -65,8 +86,8 @@ class FirebaseAdminRegistry {
 
         if (!isNil(savedServiceAccountKey)) {
             return admin.credential.cert(savedServiceAccountKey);
-        } else if (!isNil(process.env.JSEL_TT)) {
-            return admin.credential.cert(JSON.parse(process.env.JSEL_TT));
+        } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON)) {
+            return FirebaseAdminRegistry.extractFirebaseAdminServiceAccountJSON();
         } else if (!isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
             return admin.credential.cert(process.env.GOOGLE_APPLICATION_CREDENTIALS);
         } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {

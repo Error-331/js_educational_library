@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import { Buffer } from 'buffer';
 
 // internal imports
-import { SimpleAsyncTextEncryptor, SimpleSyncTextDecryptor } from '../../../declarations/security/crypto_declarations';
+import { SimpleAsyncTextEncryptor, SimpleSyncTextDecryptor } from '../../../declarations/security/crypto/encryptors_declarations';
 
 import AbstractEncryptor from './abstract_encryptor';
 import { isObject, isString } from '../../../utils/misc/logic_utils';

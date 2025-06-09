@@ -18,6 +18,8 @@
     "./declarations/net/*": "./src/declarations/net/api/*.ts",
 
     "./declarations/security/*": "./src/declarations/security/*.ts",
+    "./declarations/security/crypto/*": "./src/declarations/security/crypto/*.ts",
+
     "./declarations/ui/*": "./src/declarations/ui/*.ts",
     "./declarations/vendor/*": "./src/declarations/vendor/*.ts",
 
@@ -26,6 +28,7 @@
     "./constants/net/api/gcp/*": "./src/constants/net/api/gcp/*.ts",
     "./constants/net/http/*": "./src/constants/net/http/*.ts",
     "./constants/registers/*": "./src/constants/registers/*.ts",
+    "./constants/security/crypto/*": "./constants/security/crypto/*.ts",
     "./constants/validation/*": "./src/constants/validation/*.ts",
 
     "./errors/*": "./src/errors/*.ts",

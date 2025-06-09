@@ -13,8 +13,15 @@ interface SimpleSyncTextDecryptor {
     decryptJSON<DecryptedJSONType extends object>(key: string, text: string): DecryptedJSONType;
 }
 
+type SimpleTextEncryptor = {
+    encryptorName: string;
+    key: string;
+}
+
 // exports
 export {
     SimpleAsyncTextEncryptor,
     SimpleSyncTextDecryptor,
+
+    SimpleTextEncryptor,
 }
