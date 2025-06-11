@@ -36,7 +36,6 @@ class BaseAPIServerController {
         } else {
             return BaseAPIServerController.serveJSONData(req, res, prepareHTTPResponseData<undefined>(null, error), code);
         }
-
     }
 
     static serveData<DataType = unknown>(req: CommonServerRequest, res: CommonServerResponse, data: DataType, code?: number): CommonServerReturn {
@@ -55,7 +54,7 @@ class BaseAPIServerController {
 
     // TODO: do something with req?.formData
     static async extractFormData(req: CommonServerRequest): Promise<GenericObject> {
-        if (isFunction(req?.formData)) {
+        if ('formData' in req && isFunction(req?.formData)) {
             const currentFormData = await req.formData();
             const formDataTransformer = new FormDataTransformer(currentFormData);
 
