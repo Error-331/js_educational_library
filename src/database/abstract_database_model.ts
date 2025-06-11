@@ -2,7 +2,7 @@
 
 // internal imports
 import { AtLeast } from '../declarations/utility_declarations';
-import { AbstractDatabaseDocument, WithDatabaseDocument } from '../declarations/database/general_model_declarations';
+import { AbstractDatabaseDocument, WithDatabaseDocument } from '../declarations/database/general_database_model_declarations';
 
 import { cloneDeep } from '../utils/primitives/object_utils';
 import { isFunction, defaultTo } from '../utils/misc/logic_utils';
@@ -12,7 +12,7 @@ abstract class AbstractDatabaseModel<InputEntityType extends object, OutputEntit
     protected _collectionName: string;
     protected defaultValues: Partial<InputEntityType> = {};
 
-    public abstract add(entity: Partial<InputEntityType>): Promise<OutputEntityType>;
+    public abstract add(entity: Partial<InputEntityType>): Promise<Partial<OutputEntityType>>;
     public abstract update(entity: AtLeast<WithDatabaseDocument<InputEntityType>, 'id'>): Promise<void>;
     public abstract deleteCollection(): Promise<void>;
 

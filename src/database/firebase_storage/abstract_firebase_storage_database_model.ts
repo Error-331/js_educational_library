@@ -58,9 +58,10 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
 
         await fileRef.save(entity.file);
         return {
-            fileName: pathToFile,
+            fileName: entity.fileName,
+            pathToFile,
             metadata: {},
-            id: pathToFile,
+            id: entity.fileName,
         };
     }
 
@@ -101,12 +102,14 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
         const fileRef = this.getFileRef(id);
 
         const fileMetadata = await fileRef.getMetadata();
+        const idStr = id.toString();
 
         return Promise.resolve<FirebaseStorageDatabaseEntity>({
-            id: id.toString(),
+            id: idStr,
             collectionName: this.collectionName,
 
-            fileName: pathToFile,
+            fileName: idStr,
+            pathToFile,
             metadata: {
                 name: fileMetadata[0].name,
                 size: fileMetadata[0].size,

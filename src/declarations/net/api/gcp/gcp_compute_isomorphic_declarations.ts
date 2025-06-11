@@ -41,6 +41,15 @@ enum GCPInstanceSimplifiedStatus {
     'Unknown' = 'Unknown',
 }
 
+type GCPVMMinimalData =  {
+    id?: number | string | null;
+    name?: string | null;
+    machineType?: string | null;
+    status?: string | null;
+    zone?: string | null;
+    externalIPs: GCPVMExternalIPs;
+};
+
 // exports
 export {
     GCPVMExternalIP,
@@ -54,4 +63,5 @@ export {
     GCPInstanceCheckOperation,
 
     GCPInstanceSimplifiedStatus,
+    GCPVMMinimalData,
 }

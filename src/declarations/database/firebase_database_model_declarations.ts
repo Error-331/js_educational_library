@@ -13,6 +13,7 @@ interface FirebaseStorageDatabaseFileMetadata {
 interface FirebaseStorageDatabaseEntity extends AbstractDatabaseDocument {
     fileName: string;
     file?: Uint8Array;
+    pathToFile: string;
     metadata: FirebaseStorageDatabaseFileMetadata;
 
     get id(): string

@@ -83,14 +83,17 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
         });
     }
 
-    public async add(entity: Partial<WithFieldValue<EntityType>>): Promise<WithFieldValue<EntityType>> {
+    public async add(entity: Partial<WithFieldValue<EntityType>>): Promise<Partial<WithFieldValue<EntityType>>> {
         const entityClone = cloneDeep(entity);
 
         entityClone.createdTimestamp = isNil(entityClone.createdTimestamp) ? createCurrentUTCTimestamp() : entityClone.createdTimestamp;
         entityClone.updatedTimestamp = isNil(entityClone.updatedTimestamp) ? createCurrentUTCTimestamp() : entityClone.updatedTimestamp;
 
-        // TODO: add validate here
-        return await this.getCollectionReference().add(this.addDefaultValues(entityClone));
+        const documentReference = await this.getCollectionReference().add(this.addDefaultValues(entityClone));
+        return {
+            id: documentReference.id,
+            ...entity,
+        };
     }
 
     public async update(entity: AtLeast<EntityType, 'id'>): Promise<void> {
