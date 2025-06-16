@@ -37,6 +37,7 @@
     "./utils/browser/*": "./src/utils/browser/*.ts",
     "./utils/date/*": "./src/utils/date/*.ts",
     "./utils/file/*": "./src/utils/file/*.ts",
+    "./utils/math/*": "./src/utils/math/*.ts",
     "./utils/misc/*": "./src/utils/misc/*.ts",
     "./utils/net/*": "./src/utils/net/*.ts",
     "./utils/net/http/*": "./src/utils/net/http/*.ts",
@@ -64,6 +65,7 @@
     "./security/crypto/encryptors/*": "./src//security/crypto/encryptors/*.ts",
 
     "./validators/net/http/*": "./src/validators/net/http/*.ts",
+    "./validators/net/rest/*": "./src/validators/net/rest/*.ts",
     "./validators/security/*": "./src/validators/security/*.ts",
 
     "./package.json": "./package.json"

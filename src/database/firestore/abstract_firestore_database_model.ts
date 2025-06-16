@@ -22,11 +22,19 @@ import FirebaseAdminRegistry from '../../registers/firebase/firebase_admin_regis
 
 import { createCurrentUTCTimestamp } from '../../utils/date/current_date_utils';
 import { cloneDeep } from '../../utils/primitives/object_utils';
+import { calcElementsOffset } from '../../utils/math/math_count_utils';
 import { isNil } from '../../utils/misc/logic_utils';
 
 // implementation
 abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocument>
     extends AbstractDatabaseModel<WithFieldValue<EntityType>, WithFieldValue<EntityType>> {
+
+    protected prepareLimitOffsetQuery(collectionQuery: Query<EntityType, EntityType>, page = 1, limit = 1): Query<EntityType, EntityType> {
+        return collectionQuery
+            .limit(limit)
+            .offset(calcElementsOffset(page, limit));
+    }
+
     protected async deleteQueryBatch(
         database: Firestore,
         query: Query<EntityType, EntityType>,
@@ -103,6 +111,14 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
 
         const entityDocument = this.getDocumentReference(entityClone.id);
         await entityDocument.update(entityClone as UpdateData<EntityType>);
+    }
+
+    public async loadById(id: string | number): Promise<EntityType | null> {
+        const entityDocument = this.getDocumentReference(id.toString());
+        const documentSnapshot = await entityDocument.get();
+        const data = documentSnapshot.data();
+
+        return isNil(data) ? null : { ...data, id: documentSnapshot.id };
     }
 
     public async deleteCollection(): Promise<void> {

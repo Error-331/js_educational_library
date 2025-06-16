@@ -93,7 +93,7 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
         return Promise.resolve();
     }
 
-    public async loadDocumentById(id: string | number): Promise<FirebaseStorageDatabaseEntity | null> {
+    public async loadById(id: string | number): Promise<FirebaseStorageDatabaseEntity | null> {
         if (isNil(id)) {
             throw new RangeError('ID is not specified - cannot load image metadata from Firebase storage');
         }

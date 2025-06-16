@@ -16,7 +16,7 @@ abstract class AbstractDatabaseModel<InputEntityType extends object, OutputEntit
     public abstract update(entity: AtLeast<WithDatabaseDocument<InputEntityType>, 'id'>): Promise<void>;
     public abstract deleteCollection(): Promise<void>;
 
-    public abstract loadDocumentById(Id: string | number): Promise<OutputEntityType | null>;
+    public abstract loadById(Id: string | number): Promise<OutputEntityType | null>;
 
     protected addDefaultValues(entity: Partial<InputEntityType>): Partial<InputEntityType> | InputEntityType {
         const entityClone = cloneDeep<Partial<InputEntityType>>(entity);

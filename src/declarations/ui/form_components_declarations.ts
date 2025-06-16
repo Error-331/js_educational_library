@@ -16,6 +16,8 @@ type UIFormInputProps = {
 
 type UIFormTextInputProp = UIFormInputProps & {
     type?: string;
+
+    defaultValue?: string;
     placeholder?: string;
 };
 
