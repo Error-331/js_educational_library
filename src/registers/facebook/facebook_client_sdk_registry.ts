@@ -5,7 +5,7 @@ import {
     FacebookClientSDKRegistryOptions,
     FacebookClientSDKLoginOptions,
     FacebookClientSDKAuthUserResponse,
-} from '../../declarations/vendor/facebook_declarations';
+} from '../../declarations/vendor/facebook/facebook_base_client_declarations';
 
 import { throwIfWindowNotAvailable } from '../../utils/browser/base_utils';
 
@@ -42,7 +42,6 @@ class FacebookClientSDKRegistry {
         return new Promise<FacebookClientSDKAuthUserResponse>((resolve, reject) => {
             try {
                 window.FB.login((response: FacebookClientSDKAuthUserResponse) => {
-                    console.log('login resp', response);
                     resolve(response);
                 }, options)
             } catch (error: unknown) {
