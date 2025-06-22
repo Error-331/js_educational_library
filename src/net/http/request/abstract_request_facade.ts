@@ -16,10 +16,11 @@ import { HTTP_REQUEST_TIMEOUT } from '../../../constants/net/http/request_consta
 import { HTTPResponseSchema } from '../../../declarations/net/http/response_declarations';
 import { HTTPHeadersCollection } from '../../../declarations/net/http/headers_declarations';
 
+import FormDataTransformer from '../form/form_data_transformer';
+
 import { removeLastSpecialSymbolStringFormatter } from '../../../utils/primitives/string/basic_string_formatting_utils';
 import { cloneDeep } from '../../../utils/primitives/object_utils';
 import { isNil } from '../../../utils/misc/logic_utils';
-import FormDataTransformer from "../form/form_data_transformer";
 
 // implementation
 abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<ResponseDataType> {
@@ -93,8 +94,8 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
 
             method: this._method,
             headers: cloneDeep(this._headers),
-            data: FormDataTransformer.isFormData(this._data) ?  FormDataTransformer.clone(this._data) : cloneDeep(this._data),
-            params: cloneDeep(this._params),
+            data: FormDataTransformer.isFormData(this._data) ? FormDataTransformer.clone(this._data) : cloneDeep(this._data),
+            params: this._params instanceof URLSearchParams ? this._params : cloneDeep(this._params), // TODO: add something like FormDataTransformer here as well
             timeout: this._timeout,
         }
     }
