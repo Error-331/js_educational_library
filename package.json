@@ -24,8 +24,11 @@
     "./declarations/ui/*": "./src/declarations/ui/*.ts",
     "./declarations/vendor/*": "./src/declarations/vendor/*.ts",
 
+    "./declarations/vendor/facebook/*": "./src/declarations/vendor/facebook/*.ts",
+
     "./constants/*": "./src/constants/*.ts",
     "./constants/database/*": "./src/database/*.ts",
+    "./constants/net/api/facebook/*": "./src/constants/net/api/facebook/*.ts",
     "./constants/net/api/gcp/*": "./src/constants/net/api/gcp/*.ts",
     "./constants/net/http/*": "./src/constants/net/http/*.ts",
     "./constants/registers/*": "./src/constants/registers/*.ts",
@@ -46,6 +49,7 @@
     "./utils/ui/*": "./src/utils/ui/*.ts",
 
     "./net/api/common/*":  "./src/net/api/common/*.ts",
+    "./net/api/facebook/*":  "./src/net/api/facebook/*.ts",
     "./net/api/gcp/compute/*":  "./src/net/api/gcp/compute/*.ts",
 
     "./net/gcp/*": "./src/net/gcp/*.ts",

@@ -4,6 +4,8 @@ My small JS multipurpose library used for educational purposes.
 
 ## Environment variables (.env)
 
+### Firebase related
+
 - **JSEL_FIREBASE_CLIENT_APP_NAME** - Firebase client app name;
 - **JSEL_FIREBASE_ADMIN_APP_NAME** - Firebase admin app name;
 - **GOOGLE_APPLICATION_CREDENTIALS** - path to GCP service account file (JSON);
@@ -14,6 +16,11 @@ My small JS multipurpose library used for educational purposes.
 - **JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON** - JSON file (represented either as plain string or encrypted string) which may contain additional configuration (like Firebase storage bucket) for Firebase application;
 - **JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_CRYPTO_CONFIG** - configuration file which is used to decrypt *JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON* represented as stringified JSON;
 - **JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_CRYPTO_CONFIG** - configuration file which is used to decrypt *JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON* represented as stringified JSON;
+
+### Facebook related
+
+- **JSEL_FACEBOOK_SERVER_OPTIONS_JSON** - Facebook server options (contains such options as application id, application secret, etc.);
+- **JSEL_FACEBOOK_SERVER_OPTIONS_CRYPTO_CONFIG** - configuration file which is used to decrypt *JSEL_FACEBOOK_SERVER_OPTIONS_JSON* represented as stringified JSON;
 
 ### 'JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_CRYPTO_CONFIG' structure
 
