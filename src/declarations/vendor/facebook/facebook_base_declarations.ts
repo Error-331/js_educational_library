@@ -10,7 +10,19 @@ type FacebookErrorResponse = {
     fbtrace_id?: string
 }
 
+type FacebookResponsePagingCursor = {
+    before: string;
+    after: string;
+}
+
+type FacebookResponsePaging = {
+    cursors: FacebookResponsePagingCursor;
+}
+
 // exports
 export {
     FacebookErrorResponse,
+
+    FacebookResponsePagingCursor,
+    FacebookResponsePaging,
 }

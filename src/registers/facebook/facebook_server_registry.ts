@@ -62,7 +62,7 @@ class FacebookServerRegistry {
     /**
      * Method that returns current Facebook server options which will be used during app initialization.
      *
-     * @returns {FacebookServerOptions} base server options options.
+     * @returns {FacebookServerOptions} base server options.
      *
      */
 
