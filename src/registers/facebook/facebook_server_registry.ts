@@ -79,32 +79,6 @@ class FacebookServerRegistry {
 
         this._options = options;
     }
-
-
-    // https://graph.facebook.com/v22.0/{page_id}/photos
-    /*public async publishMediaToPage(pageId: string | number, accessToken: string, imageURL: string) {
-        const pathParts = [this._apiVersion, pageId, 'photos'];
-
-        const httpClient = new AxiosRequestFacade({
-            baseURL: FACEBOOK_GRAPH_API_BASE_URL,
-            url: composeURLPath(pathParts),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: {
-                access_token: accessToken,
-                url: imageURL,
-            }
-        })
-
-        const { statusCode, data } = await httpClient.post();
-
-        if (statusCode !== 200) {
-            throw new Error('Error');
-        } else {
-            return data;
-        }
-    }*/
 }
 
 // exports

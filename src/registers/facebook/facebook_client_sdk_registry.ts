@@ -7,10 +7,12 @@ import {
     FacebookClientSDKAuthUserResponse,
 } from '../../declarations/vendor/facebook/facebook_base_client_declarations';
 
+import { FACEBOOK_GRAPH_API_DEFAULT_VERSION } from '../../constants/net/api/facebook/facebook_common_constants';
+
 import { throwIfWindowNotAvailable } from '../../utils/browser/base_utils';
 
 import { cloneDeep, isObjectOfType } from '../../utils/primitives/object_utils';
-import { isString } from '../../utils/misc/logic_utils';
+import { isNil, isString } from '../../utils/misc/logic_utils';
 
 // implementation
 // https://developers.facebook.com/docs/javascript
@@ -88,7 +90,7 @@ class FacebookClientSDKRegistry {
         }
 
         throwIfWindowNotAvailable();
-        window.FB.init(this._options);
+        window.FB.init(this.options);
 
         this._isInit = true;
     }
@@ -101,11 +103,17 @@ class FacebookClientSDKRegistry {
      */
 
     get options(): FacebookClientSDKRegistryOptions {
-        return cloneDeep(this._options);
+        const options = cloneDeep(this._options);
+
+        if (isNil(options.version)) {
+            options.version = FACEBOOK_GRAPH_API_DEFAULT_VERSION;
+        }
+
+        return options;
     }
 
     set options(options: FacebookClientSDKRegistryOptions) {
-        const keysValidators = { appId: isString, version: isString };
+        const keysValidators = { appId: isString };
 
         if (!isObjectOfType<FacebookClientSDKRegistryOptions>(options, keysValidators)) {
             throw new RangeError('Cannot set Facebook SDK options - value must be of type "FacebookClientSDKRegistryOptions"');

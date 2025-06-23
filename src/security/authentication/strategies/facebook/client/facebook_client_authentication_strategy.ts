@@ -9,7 +9,7 @@ import {
 } from '../../../../../declarations/security/authentication/general_authentication_declarations';
 
 import { FacebookUserAuthenticationStateInfo } from '../../../../../declarations/security/authentication/facebook_authentication_declarations';
-import { FacebookClientSDKLoginOptions, FacebookClientSDKAuthUserResponse } from '../../../../../declarations/vendor/facebook/facebook_declarations';
+import { FacebookClientSDKLoginOptions, FacebookClientSDKAuthUserResponse } from '../../../../../declarations/vendor/facebook/facebook_base_client_declarations';
 
 import FacebookClientSDKRegistry from '../../../../../registers/facebook/facebook_client_sdk_registry';
 import { isNil } from '../../../../../utils/misc/logic_utils';

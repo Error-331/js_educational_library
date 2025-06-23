@@ -8,7 +8,7 @@ type FacebookClientSDKLoginResponseType = 'code';
 
 type FacebookClientSDKRegistryOptions = {
     appId: string;
-    version: string;
+    version?: string;
     cookie?: boolean;
     xfbml?: boolean;
 }
