@@ -47,9 +47,11 @@
     "./utils/primitives/*": "./src/utils/primitives/*.ts",
     "./utils/type/*": "./src/utils/type/*.ts",
     "./utils/ui/*": "./src/utils/ui/*.ts",
+    "./utils/vendor/*": "./src/utils/vendor/*.ts",
 
     "./net/api/common/*":  "./src/net/api/common/*.ts",
     "./net/api/facebook/*":  "./src/net/api/facebook/*.ts",
+    "./net/api/facebook/page/*":  "./src/net/api/facebook/page/*.ts",
     "./net/api/gcp/compute/*":  "./src/net/api/gcp/compute/*.ts",
 
     "./net/gcp/*": "./src/net/gcp/*.ts",

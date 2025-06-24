@@ -3,26 +3,31 @@
 // internal imports
 
 // implementation
-type FacebookErrorResponse = {
+type FacebookGraphAPIErrorData = {
     message: string;
-    type: string;
-    code: number;
-    fbtrace_id?: string
-}
+    type?: string;
+    code?: number;
+    fbtrace_id?: string;
+};
 
-type FacebookResponsePagingCursor = {
+type FacebookGraphAPIErrorResponse = {
+    error: FacebookGraphAPIErrorData
+};
+
+type FacebookGraphAPIPagingCursor = {
     before: string;
     after: string;
 }
 
-type FacebookResponsePaging = {
-    cursors: FacebookResponsePagingCursor;
+type FacebookGraphAPIPagingResponse = {
+    cursors: FacebookGraphAPIPagingCursor;
 }
 
 // exports
 export {
-    FacebookErrorResponse,
+    FacebookGraphAPIErrorData,
+    FacebookGraphAPIErrorResponse,
 
-    FacebookResponsePagingCursor,
-    FacebookResponsePaging,
+    FacebookGraphAPIPagingCursor,
+    FacebookGraphAPIPagingResponse,
 }

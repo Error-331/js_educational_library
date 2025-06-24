@@ -1,10 +1,10 @@
 // external imports
 
 // internal imports
-import { FacebookResponsePaging } from './facebook_base_declarations';
+import { FacebookGraphAPIPagingResponse } from './facebook_base_declarations';
 
 // implementation
-type FacebookOAuthAccessTokenResponse = {
+type FacebookGraphAPIOAuthAccessTokenResponse = {
     access_token: string;
     token_type: 'bearer';
 }
@@ -25,16 +25,16 @@ type FacebookOAuthPageAccessTokenData = {
     tasks: string[];
 }
 
-type FacebookOAuthPageAccessTokenResponse = {
+type FacebookGraphAPIOAuthPageAccessTokenResponse = {
     data: FacebookOAuthPageAccessTokenData[];
-    paging: FacebookResponsePaging;
+    paging: FacebookGraphAPIPagingResponse;
 }
 
 // exports
 export {
-    FacebookOAuthAccessTokenResponse,
+    FacebookGraphAPIOAuthAccessTokenResponse,
 
     FacebookOAuthPageAccessTokenDataCategoryList,
     FacebookOAuthPageAccessTokenData,
-    FacebookOAuthPageAccessTokenResponse,
+    FacebookGraphAPIOAuthPageAccessTokenResponse,
 }
