@@ -32,7 +32,7 @@ class FacebookAPIPagePhotosFacade extends FacebookAPIServerAbstractFacade {
             }
         });
 
-        const { statusCode, data } = await httpClient.get();
+        const { statusCode, data } = await httpClient.post();
         if (statusCode !== 200) {
             throwGraphAPIHTTPError('Cannot publish image to the page: ', 'Unknown reason', data, statusCode);
         } else {

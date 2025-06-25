@@ -44,6 +44,10 @@ class FormDataTransformer {
         }
     }
 
+    public append(key: string, value: unknown): void {
+        this._formData.append(key, value);
+    }
+
     public toObject(): GenericObject {
         const data: GenericObject = {};
 
