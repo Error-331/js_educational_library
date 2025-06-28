@@ -1,10 +1,38 @@
 // external imports
 
 // internal imports
-import { IterableMapLikeEntity } from '../../declarations/collection_declarations';
-import { isNil, isUndefined, isObject, isArray } from '../misc/logic_utils';
+import { GenericObject, IterableMapLikeEntity } from '../../declarations/collection_declarations';
+import { isNil, isUndefined, isArray, isObject } from '../misc/logic_utils';
 
 // implementation
+function checkObjectKeys(objectLike: unknown, keysValidators: {[key: string]: (arg: unknown) => boolean}): boolean {
+    if (!isIterableObject(objectLike)) {
+        return false;
+    }
+
+    for (const key in keysValidators) {
+        const validator = keysValidators[key];
+
+        if (!(key in objectLike) && !validator(objectLike[key])) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function isIterableObject(iterableObjectLike: unknown): iterableObjectLike is GenericObject {
+    if (typeof iterableObjectLike !== 'object') {
+        return false;
+    }
+
+    return Object.keys(iterableObjectLike).length > 0;
+}
+
+function isObjectOfType<ObjectType>(objectLike: unknown, keysValidators: {[key: string]: (arg: unknown) => boolean}): objectLike is ObjectType {
+    return checkObjectKeys(objectLike, keysValidators);
+}
+
 function cloneArrayDeep(arrayToClone) {
     if (isNil(arrayToClone)) {
         throw new Error('Cannot clone an array - array is not provided');
@@ -119,8 +147,37 @@ function mapToObject<ValueType>(customMap: IterableMapLikeEntity<ValueType>): Re
     return customObj;
 }
 
+// TODO: map returns object? - not good
+function pick<SourceObjectType, KeysListType extends keyof SourceObjectType>(objectToPickFrom: SourceObjectType, propertiesList: KeysListType[]): Pick<SourceObjectType, KeysListType> {
+    if (!isObject(objectToPickFrom)) {
+        throw new RangeError('Cannot pick properties from object - provided value is not an object');
+    }
+
+    return Object.assign(
+        {},
+        ...propertiesList.map(key => {
+            if (objectToPickFrom && Object.prototype.hasOwnProperty.call(objectToPickFrom, key)) {
+                return { [key]: objectToPickFrom[key] };
+            }
+        })
+    );
+}
+
+function omit<SourceObjectType extends object, KeysListType extends keyof SourceObjectType>(objectToOmitIn: SourceObjectType, propertiesList: KeysListType | KeysListType[]): Omit<SourceObjectType, KeysListType>  {
+    const objectToOmitInCopy = cloneDeep<SourceObjectType>(objectToOmitIn);
+    let preparedPropertiesList: KeysListType[] = isArray<KeysListType>(propertiesList) ? propertiesList : [propertiesList];
+
+    preparedPropertiesList.forEach((key) => delete objectToOmitInCopy[key]);
+    return objectToOmitInCopy;
+}
+
 // exports
 export {
+    checkObjectKeys,
+
+    isIterableObject,
+    isObjectOfType,
+
     cloneArrayDeep,
     cloneDeep,
 
@@ -129,4 +186,7 @@ export {
 
     objectPropertiesToNormalize,
     mapToObject,
+
+    pick,
+    omit,
 }

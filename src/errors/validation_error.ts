@@ -2,6 +2,8 @@
 
 // internal imports
 import { ZodIssueWithInputData } from '../declarations/validation_declarations';
+import { CustomErrorName } from '../declarations/error/custom_error_declarations';
+import { SerializedValidationError } from '../declarations/error/serializable_error_declarations';
 
 // implementation
 
@@ -13,6 +15,11 @@ import { ZodIssueWithInputData } from '../declarations/validation_declarations';
  *
  */
 class ValidationError extends Error {
+    /**
+     * Error name.
+     */
+    public name: CustomErrorName;
+
     /**
      * Holds Zod issues.
      */
@@ -28,10 +35,18 @@ class ValidationError extends Error {
     constructor(message: string, issues: ZodIssueWithInputData[]) {
         super(message);
 
-        this.name = 'ValidationError';
+        this.name = CustomErrorName.ValidationError;
         this._issues = issues;
 
         Object.setPrototypeOf(this, ValidationError.prototype);
+    }
+
+    serialize(): SerializedValidationError {
+        return {
+            name: this.name,
+            message: this.message,
+            issues: this.issues
+        }
     }
 
     /**

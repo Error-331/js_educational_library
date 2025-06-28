@@ -5,16 +5,74 @@
   "exports": {
     ".": "./src/index.ts",
 
-    "./decralations/net/http/*": "./src/decralations/net/http/*.ts",
+    "./database/*": "./src/database/*.ts",
+    "./database/firebase_storage/*": "./src/database/firebase_storage/*.ts",
+    "./database/firestore/*": "./src/database/firestore/*.ts",
 
+    "./declarations/*": "./src/declarations/*.ts",
+    "./declarations/database/*": "./src/declarations/database/*.ts",
+    "./declarations/error/*": "./src/declarations/error/*.ts",
+
+    "./declarations/net/api/gcp/*": "./src/declarations/net/api/gcp/*.ts",
+    "./declarations/net/http/*": "./src/declarations/net/http/*.ts",
+    "./declarations/net/*": "./src/declarations/net/api/*.ts",
+
+    "./declarations/security/*": "./src/declarations/security/*.ts",
+    "./declarations/security/authentication/*": "./src/declarations/security/authentication/*.ts",
+    "./declarations/security/crypto/*": "./src/declarations/security/crypto/*.ts",
+
+    "./declarations/ui/*": "./src/declarations/ui/*.ts",
+    "./declarations/vendor/*": "./src/declarations/vendor/*.ts",
+
+    "./declarations/vendor/facebook/*": "./src/declarations/vendor/facebook/*.ts",
+
+    "./constants/*": "./src/constants/*.ts",
+    "./constants/database/*": "./src/database/*.ts",
+    "./constants/net/api/facebook/*": "./src/constants/net/api/facebook/*.ts",
+    "./constants/net/api/gcp/*": "./src/constants/net/api/gcp/*.ts",
     "./constants/net/http/*": "./src/constants/net/http/*.ts",
+    "./constants/registers/*": "./src/constants/registers/*.ts",
+    "./constants/security/crypto/*": "./constants/security/crypto/*.ts",
+    "./constants/validation/*": "./src/constants/validation/*.ts",
 
     "./errors/*": "./src/errors/*.ts",
+
+    "./utils/browser/*": "./src/utils/browser/*.ts",
+    "./utils/date/*": "./src/utils/date/*.ts",
+    "./utils/file/*": "./src/utils/file/*.ts",
+    "./utils/math/*": "./src/utils/math/*.ts",
     "./utils/misc/*": "./src/utils/misc/*.ts",
+    "./utils/net/*": "./src/utils/net/*.ts",
+    "./utils/net/http/*": "./src/utils/net/http/*.ts",
+    "./utils/primitives/*": "./src/utils/primitives/*.ts",
+    "./utils/type/*": "./src/utils/type/*.ts",
+    "./utils/ui/*": "./src/utils/ui/*.ts",
+    "./utils/vendor/*": "./src/utils/vendor/*.ts",
+
+    "./net/api/common/*":  "./src/net/api/common/*.ts",
+    "./net/api/facebook/*":  "./src/net/api/facebook/*.ts",
+    "./net/api/facebook/page/*":  "./src/net/api/facebook/page/*.ts",
+    "./net/api/gcp/compute/*":  "./src/net/api/gcp/compute/*.ts",
+
+    "./net/gcp/*": "./src/net/gcp/*.ts",
 
     "./net/http/cookies/*": "./src/net/http/cookies/*.ts",
+    "./net/http/form/*": "./src/net/http/form/*.ts",
     "./net/http/request/*": "./src/net/http/request/*.ts",
-    "./security/authentication/strategies/firebase/*": "./src/security/authentication/strategies/firebase/*.ts",
+
+    "./registers/facebook/*": "./src/registers/facebook/*.ts",
+    "./registers/firebase/*": "./src/registers/firebase/*.ts",
+
+    "./security/authentication/strategies/facebook/client/*": "./src/security/authentication/strategies/facebook/client/*.ts",
+    "./security/authentication/strategies/firebase/client/*": "./src/security/authentication/strategies/firebase/client/*.ts",
+    "./security/authentication/strategies/firebase/server/*": "./src/security/authentication/strategies/firebase/server/*.ts",
+
+    "./security/crypto/*": "./src//security/crypto/*.ts",
+    "./security/crypto/encryptors/*": "./src//security/crypto/encryptors/*.ts",
+
+    "./validators/net/http/*": "./src/validators/net/http/*.ts",
+    "./validators/net/rest/*": "./src/validators/net/rest/*.ts",
+    "./validators/security/*": "./src/validators/security/*.ts",
 
     "./package.json": "./package.json"
   },
@@ -25,14 +83,19 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "zod": "^3.24.1",
+    "@google-cloud/compute": "^5.2.0",
     "axios": "^1.8.4",
-    "next": "^15.2.2",
-    "express": "^4.21.2",
+    "express": "^5.1.0",
+    "firebase": "^11.4.0",
     "firebase-admin": "^13.2.0",
-    "firebase": "^11.4.0"
+    "luxon": "^3.6.1",
+    "next": "^15.2.2",
+    "zod": "^3.24.1"
   },
   "peerDependenciesMeta": {
+    "@google-cloud/compute": {
+      "optional": true
+    },
     "zod": {
       "optional": true
     },
@@ -50,25 +113,32 @@
     },
     "firebase": {
       "optional": true
+    },
+    "luxon": {
+      "optional": true
     }
   },
   "devDependencies": {
-    "@types/node": "^22.13.10",
-    "@types/jest": "^29.5.14",
-    "@types/firebase": "^3.2.3",
-    "@types/express": "^5.0.1",
-    "@types/cookie-parser": "^1.4.8",
-    "@types/axios": "^0.14.4",
     "@babel/core": "^7.26.9",
     "@babel/preset-env": "^7.26.9",
     "@babel/preset-typescript": "^7.26.0",
-    "typescript": "^5.7.3",
-    "ts-node": "^10.9.2",
-    "jest": "^29.7.0",
+    "@types/axios": "^0.14.4",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/express": "^5.0.1",
+    "@types/firebase": "^3.2.3",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
     "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
-    "zod": "^3.24.1",
-    "axios": "^1.8.4"
-  },
-  "dependencies": {}
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "firebase": "^11.4.0",
+    "firebase-admin": "^13.2.0",
+    "@google-cloud/compute": "^5.2.0",
+    "luxon": "^3.6.1",
+    "zod": "^3.24.1"
+  }
 }

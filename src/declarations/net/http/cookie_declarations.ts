@@ -74,7 +74,7 @@ interface JWTCookieStore {
     clearJWTResponseCookie(): Promise<void>;
 
     getJWTResponseCookie(): Promise<string | undefined>;
-    setJWTResponseCookie(jwtToken: string): Promise<void>;
+    setJWTResponseCookie(jwtToken: string, setCookieOptions?: SetCookieOptions): Promise<void>;
 }
 
 // exports

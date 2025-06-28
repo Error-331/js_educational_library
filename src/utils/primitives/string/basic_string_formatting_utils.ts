@@ -24,6 +24,18 @@ function removeLastLetterStringFormatter(strPart: string): string {
     return strPart.slice(0, -1);
 }
 
+function removePrefixStringFormatter(prefix: string, strPart: string): string {
+    if (!isString(prefix)) {
+        throw new RangeError('Cannot remove prefix from a string part - provided prefix value is not a string');
+    }
+
+    if (!isString(strPart)) {
+        throw new RangeError('Cannot remove prefix from a string part - provided string part is not a string');
+    }
+
+    return strPart.startsWith(prefix) ? strPart.slice(prefix.length) : strPart;
+}
+
 function addPrefixStringFormatter(prefix: string, strPart: string): string {
     if (!isString(prefix)) {
         throw new RangeError('Cannot add prefix to a string part - provided prefix value is not a string');
@@ -111,7 +123,10 @@ async function stringByLineBreakFormatter(formatterFunction: StringFormatterFunc
 }
 
 const trimStringFormatterFP = curry(trimStringFormatter);
+
 const removeLastLetterStringFormatterFP = curry(removeLastLetterStringFormatter);
+const removePrefixStringFormatterFP = curry(removePrefixStringFormatter);
+
 const addPrefixStringFormatterFP = curry(addPrefixStringFormatter);
 const addPostfixStringFormatterFP = curry(addPostfixStringFormatter);
 
@@ -126,11 +141,13 @@ const cleanCapitalizedListItemStringFormatter = chain(
     addPostfixStringFormatterFP(';')
 );
 
-
 // exports
 export {
     trimStringFormatter,
+
     removeLastLetterStringFormatter,
+    removePrefixStringFormatter,
+
     addPrefixStringFormatter,
     addPostfixStringFormatter,
 

@@ -2,6 +2,8 @@
 import { Stream } from 'stream'
 
 // internal imports
+import { GenericObject } from '../../collection_declarations';
+
 import { HTTPHeadersObject, HTTPHeadersCollection } from './headers_declarations';
 import { HTTPResponseSchema } from './response_declarations';
 
@@ -12,9 +14,10 @@ type HTTPRequestParams = string | object | ArrayBufferView | URLSearchParams | F
 type HTTPRequestConfig = {
     baseURL?: string,
     url?: string,
-    method: HTTPRequestMethod,
+    method?: HTTPRequestMethod,
     headers?: HTTPHeadersCollection,
     params?: HTTPRequestParams,
+    data?: GenericObject | FormData,
     timeout?: number, // in milliseconds
 }
 

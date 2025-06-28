@@ -25,6 +25,7 @@ function __addApp(app: MockFirebaseAdminApp): void {
     firebaseAdminApps.push(app);
 }
 
+
 function __resetMock(): void {
     firebaseAdminApps = [];
 }

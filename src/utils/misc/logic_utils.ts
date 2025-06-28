@@ -58,7 +58,7 @@ function isObject(input: unknown): input is object {
     } else return typeof input === 'object';
 }
 
-function isArray<ArrayType extends unknown>(input: unknown): input is ArrayLike<ArrayType> {
+function isArray<ArrayType>(input: unknown): input is ArrayLike<ArrayType> {
     return (
         input instanceof Array ||
         Object.prototype.toString.call(input) === '[object Array]'

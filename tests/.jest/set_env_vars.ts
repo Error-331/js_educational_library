@@ -1,9 +1,9 @@
 // external imports
 
 // internal imports
-import env from '../__mocks__/env';
+import { setEnvVars } from '../__mocks__/env';
 
 // implementation
-process.env = Object.assign({}, process.env, env);
+setEnvVars();
 
 // exports

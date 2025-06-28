@@ -1,6 +1,8 @@
 // external imports
 
 // internal imports
+import { GenericObject } from '../../../declarations/collection_declarations';
+
 import {
     HTTPRequestMethod,
     HTTPRequestParams,
@@ -14,6 +16,8 @@ import { HTTP_REQUEST_TIMEOUT } from '../../../constants/net/http/request_consta
 import { HTTPResponseSchema } from '../../../declarations/net/http/response_declarations';
 import { HTTPHeadersCollection } from '../../../declarations/net/http/headers_declarations';
 
+import FormDataTransformer from '../form/form_data_transformer';
+
 import { removeLastSpecialSymbolStringFormatter } from '../../../utils/primitives/string/basic_string_formatting_utils';
 import { cloneDeep } from '../../../utils/primitives/object_utils';
 import { isNil } from '../../../utils/misc/logic_utils';
@@ -26,6 +30,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
     protected _method: HTTPRequestMethod = 'get';
     protected _headers: HTTPHeadersCollection = {};
     protected _params: HTTPRequestParams = {};
+    protected _data: GenericObject | FormData;
     protected _timeout: number = HTTP_REQUEST_TIMEOUT;
 
     constructor(config: HTTPRequestConfig) {
@@ -39,7 +44,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
         }
 
         if (!isNil(config.url)) {
-            this.baseURL = config.baseURL
+            this.url = config.url;
         }
 
         if (!isNil(config.method)) {
@@ -52,6 +57,10 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
 
         if (!isNil(config.params)) {
             this.params = config.params;
+        }
+
+        if (!isNil(config.data)) {
+            this.data = config.data;
         }
 
         if (!isNil(config.timeout)) {
@@ -85,7 +94,8 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
 
             method: this._method,
             headers: cloneDeep(this._headers),
-            params: cloneDeep(this._headers),
+            data: FormDataTransformer.isFormData(this._data) ? FormDataTransformer.clone(this._data) : cloneDeep(this._data),
+            params: this._params instanceof URLSearchParams ? this._params : cloneDeep(this._params), // TODO: add something like FormDataTransformer here as well
             timeout: this._timeout,
         }
     }
@@ -174,6 +184,11 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
     set params(params: HTTPRequestParams) {
         //validate
         this._params = params;
+    }
+
+    set data(data: GenericObject | FormData) {
+        //validate
+        this._data = data;
     }
 
     set timeout(timeout: number) {
