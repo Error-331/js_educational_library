@@ -80,6 +80,14 @@ function removeLastSpecialSymbolStringFormatter(specialSymbols: string | string[
     return strPart;
 }
 
+function reverseStringFormatter(strPart: string): string {
+    if (!isString(strPart)) {
+        throw new RangeError('Cannot reverse a string - provided string part is not a string');
+    }
+
+    return strPart.split('').reverse().join('');
+}
+
 async function stringByLineBreakFormatter(formatterFunction: StringFormatterFunction, lineBreak: string, strToFormat: string): Promise<string> {
     if (!isString(strToFormat)) {
         throw new RangeError('Cannot format string by line break - provided value is not a string');
@@ -101,7 +109,6 @@ async function stringByLineBreakFormatter(formatterFunction: StringFormatterFunc
 
     return (await Promise.all(strToFormat.split(lineBreakCopy).map(formatterFunction))).join(lineBreak);
 }
-
 
 const trimStringFormatterFP = curry(trimStringFormatter);
 const removeLastLetterStringFormatterFP = curry(removeLastLetterStringFormatter);
@@ -129,6 +136,7 @@ export {
 
     capitalizeFirstLetterStringFormatter,
     removeLastSpecialSymbolStringFormatter,
+    reverseStringFormatter,
 
     stringByLineBreakFormatter,
 
