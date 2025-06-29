@@ -44,7 +44,6 @@ describe('Basic string formatting utilities tests....', () => {
 - Residential Proxy — from $4.5 per GB to $300 per 100 GB;
 - Server Proxies — from $10 per day to $135 per month;
 - IPv6 — from $10 per day to $110 per month;`;
-    
 
     describe('reverseStringFormatter() function tests...', () => {
         test('Should correctly reverse a string string - case 1', async () => {

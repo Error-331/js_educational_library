@@ -4,7 +4,7 @@
 import { ComparatorType } from '../../declarations/utility_declarations';
 import { ArrayIterator, CollectionIterator } from '../../declarations/collection_declarations';
 
-import { isNil,  isObject, isArray, isFunction, isBoolean } from '../misc/logic_utils';
+import { isNil, isObject, isArray, isFunction, isBoolean } from '../misc/logic_utils';
 import { defaultCompare, comparatorIsLt } from '../misc/comparator_utils';
 
 // implementation

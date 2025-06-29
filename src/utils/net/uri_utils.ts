@@ -80,12 +80,23 @@ function removeExtraTrailingSlashesButOne(pathPart: string): string {
     return pathPart.replace(/\/+$/, '/');
 }
 
+function sanitizeURLPathPartFromRoot(urlPathPart: string): string {
+    if (!isString(urlPathPart)) {
+        throw new RangeError('Cannot sanitize URL path part (from root) - url path part must be of type string');
+    }
+
+    urlPathPart = removeExtraLeadingSlashesButOne(urlPathPart);
+    urlPathPart = removeExtraTrailingSlashes(urlPathPart);
+
+    return urlPathPart;
+}
+
 function sanitizeURLPathPart(urlPathPart: string): string {
     if (!isString(urlPathPart)) {
         throw new RangeError('Cannot sanitize URL path part - url path part must be of type string');
     }
 
-    urlPathPart = removeExtraTrailingSlashes(urlPathPart);
+    urlPathPart = removeExtraLeadingSlashes(urlPathPart);
     urlPathPart = removeExtraTrailingSlashes(urlPathPart);
 
     return urlPathPart;
@@ -117,6 +128,7 @@ function combineMultipleURLPaths(pathParts: string[]): string {
 
 // exports
 export {
+    sanitizeURLPathPartFromRoot,
     sanitizeURLPathPart,
 
     removeExtraLeadingSlashes,
