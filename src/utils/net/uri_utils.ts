@@ -12,13 +12,81 @@ function composeURLPath(pathParts: (string | number)[]): string {
     return pathParts.join('/');
 }
 
-function sanitizeURLPathPart(urlPathPart: string) {
+/**
+ * Removes all leading slashes from the start of a string.
+ *
+ * @param {string} pathPart - the path part to modify.
+ *
+ * @throws {RangeError} if path part is not a string.
+ *
+ * @returns {string} -  URL path part without at most one leading slash.
+ */
+function removeExtraLeadingSlashes(pathPart: string): string {
+    if (!isString(pathPart)) {
+        throw new RangeError('Cannot remove all leading "/" (slash) characters from URL path part - url path part must be of type string');
+    }
+
+    return pathPart.replace(/^\/+/, '');
+}
+
+/**
+ * Removes all trailing slashes from the end of a string.
+ *
+ * @param {string} pathPart - the path part to modify.
+ *
+ * @throws {RangeError} if path part is not a string.
+ *
+ * @returns {string} - URL path part without trailing slash.
+ */
+function removeExtraTrailingSlashes(pathPart: string): string {
+    if (!isString(pathPart)) {
+        throw new RangeError('Cannot remove all trailing "/" (slash) characters from URL path part - url path part must be of type string');
+    }
+
+    return pathPart.replace(/\/+$/, '');
+}
+
+/**
+ * Removes all leading slashes from the start of a string, leaving only one.
+ *
+ * @param {string} pathPart - the path part to modify.
+ *
+ * @throws {RangeError} if path part is not a string.
+ *
+ * @returns {string} -  URL path part with at most one leading slash.
+ */
+function removeExtraLeadingSlashesButOne(pathPart: string): string {
+    if (!isString(pathPart)) {
+        throw new RangeError('Cannot remove leading "/" (slash) characters from URL path part - url path part must be of type string');
+    }
+
+    return pathPart.replace(/^\/+/, '/');
+}
+
+/**
+ * Removes all trailing slashes from the end of a string.
+ *
+ * @param {string} pathPart - the path part to modify.
+ *
+ * @throws {RangeError} if path part is not a string.
+ *
+ * @returns {string} - URL path part with at most one trailing slash.
+ */
+function removeExtraTrailingSlashesButOne(pathPart: string): string {
+    if (!isString(pathPart)) {
+        throw new RangeError('Cannot remove trailing "/" (slash) characters from URL path part - url path part must be of type string');
+    }
+
+    return pathPart.replace(/\/+$/, '/');
+}
+
+function sanitizeURLPathPart(urlPathPart: string): string {
     if (!isString(urlPathPart)) {
         throw new RangeError('Cannot sanitize URL path part - url path part must be of type string');
     }
 
-    urlPathPart = urlPathPart.endsWith('/') ? urlPathPart.slice(0, -1) : urlPathPart;
-    urlPathPart = urlPathPart.startsWith('/') ? urlPathPart.slice(1) : urlPathPart;
+    urlPathPart = removeExtraTrailingSlashes(urlPathPart);
+    urlPathPart = removeExtraTrailingSlashes(urlPathPart);
 
     return urlPathPart;
 }
@@ -50,6 +118,12 @@ function combineMultipleURLPaths(pathParts: string[]): string {
 // exports
 export {
     sanitizeURLPathPart,
+
+    removeExtraLeadingSlashes,
+    removeExtraTrailingSlashes,
+
+    removeExtraLeadingSlashesButOne,
+    removeExtraTrailingSlashesButOne,
 
     composeURLPath,
     combineURLPaths,
