@@ -67,7 +67,7 @@ describe('Simple redirect policy map class tests...', () => {
                 'anonymous': '/vm',
             }
         }
-    }
+    };
 
     describe('isAllowed() method tests...', () => {
         describe('Allowed single role tests...', () => {

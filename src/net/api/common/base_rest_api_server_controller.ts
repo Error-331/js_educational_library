@@ -1,6 +1,8 @@
 // external imports
 
 // internal imports
+import { CommonServerRequest, CommonServerResponse } from '../../../declarations/net/api/common_declarations';
+
 import BaseAPIServerController from './base_api_server_controller';
 
 import { createAndThrowValidationError } from '../../../utils/misc/validation_utils';
@@ -26,6 +28,10 @@ class BaseRESTAPIServerController extends BaseAPIServerController{
         } else {
             return limitValidationResult.data;
         }
+    }
+
+    static serverNotAcceptable406Error(req: CommonServerRequest, res: CommonServerResponse) {
+        BaseRESTAPIServerController.serveError(req, res, 406, 'Not Acceptable');
     }
 }
 
