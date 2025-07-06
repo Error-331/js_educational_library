@@ -8,7 +8,7 @@ import {
 
 import { sanitizeURLPathPartFromRoot } from '../../../utils/net/uri_utils';
 import { isObjectOfType } from '../../../utils/primitives/object_utils';
-import { isNil, isString, isArray, isObject, isFunction } from '../../../utils/misc/logic_utils';
+import { isNil, isBoolean, isString, isArray, isObject, isFunction } from '../../../utils/misc/logic_utils';
 
 // implementation
 class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
@@ -24,7 +24,7 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
     }
 
     protected getRuleByPath(currentPath: string): SimpleRedirectPolicyRule<PossibleStateNames> | null {
-        if (isString(currentPath)) {
+        if (!isString(currentPath)) {
             throw new RangeError('Cannot find redirect policy rule - specified path must be a string');
         }
 
@@ -46,7 +46,16 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
             fallback: (valueToCheck: unknown) => isNil(valueToCheck) || isString(valueToCheck) || isObject(valueToCheck) || isFunction(valueToCheck)
         });
 
-        if (isObject(rule.fallback)) {
+        if (!isValidRule) {
+            throw new RangeError(`Cannot add redirect policy rule - invalid rule data object provided for path "${preparedPath}"`)
+        }
+
+        if (isFunction(rule.fallback) || isString(rule.fallback)) {
+            this.redirectPolicyRules[preparedPath] = rule;
+            return;
+        }
+
+        if (isObject(rule.fallback) ) {
             for (const fallbackKey in rule.fallback) {
                 const fallbackValue = rule.fallback[fallbackKey];
 
@@ -56,20 +65,23 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
             }
         }
 
-        if (!isValidRule) {
-            throw new RangeError(`Cannot add redirect policy rule - invalid rule data object provided for path "${preparedPath}"`)
-        }
-
         this.redirectPolicyRules[preparedPath] = rule;
     }
 
-    public isAllowed(currentPath: string, currentState: PossibleStateNames): boolean {
+    public async isAllowed(currentPath: string, currentState: PossibleStateNames): Promise<boolean> {
         if (!isString(currentState)) {
             throw new RangeError('Cannot check redirect policy rule - specified state name must be a string');
         }
 
         const rule = this.getRuleByPath(currentPath);
-        return isNil(rule) ? false : (isArray(rule.allowed.includes) ? rule.allowed.includes(currentState) : rule.allowed === currentState);
+        const isAllowed = isNil(rule) ? false : (isArray(rule.allowed) ? rule.allowed.includes(currentState) : rule.allowed === currentState);
+
+        if (!isAllowed || isNil(rule.guard)) {
+            return isAllowed;
+        }
+
+        const guardResult = await rule.guard(currentPath, currentState);
+        return isBoolean(guardResult) ? guardResult : !isNil(guardResult);
     }
 
     public async getFallback(currentPath: string, currentState: PossibleStateNames): Promise<string | null> {

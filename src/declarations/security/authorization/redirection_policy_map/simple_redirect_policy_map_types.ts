@@ -3,7 +3,8 @@
 // internal imports
 
 // implementation
-type SimpleRedirectPolicyFallbackFunction = (path: string, state: string) => Promise<string>;
+type SimpleRedirectPolicyGuardFunction = (path: string, state: string) => Promise<boolean | unknown>;
+type SimpleRedirectPolicyFallbackFunction = (path: string, state: string) => Promise<string | null>;
 
 type SimpleRedirectPolicyFallbackMap = {
     [state: string]: string | SimpleRedirectPolicyFallbackFunction;
@@ -11,6 +12,7 @@ type SimpleRedirectPolicyFallbackMap = {
 
 type SimpleRedirectPolicyRule<PossibleStateNames extends string> = {
     allowed: PossibleStateNames | PossibleStateNames[];
+    guard?: SimpleRedirectPolicyGuardFunction;
     fallback?: string | SimpleRedirectPolicyFallbackMap | SimpleRedirectPolicyFallbackFunction;
 };
 
@@ -26,33 +28,3 @@ export {
     SimpleRedirectPolicyRule,
     SimpleRedirectPolicyRules,
 }
-
-/*
-const redirectRules: RedirectRule[] = [
-    {
-        pattern: '/path1/sub1',
-        allowed: ['AUTHENTICATED'],
-        fallback: '/login',
-    },
-    {
-        pattern: '/path1/sub2',
-        allowed: ['ANONYMOUS', 'AUTHENTICATED'],
-        fallback: '/login/anonymous',
-    },
-    {
-        pattern: '/path2/sub',
-        allowed: ['UNAUTHENTICATED'],
-        fallback: '/home',
-    },
-    {
-        pattern: '/public-page',
-        allowed: ['UNAUTHENTICATED', 'ANONYMOUS', 'AUTHENTICATED'],
-        fallback: '/public-page',
-    },
-    {
-        pattern: '/admin/:subpage*',
-        allowed: ['AUTHENTICATED'],
-        fallback: '/login',
-    },
-];
- */
