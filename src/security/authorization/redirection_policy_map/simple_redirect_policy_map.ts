@@ -11,6 +11,17 @@ import { isObjectOfType } from '../../../utils/primitives/object_utils';
 import { isNil, isBoolean, isString, isArray, isObject, isFunction } from '../../../utils/misc/logic_utils';
 
 // implementation
+/**
+ * Represents a map of simple redirect policy rules, enabling the management of redirection policies
+ * based on defined paths and associated rules.
+ *
+ * The `SimpleRedirectPolicyMap` class allows for defining, validating, and enforcing redirect policies
+ * for various paths, enabling structured control of state transitions and fallbacks within an application.
+ *
+ * @template PossibleStateNames - A string type representing possible state names used in the rules.
+ *
+ */
+
 class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
     protected redirectPolicyRules: SimpleRedirectPolicyRules<PossibleStateNames> = {};
 
@@ -23,6 +34,21 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
         newRulesKeys.forEach((ruleKey) => this.addRule(ruleKey, rulesMap[ruleKey]));
     }
 
+
+    /**
+     * Retrieves the redirect policy rule associated with the specified path.
+     *
+     * @template PossibleStateNames - A string type representing possible state names.
+     *
+     * @throws {RangeError} - If the provided `currentPath` is not a string.
+     *
+     * @param {string} currentPath - The path for which the redirect policy rule should be retrieved.
+     *
+     * @returns {SimpleRedirectPolicyRule<PossibleStateNames> | null} - The redirect policy rule associated
+     * with the given path if one exists; otherwise, `null`.
+     *
+     */
+
     protected getRuleByPath(currentPath: string): SimpleRedirectPolicyRule<PossibleStateNames> | null {
         if (!isString(currentPath)) {
             throw new RangeError('Cannot find redirect policy rule - specified path must be a string');
@@ -33,6 +59,27 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
 
         return isNil(rule) ? null : rule;
     }
+
+
+    /**
+     * Adds a redirect policy rule for a given path.
+     *
+     * @template PossibleStateNames - A string type representing possible state names.
+     *
+     * @param {string} path - The path for which the redirect policy rule is being added.
+     * @param {SimpleRedirectPolicyRule<PossibleStateNames>} rule - The redirect policy rule to add.
+     *
+     * @throws {Error} If a rule for the specified path already exists.
+     * @throws {RangeError} If the provided rule object is not valid.
+     *
+     * The rule object must adhere to the required structure:
+     * - `allowed`: Must be either a single state name (string) or an array of state names (string[]).
+     * - `fallback`: Can be `null`, a string, an object mapping states to fallback destinations, or a function.
+     * - For `fallback` objects, all values must be strings or functions. Otherwise, a `RangeError` is thrown.
+     *
+     * The method ensures that the rule is valid and does not conflict with existing rules before storing it.
+     *
+     */
 
     public addRule(path: string, rule: SimpleRedirectPolicyRule<PossibleStateNames>): void {
         const preparedPath = sanitizeURLPathPartFromRoot(path);
@@ -68,6 +115,22 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
         this.redirectPolicyRules[preparedPath] = rule;
     }
 
+    /**
+     * Determines whether the specified state is allowed for the given path according to the redirect policy rules.
+     *
+     * @template PossibleStateNames - A string type representing possible state names.
+     *
+     * @param {string} currentPath - The current path for which the rule should be checked.
+     * @param {PossibleStateNames} currentState - The current state name to evaluate against the policy rule.
+     *
+     * @throws {RangeError} If the provided `currentState` is not a string.
+     *
+     * @returns {Promise<boolean>} Resolves to:
+     * - `true` if the state is allowed by the policy rule.
+     * - `false` if the state is not allowed, no rule exists for the path, or the guard function denies access.
+     *
+     */
+
     public async isAllowed(currentPath: string, currentState: PossibleStateNames): Promise<boolean> {
         if (!isString(currentState)) {
             throw new RangeError('Cannot check redirect policy rule - specified state name must be a string');
@@ -83,6 +146,23 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
         const guardResult = await rule.guard(currentPath, currentState);
         return isBoolean(guardResult) ? guardResult : !isNil(guardResult);
     }
+    
+    /**
+     * Retrieves the fallback redirect path or computation function for the provided path and state.
+     *
+     * @template PossibleStateNames - A string type representing possible state names.
+     *
+     * @param {string} currentPath - The current path to look up the associated redirect policy rule.
+     * @param {PossibleStateNames} currentState - The current state name to evaluate against the policy rule.
+     *
+     * @throws {RangeError} If the provided `currentState` is not a string.
+     *
+     * @returns {Promise<string | null>} Resolves to:
+     * - A string representing the fallback redirect destination if set directly.
+     * - The result of executing the fallback function if it exists and evaluates successfully.
+     * - `null` if there is no fallback.
+     *
+     */
 
     public async getFallback(currentPath: string, currentState: PossibleStateNames): Promise<string | null> {
         if (!isString(currentState)) {
@@ -116,4 +196,4 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
 }
 
 // exports
-export default SimpleRedirectPolicyMap
+export default SimpleRedirectPolicyMap;
