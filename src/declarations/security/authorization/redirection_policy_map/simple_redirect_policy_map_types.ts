@@ -3,21 +3,21 @@
 // internal imports
 
 // implementation
-type SimpleRedirectPolicyGuardFunction = (path: string, state: string) => Promise<boolean | unknown>;
-type SimpleRedirectPolicyFallbackFunction = (path: string, state: string) => Promise<string | null>;
+type SimpleRedirectPolicyGuardFunction<AdditionalArgs extends unknown> = (path: string, state: string, ...args: AdditionalArgs[]) => Promise<boolean | unknown>;
+type SimpleRedirectPolicyFallbackFunction<AdditionalArgs extends unknown> = (path: string, state: string, ...args: AdditionalArgs[]) => Promise<string | null>;
 
-type SimpleRedirectPolicyFallbackMap = {
-    [state: string]: string | SimpleRedirectPolicyFallbackFunction;
+type SimpleRedirectPolicyFallbackMap<AdditionalFallbackFuncArgs extends unknown> = {
+    [state: string]: string | SimpleRedirectPolicyFallbackFunction<AdditionalFallbackFuncArgs>;
 };
 
-type SimpleRedirectPolicyRule<PossibleStateNames extends string> = {
+type SimpleRedirectPolicyRule<PossibleStateNames extends string, AdditionalGuardFuncArgs extends unknown, AdditionalFallbackFuncArgs extends unknown> = {
     allowed: PossibleStateNames | PossibleStateNames[];
-    guard?: SimpleRedirectPolicyGuardFunction;
-    fallback?: string | SimpleRedirectPolicyFallbackMap | SimpleRedirectPolicyFallbackFunction;
+    guard?: SimpleRedirectPolicyGuardFunction<AdditionalGuardFuncArgs>;
+    fallback?: string | SimpleRedirectPolicyFallbackMap<AdditionalFallbackFuncArgs> | SimpleRedirectPolicyFallbackFunction<AdditionalFallbackFuncArgs>;
 };
 
-type SimpleRedirectPolicyRules<PossibleStateNames extends string> = {
-    [path: string]: SimpleRedirectPolicyRule<PossibleStateNames>
+type SimpleRedirectPolicyRules<PossibleStateNames extends string, AdditionalGuardFuncArgs = unknown, AdditionalFallbackFuncArgs = unknown> = {
+    [path: string]: SimpleRedirectPolicyRule<PossibleStateNames, AdditionalGuardFuncArgs, AdditionalFallbackFuncArgs>
 };
 
 // exports

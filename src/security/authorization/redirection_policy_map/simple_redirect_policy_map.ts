@@ -19,13 +19,15 @@ import { isNil, isBoolean, isString, isArray, isObject, isFunction } from '../..
  * for various paths, enabling structured control of state transitions and fallbacks within an application.
  *
  * @template PossibleStateNames - A string type representing possible state names used in the rules.
+ * @template AdditionalGuardFuncArgs - Additional arguments which may be provided to guard function.
+ * @template AdditionalFallbackFuncArgs - Additional arguments which may be provided to fallback resolver functions.
  *
  */
 
-class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
-    protected redirectPolicyRules: SimpleRedirectPolicyRules<PossibleStateNames> = {};
+class SimpleRedirectPolicyMap<PossibleStateNames extends string, AdditionalGuardFuncArgs = unknown, AdditionalFallbackFuncArgs = unknown> {
+    protected redirectPolicyRules: SimpleRedirectPolicyRules<PossibleStateNames, AdditionalGuardFuncArgs, AdditionalFallbackFuncArgs> = {};
 
-    constructor(rulesMap?: SimpleRedirectPolicyRules<PossibleStateNames>) {
+    constructor(rulesMap?: SimpleRedirectPolicyRules<PossibleStateNames, AdditionalGuardFuncArgs, AdditionalFallbackFuncArgs>) {
         if (isNil(rulesMap)) {
             return;
         }
@@ -34,22 +36,23 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
         newRulesKeys.forEach((ruleKey) => this.addRule(ruleKey, rulesMap[ruleKey]));
     }
 
-
     /**
      * Retrieves the redirect policy rule associated with the specified path.
      *
      * @template PossibleStateNames - A string type representing possible state names.
+     * @template AdditionalGuardFuncArgs - Additional arguments which may be provided to guard function.
+     * @template AdditionalFallbackFuncArgs - Additional arguments which may be provided to fallback resolver functions.
      *
      * @throws {RangeError} - If the provided `currentPath` is not a string.
      *
      * @param {string} currentPath - The path for which the redirect policy rule should be retrieved.
      *
-     * @returns {SimpleRedirectPolicyRule<PossibleStateNames> | null} - The redirect policy rule associated
+     * @returns {SimpleRedirectPolicyRule<PossibleStateNames, AdditionalFallbackFuncArgs> | null} - The redirect policy rule associated
      * with the given path if one exists; otherwise, `null`.
      *
      */
 
-    protected getRuleByPath(currentPath: string): SimpleRedirectPolicyRule<PossibleStateNames> | null {
+    protected getRuleByPath(currentPath: string): SimpleRedirectPolicyRule<PossibleStateNames, AdditionalGuardFuncArgs, AdditionalFallbackFuncArgs> | null {
         if (!isString(currentPath)) {
             throw new RangeError('Cannot find redirect policy rule - specified path must be a string');
         }
@@ -60,14 +63,15 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
         return isNil(rule) ? null : rule;
     }
 
-
     /**
      * Adds a redirect policy rule for a given path.
      *
      * @template PossibleStateNames - A string type representing possible state names.
+     * @template AdditionalGuardFuncArgs - Additional arguments which may be provided to guard function.
+     * @template AdditionalFallbackFuncArgs - Additional arguments which may be provided to fallback resolver functions.
      *
      * @param {string} path - The path for which the redirect policy rule is being added.
-     * @param {SimpleRedirectPolicyRule<PossibleStateNames>} rule - The redirect policy rule to add.
+     * @param {SimpleRedirectPolicyRule<PossibleStateNames, AdditionalGuardFuncArgs, AdditionalFallbackFuncArgs>} rule - The redirect policy rule to add.
      *
      * @throws {Error} If a rule for the specified path already exists.
      * @throws {RangeError} If the provided rule object is not valid.
@@ -81,14 +85,14 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
      *
      */
 
-    public addRule(path: string, rule: SimpleRedirectPolicyRule<PossibleStateNames>): void {
+    public addRule(path: string, rule: SimpleRedirectPolicyRule<PossibleStateNames, AdditionalGuardFuncArgs, AdditionalFallbackFuncArgs>): void {
         const preparedPath = sanitizeURLPathPartFromRoot(path);
 
         if (!isNil(this.redirectPolicyRules[preparedPath])) {
             throw new Error(`Cannot add redirect policy rule - rule for path "${preparedPath}" already exists`);
         }
 
-        const isValidRule = isObjectOfType<SimpleRedirectPolicyRule<PossibleStateNames>>(rule, {
+        const isValidRule = isObjectOfType<SimpleRedirectPolicyRule<PossibleStateNames, AdditionalGuardFuncArgs, AdditionalFallbackFuncArgs>>(rule, {
             allowed:  (valueToCheck: unknown) => isString(valueToCheck) || isArray<PossibleStateNames>(valueToCheck),
             fallback: (valueToCheck: unknown) => isNil(valueToCheck) || isString(valueToCheck) || isObject(valueToCheck) || isFunction(valueToCheck)
         });
@@ -119,9 +123,11 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
      * Determines whether the specified state is allowed for the given path according to the redirect policy rules.
      *
      * @template PossibleStateNames - A string type representing possible state names.
+     * @template AdditionalGuardFuncArgs - Additional arguments which may be provided to guard function.
      *
      * @param {string} currentPath - The current path for which the rule should be checked.
      * @param {PossibleStateNames} currentState - The current state name to evaluate against the policy rule.
+     * @param {...AdditionalGuardFuncArgs} args - Additional arguments that can be passed to the guard.
      *
      * @throws {RangeError} If the provided `currentState` is not a string.
      *
@@ -131,7 +137,7 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
      *
      */
 
-    public async isAllowed(currentPath: string, currentState: PossibleStateNames): Promise<boolean> {
+    public async isAllowed(currentPath: string, currentState: PossibleStateNames, ...args: AdditionalGuardFuncArgs[]): Promise<boolean> {
         if (!isString(currentState)) {
             throw new RangeError('Cannot check redirect policy rule - specified state name must be a string');
         }
@@ -143,17 +149,19 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
             return isAllowed;
         }
 
-        const guardResult = await rule.guard(currentPath, currentState);
+        const guardResult = await rule.guard(currentPath, currentState, ...args);
         return isBoolean(guardResult) ? guardResult : !isNil(guardResult);
     }
     
     /**
-     * Retrieves the fallback redirect path or computation function for the provided path and state.
+     * Retrieves the fallback redirect path or computation function for the provided path, state and additional arguments.
      *
      * @template PossibleStateNames - A string type representing possible state names.
+     * @template AdditionalFallbackFuncArgs - Additional arguments which may be provided to fallback resolver functions.
      *
      * @param {string} currentPath - The current path to look up the associated redirect policy rule.
      * @param {PossibleStateNames} currentState - The current state name to evaluate against the policy rule.
+     * @param {...AdditionalFallbackFuncArgs} args - Additional arguments that can be passed to the fallback resolver.
      *
      * @throws {RangeError} If the provided `currentState` is not a string.
      *
@@ -164,7 +172,7 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
      *
      */
 
-    public async getFallback(currentPath: string, currentState: PossibleStateNames): Promise<string | null> {
+    public async getFallback(currentPath: string, currentState: PossibleStateNames, ...args: AdditionalFallbackFuncArgs[]): Promise<string | null> {
         if (!isString(currentState)) {
             throw new RangeError('Cannot retrieve redirect policy rule fallback - specified state name must be a string');
         }
@@ -178,14 +186,14 @@ class SimpleRedirectPolicyMap<PossibleStateNames extends string> {
         if (isString(rule.fallback)) {
             return rule.fallback;
         } else if (isFunction(rule.fallback)) {
-            return await rule.fallback(currentPath, currentState);
+            return await rule.fallback(currentPath, currentState, ...args);
         } else if (isObject(rule.fallback)) {
             const fallbackSubValue = rule.fallback[currentState];
 
             if (isString(fallbackSubValue)) {
                 return fallbackSubValue;
             } else if (isFunction(fallbackSubValue)) {
-                return await fallbackSubValue(currentPath, currentState);
+                return await fallbackSubValue(currentPath, currentState, ...args);
             } else {
                 return null;
             }
