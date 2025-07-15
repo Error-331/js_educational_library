@@ -64,9 +64,13 @@
     "./registers/facebook/*": "./src/registers/facebook/*.ts",
     "./registers/firebase/*": "./src/registers/firebase/*.ts",
 
+    "./security/authentication/factories/firebase/*": "./src/security/authentication/factories/firebase/*.ts",
+
     "./security/authentication/strategies/facebook/client/*": "./src/security/authentication/strategies/facebook/client/*.ts",
     "./security/authentication/strategies/firebase/client/*": "./src/security/authentication/strategies/firebase/client/*.ts",
     "./security/authentication/strategies/firebase/server/*": "./src/security/authentication/strategies/firebase/server/*.ts",
+
+    "./security/authentication/utils/firebase/*": "./src/security/authentication/utils/firebase/*.ts",
 
     "./security/authorization/redirection_policy_map/*": "./src/security/authorization/redirection_policy_map/*.ts",
 
