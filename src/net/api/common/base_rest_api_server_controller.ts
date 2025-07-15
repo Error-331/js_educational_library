@@ -9,7 +9,7 @@ import { createAndThrowValidationError } from '../../../utils/misc/validation_ut
 import { validateRESTPage, validateRESTLimit } from '../../../validators/net/rest/rest_common_validators';
 
 // implementation
-class BaseRESTAPIServerController extends BaseAPIServerController{
+class BaseRESTAPIServerController extends BaseAPIServerController {
     static validatePageOrThrowError(page?: unknown | string | number): number {
         const pageValidationResult = validateRESTPage(page);
 

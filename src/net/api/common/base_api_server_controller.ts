@@ -38,6 +38,11 @@ class BaseAPIServerController {
         }
     }
 
+    static serveEmptyData(req: CommonServerRequest, res: CommonServerResponse, code?: number): CommonServerReturn {
+        res.status(code).send();
+        return;
+    }
+
     static serveData<DataType = unknown>(req: CommonServerRequest, res: CommonServerResponse, data: DataType, code?: number): CommonServerReturn {
         return BaseAPIServerController.serveJSONData(req, res, prepareHTTPResponseData<DataType>(data), code);
     }
