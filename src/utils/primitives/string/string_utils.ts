@@ -1,29 +1,18 @@
-'use strict';
+// external imports
 
-import { ALPHANUMERIC_LETTERS_EN_ALL } from '../../constants/string_constants.js';
-import { isNullOrEmpty, isString, isBoolean, isNumber } from '../misc/logic_utils.js';
+// internal imports
+import { isNullOrEmpty, isString, isBoolean, isNumber } from '../../misc/logic_utils';
 
-function isOnlyDigits(str){
+// implementation
+function isOnlyDigits(str: string): boolean{
     return /^[0-9]+$/.test(str);
 }
 
-function generateRandomString(len, charSet) {
-    charSet = charSet || ALPHANUMERIC_LETTERS_EN_ALL;
-
-    let randomString = '';
-    for (let i = 0; i < len; i++) {
-        let randomPoz = Math.floor(Math.random() * charSet.length);
-        randomString += charSet.substring(randomPoz,randomPoz+1);
-    }
-
-    return randomString;
-}
-
-function removeComa(value) {
+function removeComa(value: string): string {
     return value.replace(/\,/g, '');
 }
 
-const toStringFOrT = (value, name = '') => {
+const toStringFOrT = (value: string, name = ''): string => {
     if (isNullOrEmpty(value)) {
         throw new Error(`"${name}" cannot be null or empty`);
     }
@@ -51,7 +40,7 @@ const toStringFOrT = (value, name = '') => {
     return value;
 };
 
-const toStringFOrTAsync = (value, name = '') => {
+const toStringFOrTAsync = (value: string, name = ''): Promise<string> => {
     try {
         return Promise.resolve(toStringFOrT(value, name));
     } catch (error) {
@@ -59,9 +48,9 @@ const toStringFOrTAsync = (value, name = '') => {
     }
 };
 
+// exports
 export {
     isOnlyDigits,
-    generateRandomString,
     removeComa,
     toStringFOrT,
     toStringFOrTAsync,
