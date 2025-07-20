@@ -16,13 +16,16 @@ enum AuthenticationProvider {
     Unknown = 'Unknown',
 }
 
-interface UserAuthenticationStateInfo {
-    authenticated: boolean;
+interface UserAuthenticationStrategyInfo {
     vendor?: AuthenticationVendor;
     provider?: AuthenticationProvider;
 }
 
-interface AuthenticationSignInStrategy<SignInParams, SignUpParams = void> {
+interface UserAuthenticationStateInfo extends UserAuthenticationStrategyInfo {
+    authenticated: boolean;
+}
+
+interface AuthenticationSignInStrategy<SignInParams = unknown, SignUpParams = void> {
     verifyUser(): Promise<boolean>;
     getUserAuthenticationStateInfo(): Promise<UserAuthenticationStateInfo>;
 
@@ -37,6 +40,7 @@ export {
     AuthenticationVendor,
     AuthenticationProvider,
 
+    UserAuthenticationStrategyInfo,
     UserAuthenticationStateInfo,
     AuthenticationSignInStrategy,
 }

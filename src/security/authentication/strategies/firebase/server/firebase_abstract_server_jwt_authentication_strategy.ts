@@ -14,6 +14,7 @@ import { JWT_COOKIE_DEFAULT_MAX_AGE } from '../../../../../constants/net/http/co
 import HTTPError from '../../../../../errors/http_error';
 
 import AbstractAuthenticationStrategy from '../../abstract_authentication_strategy';
+import FirebaseServerJWTAuthenticationUtils from '../../../utils/firebase/firebase_server_jwt_authentication_utils';
 import FirebaseAdminRegistry from '../../../../../registers/firebase/firebase_admin_registry';
 
 import { convertSecondsToMilliseconds } from '../../../../../utils/physics/time_utils';
@@ -22,52 +23,6 @@ import { isNil } from '../../../../../utils/misc/logic_utils';
 // implementation
 abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends AbstractAuthenticationStrategy {
     protected cookieStore: CookieStore & JWTCookieStore;
-
-    /**
-     * GCP decoded token structure (possible):
-     *
-     * decodedIdToken {
-     *      provider_id: 'anonymous',
-     *      auth_time: 111111,
-     *      user_id: 'some_id',
-     *      firebase: { identities: {}, sign_in_provider: 'anonymous' },
-     *      iat: 111111,
-     *      exp: 111111,
-     *      aud: 'some_project',
-     *      iss: 'https://session.firebase.google.com/some_project',
-     *      sub: 'some_sub',
-     *      uid: 'some_uid'
-     * }
-     *
-     */
-
-    static async decodeAuthToken(authToken: string, tokenType: FirebaseAuthTokenType): Promise<DecodedIdToken> {
-        if (isNil(authToken)) {
-            throw new HTTPError('Cannot decode authentication token - token is not set', 400);
-        }
-
-        const fbAdmin = FirebaseAdminRegistry.getInstance();
-
-        switch (tokenType) {
-            case FirebaseAuthTokenType.AccessToken:
-                return await fbAdmin.auth.verifyIdToken(authToken);
-            case FirebaseAuthTokenType.JWTToken:
-                return await fbAdmin.auth.verifySessionCookie(authToken);
-            default:
-                throw new HTTPError(`Cannot decode Firebase auth token - wrong token type: ${tokenType}`, 500)
-        }
-    }
-
-    static determineAuthProviderById(providerId: string): AuthenticationProvider {
-        switch (providerId) {
-            case 'anonymous':
-                return AuthenticationProvider.Anonymous;
-            case 'password':
-                return AuthenticationProvider.EmailPassword;
-            default:
-                return AuthenticationProvider.Unknown;
-        }
-    }
 
     protected verifyDecodedAuthTokenProjectId(decodedAuthToken: DecodedIdToken): boolean {
         const fbAdmin = FirebaseAdminRegistry.getInstance();
@@ -91,7 +46,7 @@ abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends AbstractA
     }
 
     protected async verifyAuthToken(authToken: string, tokenType: FirebaseAuthTokenType): Promise<DecodedIdToken> {
-        const decodedAuthToken = await FirebaseAbstractServerJWTAuthenticationStrategy.decodeAuthToken(authToken, tokenType);
+        const decodedAuthToken = await FirebaseServerJWTAuthenticationUtils.decodeAuthToken(authToken, tokenType);
         return this.runAuthTokenVerificationStrategy(decodedAuthToken);
     }
 
@@ -137,10 +92,9 @@ abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends AbstractA
     }
 
     public async getUserAuthenticationStateInfo(): Promise<UserAuthenticationStateInfo> {
-        const stateInfo: UserAuthenticationStateInfo = {
+        let stateInfo: UserAuthenticationStateInfo = {
             authenticated: false,
-            vendor: AuthenticationVendor.Unknown,
-            provider: AuthenticationProvider.Unknown,
+            ...FirebaseServerJWTAuthenticationUtils.getDefaultUserAuthenticationStrategyInfo(),
         }
 
         const jwtValue = await this.cookieStore.getJWTResponseCookie();
@@ -149,18 +103,15 @@ abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends AbstractA
         }
 
         try {
-            const decodedAuthToken = await FirebaseAbstractServerJWTAuthenticationStrategy.decodeAuthToken(jwtValue, FirebaseAuthTokenType.JWTToken);
-
-            stateInfo.vendor = AuthenticationVendor.Firebase;
-            stateInfo.provider = FirebaseAbstractServerJWTAuthenticationStrategy.determineAuthProviderById(decodedAuthToken.firebase.sign_in_provider);
-
-            try {
-                this.runAuthTokenVerificationStrategy(decodedAuthToken);
-            } catch (error: unknown) {
-                return stateInfo
+            const decodedAuthToken = await FirebaseServerJWTAuthenticationUtils.decodeAuthToken(jwtValue, FirebaseAuthTokenType.JWTToken);
+            stateInfo = {
+                ...stateInfo,
+                ...FirebaseServerJWTAuthenticationUtils.getUserAuthenticationStrategyInfoByDecodedToken(decodedAuthToken),
             }
 
+            this.runAuthTokenVerificationStrategy(decodedAuthToken);
             stateInfo.authenticated = true;
+
             return stateInfo;
         } catch (error: unknown) {
             return stateInfo;

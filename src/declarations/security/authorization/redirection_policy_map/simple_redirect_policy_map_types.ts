@@ -3,19 +3,21 @@
 // internal imports
 
 // implementation
-type SimpleRedirectPolicyFallbackFunction = (path: string, state: string) => Promise<string>;
+type SimpleRedirectPolicyGuardFunction<AdditionalArgs extends unknown> = (path: string, state: string, ...args: AdditionalArgs[]) => Promise<boolean | unknown>;
+type SimpleRedirectPolicyFallbackFunction<AdditionalArgs extends unknown> = (path: string, state: string, ...args: AdditionalArgs[]) => Promise<string | null>;
 
-type SimpleRedirectPolicyFallbackMap = {
-    [state: string]: string | SimpleRedirectPolicyFallbackFunction;
+type SimpleRedirectPolicyFallbackMap<AdditionalFallbackFuncArgs extends unknown> = {
+    [state: string]: string | SimpleRedirectPolicyFallbackFunction<AdditionalFallbackFuncArgs>;
 };
 
-type SimpleRedirectPolicyRule<PossibleStateNames extends string> = {
+type SimpleRedirectPolicyRule<PossibleStateNames extends string, AdditionalGuardFuncArgs extends unknown, AdditionalFallbackFuncArgs extends unknown> = {
     allowed: PossibleStateNames | PossibleStateNames[];
-    fallback?: string | SimpleRedirectPolicyFallbackMap | SimpleRedirectPolicyFallbackFunction;
+    guard?: SimpleRedirectPolicyGuardFunction<AdditionalGuardFuncArgs>;
+    fallback?: string | SimpleRedirectPolicyFallbackMap<AdditionalFallbackFuncArgs> | SimpleRedirectPolicyFallbackFunction<AdditionalFallbackFuncArgs>;
 };
 
-type SimpleRedirectPolicyRules<PossibleStateNames extends string> = {
-    [path: string]: SimpleRedirectPolicyRule<PossibleStateNames>
+type SimpleRedirectPolicyRules<PossibleStateNames extends string, AdditionalGuardFuncArgs = unknown, AdditionalFallbackFuncArgs = unknown> = {
+    [path: string]: SimpleRedirectPolicyRule<PossibleStateNames, AdditionalGuardFuncArgs, AdditionalFallbackFuncArgs>
 };
 
 // exports
@@ -26,33 +28,3 @@ export {
     SimpleRedirectPolicyRule,
     SimpleRedirectPolicyRules,
 }
-
-/*
-const redirectRules: RedirectRule[] = [
-    {
-        pattern: '/path1/sub1',
-        allowed: ['AUTHENTICATED'],
-        fallback: '/login',
-    },
-    {
-        pattern: '/path1/sub2',
-        allowed: ['ANONYMOUS', 'AUTHENTICATED'],
-        fallback: '/login/anonymous',
-    },
-    {
-        pattern: '/path2/sub',
-        allowed: ['UNAUTHENTICATED'],
-        fallback: '/home',
-    },
-    {
-        pattern: '/public-page',
-        allowed: ['UNAUTHENTICATED', 'ANONYMOUS', 'AUTHENTICATED'],
-        fallback: '/public-page',
-    },
-    {
-        pattern: '/admin/:subpage*',
-        allowed: ['AUTHENTICATED'],
-        fallback: '/login',
-    },
-];
- */

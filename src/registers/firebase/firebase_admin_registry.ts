@@ -158,6 +158,10 @@ class FirebaseAdminRegistry {
         const credential = FirebaseAdminRegistry.loadServiceAccountKey();
         const appAdditionalConfiguration = FirebaseAdminRegistry.loadAppAdditionalConfiguration();
 
+        if (isNil(credential) && isNil(appAdditionalConfiguration)) {
+            return undefined;
+        }
+
         if (isNil(credential)) {
             return {
                 ...appAdditionalConfiguration,
@@ -211,7 +215,7 @@ class FirebaseAdminRegistry {
 
     get projectId(): string {
         this.init();
-        return this.app.options.credential.projectId;
+        return this.app.options.credential.projectId ?? this.app.options.projectId;
     }
 
     /**
