@@ -26,10 +26,17 @@ import { calcElementsOffset } from '../../utils/math/math_count_utils';
 import { isNil } from '../../utils/misc/logic_utils';
 
 // implementation
+type Filter = {
+    [field: string]: {
+        op: string;
+        value: number | string | object | null;
+    }
+}
+
 abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocument>
     extends AbstractDatabaseModel<WithFieldValue<EntityType>, WithFieldValue<EntityType>> {
 
-    protected prepareLimitOffsetQuery(collectionQuery: Query<EntityType, EntityType>, page = 1, limit = 1): Query<EntityType, EntityType> {
+    protected prepareLimitOffsetQuery(collectionQuery: Query<EntityType, EntityType>, page = 1, limit = MODEL_PAGINATION_LIMIT): Query<EntityType, EntityType> {
         return collectionQuery
             .limit(limit)
             .offset(calcElementsOffset(page, limit));
@@ -116,8 +123,12 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
     public async loadById(id: string | number): Promise<EntityType | null> {
         const entityDocument = this.getDocumentReference(id.toString());
         const documentSnapshot = await entityDocument.get();
-        const data = documentSnapshot.data();
 
+        if (!documentSnapshot.exists) {
+            return null;
+        }
+
+        const data = documentSnapshot.data();
         return isNil(data) ? null : { ...data, id: documentSnapshot.id };
     }
 
@@ -128,6 +139,21 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
         return new Promise((resolve: (value?: void | PromiseLike<void>) => void, reject: (error: Error) => void) => {
             this.deleteQueryBatch(database, query, resolve).catch(reject);
         });
+    }
+
+    public async loadEntities(filter: Filter, page = 1, limit = MODEL_PAGINATION_LIMIT) {
+        const snapshot = await this.getCollectionReference();
+        let query: Query<EntityType, EntityType>;
+
+        for (const filterField in filter) {
+            const
+        }
+
+
+            /*.where('type', '==', assetType)
+            .where('userId', '==', userId)
+            .count()
+            .get();*/
     }
 
     protected abstract getCollectionConverter(): FirestoreDataConverter<EntityType, Omit<WithFieldValue<EntityType>, 'id'>>;
@@ -141,9 +167,9 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
         return isNil(firestoreDataConverter) ? collectionRef as CollectionReference<EntityType, WithFieldValue<EntityType>> : collectionRef.withConverter(firestoreDataConverter);
     }
 
-    protected getDocumentReference(id: string | number): DocumentReference<EntityType, WithFieldValue<EntityType>> {
+    protected getDocumentReference(id: string): DocumentReference<EntityType, WithFieldValue<EntityType>> {
         const database = FirebaseAdminRegistry.getInstance().firestore;
-        return database.doc( `${this.collectionName}/${id}`) as DocumentReference<EntityType, WithFieldValue<EntityType>>;
+        return database.collection(this.collectionName).doc(id) as DocumentReference<EntityType, WithFieldValue<EntityType>>;
     }
 }
 
