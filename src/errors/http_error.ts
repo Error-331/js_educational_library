@@ -3,9 +3,10 @@
 // internal imports
 import { CustomErrorName } from '../declarations/error/custom_error_declarations';
 import { SerializedHTTPError } from '../declarations/error/serializable_error_declarations';
+import { Serializable } from '../declarations/common_interfaces_declarations';
 
 // implementation
-class HTTPError extends Error {
+class HTTPError extends Error implements Serializable<SerializedHTTPError> {
     public name: CustomErrorName;
     protected _httpCode: number;
 

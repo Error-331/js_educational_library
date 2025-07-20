@@ -4,6 +4,7 @@
 import { ZodIssueWithInputData } from '../declarations/validation_declarations';
 import { CustomErrorName } from '../declarations/error/custom_error_declarations';
 import { SerializedValidationError } from '../declarations/error/serializable_error_declarations';
+import { Serializable } from '../declarations/common_interfaces_declarations';
 
 // implementation
 
@@ -14,7 +15,7 @@ import { SerializedValidationError } from '../declarations/error/serializable_er
  * @extends Error
  *
  */
-class ValidationError extends Error {
+class ValidationError extends Error implements Serializable<SerializedValidationError>{
     /**
      * Error name.
      */

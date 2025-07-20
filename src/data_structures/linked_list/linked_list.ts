@@ -182,8 +182,7 @@ class LinkedList<DataType> {
 
         return dataArray;
     }
-     // LinkedListNode<DataType>
-     //
+
     public [Symbol.iterator](): Iterator<LinkedListNode<DataType>, undefined> {
         let nodeCounter = 0;
         let node: LinkedListNode<DataType> = null;
