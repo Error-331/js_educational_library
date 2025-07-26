@@ -19,10 +19,19 @@ import { cloneDeep } from '../../../utils/primitives/object_utils';
 abstract class AbstractCookieStore<OptionsType extends CookieStoreOptions> {
     protected options: OptionsType;
 
+    static get defaultSetCookieOptions(): SetCookieOptions {
+        const optionsType: string = defaultTo<string, string>('default', process.env.JSEL_DEFAULT_SET_COOKIES_STORE_OPTIONS_TYPE).toLowerCase();
+
+        switch (optionsType) {
+            default:
+                return SET_COOKIE_DEFAULT_OPTIONS;
+        }
+    }
+
     /**
      * Cookie store constructor.
-     * Constructor accepts the cookie options object and merges it with default cookie options @see {@link SET_COOKIE_DEFAULT_OPTIONS}.
-     * If no cookie options are provided - default values will be used @see {@link SET_COOKIE_DEFAULT_OPTIONS}.
+     * Constructor accepts the cookie options object and merges it with default cookie options @see {@link defaultSetCookieOptions()}.
+     * If no cookie options are provided - default values will be used @see {@link defaultSetCookieOptions()}.
      *
      * @param {CookieStoreOptions} options - cookie configuration object.
 
@@ -35,9 +44,9 @@ abstract class AbstractCookieStore<OptionsType extends CookieStoreOptions> {
         this.options = defaultTo<OptionsType, OptionsType>({}, options);
 
         if (!isNil(this.options.setCookieOptions)) {
-            this.options.setCookieOptions =  Object.assign({}, SET_COOKIE_DEFAULT_OPTIONS, validateSetCookieOptions(this.options.setCookieOptions));
+            this.options.setCookieOptions =  Object.assign({}, AbstractCookieStore.defaultSetCookieOptions, validateSetCookieOptions(this.options.setCookieOptions));
         } else {
-            this.options.setCookieOptions = cloneDeep(SET_COOKIE_DEFAULT_OPTIONS);
+            this.options.setCookieOptions = cloneDeep(AbstractCookieStore.defaultSetCookieOptions);
         }
     }
 

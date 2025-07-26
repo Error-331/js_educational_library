@@ -4,6 +4,11 @@ My small JS multipurpose library used for educational purposes.
 
 ## Environment variables (.env)
 
+### Cookies related options
+
+- **JSEL_DEFAULT_SET_COOKIES_STORE_OPTIONS_TYPE** - type of the cookie configuration;
+- **JSEL_DEFAULT_JWT_SET_COOKIES_STORE_OPTIONS_TYPE** - type of the JWT cookie configuration (possible values: `jwt_unsecure`);
+
 ### Firebase related
 
 - **JSEL_FIREBASE_CLIENT_APP_NAME** - Firebase client app name;

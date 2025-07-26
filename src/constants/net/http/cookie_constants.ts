@@ -21,6 +21,12 @@ const JWT_SET_COOKIE_DEFAULT_OPTIONS: SetCookieOptions = {
     sameSite: 'strict',
 }
 
+const JWT_SET_COOKIE_UNSECURE_OPTIONS: SetCookieOptions = {
+    ...JWT_SET_COOKIE_DEFAULT_OPTIONS,
+    httpOnly: false,
+    secure: false,
+}
+
 const JWT_SET_COOKIE_LOCALHOST_OPTIONS: SetCookieOptions = {
     ...JWT_SET_COOKIE_DEFAULT_OPTIONS,
 
@@ -36,6 +42,7 @@ export {
     SET_COOKIE_DEFAULT_OPTIONS,
 
     JWT_SET_COOKIE_DEFAULT_OPTIONS,
+    JWT_SET_COOKIE_UNSECURE_OPTIONS,
     JWT_SET_COOKIE_LOCALHOST_OPTIONS,
 }
 
