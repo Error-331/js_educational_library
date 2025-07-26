@@ -6,47 +6,15 @@ import { CommonServerRequest, CommonServerResponse, CommonServerReturn } from '.
 import HTTPError from '../../../errors/http_error';
 import ValidationError from '../../../errors/validation_error';
 
-import { GenericObject } from '../../../declarations/collection_declarations';
-import { SerializableError } from '../../../declarations/error/general_error_declarations';
+import BaseHTTPServerController from "./base_http_server_controller";
 
+import { GenericObject } from '../../../declarations/collection_declarations';
 import FormDataTransformer from '../../http/form/form_data_transformer';
 
-import { prepareHTTPResponseData } from '../../../utils/net/http/response_utils';
-import { isNil, isString, isFunction } from '../../../utils/misc/logic_utils';
+import { isFunction } from '../../../utils/misc/logic_utils';
 
 // implementation
-class BaseAPIServerController {
-    static serveJSONData(req: CommonServerRequest, res: CommonServerResponse, data: object, status: number = 200): CommonServerReturn {
-        if (isNil(res)) {
-            return new Response(JSON.stringify(data), {
-                status,
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-        } else {
-            res.status(status).send(data);
-            return;
-        }
-    }
-
-    static serveError(req: CommonServerRequest, res: CommonServerResponse, code: number, error: Error | SerializableError | string): CommonServerReturn {
-        if (isString(error)) {
-            return BaseAPIServerController.serveJSONData(req, res, prepareHTTPResponseData<undefined>(null, new HTTPError(error, code)), code);
-        } else {
-            return BaseAPIServerController.serveJSONData(req, res, prepareHTTPResponseData<undefined>(null, error), code);
-        }
-    }
-
-    static serveEmptyData(req: CommonServerRequest, res: CommonServerResponse, code?: number): CommonServerReturn {
-        res.status(code).send();
-        return;
-    }
-
-    static serveData<DataType = unknown>(req: CommonServerRequest, res: CommonServerResponse, data: DataType, code?: number): CommonServerReturn {
-        return BaseAPIServerController.serveJSONData(req, res, prepareHTTPResponseData<DataType>(data), code);
-    }
-
+class BaseAPIServerController extends BaseHTTPServerController {
     static handleThrownError(req: CommonServerRequest, res: CommonServerResponse, error: unknown): CommonServerReturn {
         if (error instanceof HTTPError) {
             return this.serveError(req, res, error.httpCode, error);
