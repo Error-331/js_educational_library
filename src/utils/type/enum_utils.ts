@@ -4,6 +4,10 @@
 import { EnumLikeObjectType } from '../../declarations/collection_declarations';
 
 // implementation
+function isEnumContainsValue<EnumType>(enumObject: object, enumValue: any): enumValue is EnumType {
+    return Object.values(enumObject).includes(enumValue);
+}
+
 function checkKeyToStringKeyEnumType<OriginalEnumType extends EnumLikeObjectType<string>>(enumToCheck: EnumLikeObjectType, keys: string[]): enumToCheck is OriginalEnumType  {
     for (const key of keys) {
         const currentValue = enumToCheck[key];
@@ -31,6 +35,8 @@ function convertEnumToKeyToStringKeyEnum<OriginalEnumType, NewEnumType extends E
 
 // exports
 export {
+    isEnumContainsValue,
+
     checkKeyToStringKeyEnumType,
     convertEnumToKeyToStringKeyEnum,
 }
