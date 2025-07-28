@@ -4,6 +4,10 @@ My small JS multipurpose library used for educational purposes.
 
 ## Environment variables (.env)
 
+### Common options
+
+- **JSEL_SERVER_FRAMEWORK_VENDOR_NAME** - name of the host server framework (like `ExpressJS`, `NextJS`, etc.);
+
 ### Cookies related options
 
 - **JSEL_DEFAULT_SET_COOKIES_STORE_OPTIONS_TYPE** - type of the cookie configuration;
