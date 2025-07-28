@@ -18,7 +18,7 @@ class FirebaseAnonymousJWTAuthenticationController extends FirebaseBaseJWTAuthen
             const authStrategy = new FirebaseAnonymousJWTServerAuthenticationStrategy(preparedCookieStore);
 
             const isUserVerified = await authStrategy.verifyUser();
-            return FirebaseAnonymousJWTAuthenticationController.serveData<UserAuthenticationStateInfo>(req, res, { authenticated: isUserVerified });
+            return FirebaseAnonymousJWTAuthenticationController.serveData<boolean>(req, res, isUserVerified);
         } catch (error: unknown) {
             return FirebaseAnonymousJWTAuthenticationController.handleThrownError(req, res, error);
         }
