@@ -1,18 +1,18 @@
 // external imports
 
 // internal imports
-import { JWTCookieStoreOptions, SetCookieOptions } from '../../../declarations/net/http/cookie_declarations';
+import { JWTCookieStoreOptions, SetCookieOptions } from '../../../../declarations/net/http/cookie_declarations';
 import AbstractCookieStore from './abstract_cookie_store';
 
 import {
     JWT_COOKIE_DEFAULT_NAME,
     JWT_SET_COOKIE_DEFAULT_OPTIONS,
     JWT_SET_COOKIE_UNSECURE_OPTIONS,
-} from '../../../constants/net/http/cookie_constants';
-import { validateSetCookieOptions } from '../../../validators/net/http/cookie_validators';
+} from '../../../../constants/net/http/cookie_constants';
+import { validateSetCookieOptions } from '../../../../validators/net/http/cookie_validators';
 
-import { cloneDeep } from '../../../utils/primitives/object_utils';
-import { isNil, defaultTo } from '../../../utils/misc/logic_utils';
+import { cloneDeep } from '../../../../utils/primitives/object_utils';
+import { isNil, defaultTo } from '../../../../utils/misc/logic_utils';
 
 // implementation
 abstract class AbstractJWTCookieStore extends AbstractCookieStore<JWTCookieStoreOptions> {

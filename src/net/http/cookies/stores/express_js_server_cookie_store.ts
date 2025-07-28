@@ -1,24 +1,26 @@
 // external imports
-import { Request, Response } from 'express';
+import { Request } from 'express';
 
 // internal imports
+import { CommonServerRequest, CommonServerResponse } from '../../../../declarations/net/api/common_declarations';
 import {
     SetCookieOptions,
     CookieStore,
     JWTCookieStore,
     JWTCookieStoreOptions
-} from '../../../declarations/net/http/cookie_declarations';
+} from '../../../../declarations/net/http/cookie_declarations';
 import AbstractJWTCookieStore from './abstract_jwt_cookie_store';
 
-import { isNil, isNumber, isString } from '../../../utils/misc/logic_utils';
-import { cloneDeep } from '../../../utils/primitives/object_utils';
+import { isObjectOfType } from '../../../../utils/primitives/object_utils';
+import { isNil, isNumber, isString, isObject } from '../../../../utils/misc/logic_utils';
+import { cloneDeep } from '../../../../utils/primitives/object_utils';
 
 // implementation
 class ExpressJSServerCookieStore extends AbstractJWTCookieStore implements CookieStore, JWTCookieStore {
-    protected request: Request
-    protected response: Response;
+    protected request: CommonServerRequest;
+    protected response: CommonServerResponse;
 
-    constructor(req: Request, res: Response, options?: JWTCookieStoreOptions) {
+    constructor(req: CommonServerRequest, res: CommonServerResponse, options?: JWTCookieStoreOptions) {
         super(options);
 
         this.request = req;
@@ -30,6 +32,10 @@ class ExpressJSServerCookieStore extends AbstractJWTCookieStore implements Cooki
     }
 
     public async getByName(cookieName: string): Promise<string | undefined> {
+        if (!isObjectOfType<Request>(this.request, { cookies: isObject })) {
+            throw new RangeError('Cannot get cookie by name - provided "request" object is not valid ExpressJS "request" wrapper')
+        }
+
         return this.request.cookies?.[cookieName];
     }
 

@@ -3,14 +3,14 @@ import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adap
 import { cookies } from 'next/headers';
 
 // internal imports
-import { SetCookieOptions, CookieStore, JWTCookieStore } from '../../../declarations/net/http/cookie_declarations';
+import { SetCookieOptions, CookieStore, JWTCookieStore } from '../../../../declarations/net/http/cookie_declarations';
 import AbstractJWTCookieStore from './abstract_jwt_cookie_store';
 
-import { JWT_COOKIE_DEFAULT_NAME } from '../../../constants/net/http/cookie_constants';
+import { JWT_COOKIE_DEFAULT_NAME } from '../../../../constants/net/http/cookie_constants';
 
-import { isNil, isString } from '../../../utils/misc/logic_utils';
-import { cloneDeep } from '../../../utils/primitives/object_utils';
-import { prepareFormattedUTCDateFromNow } from '../../../utils/date/native_date_utils';
+import { isNil, isString } from '../../../../utils/misc/logic_utils';
+import { cloneDeep } from '../../../../utils/primitives/object_utils';
+import { prepareFormattedUTCDateFromNow } from '../../../../utils/date/native_date_utils';
 
 // implementation
 class NextJSServerCookieStore extends AbstractJWTCookieStore implements CookieStore, JWTCookieStore {
