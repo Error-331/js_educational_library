@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import NextJSServerCookieStore from '../../../../src/net/http/cookies/next_js_server_cookie_store';
+import NextJSServerCookieStore from '../../../../src/net/http/cookies/stores/next_js_server_cookie_store';
 
 import { SET_COOKIE_DEFAULT_OPTIONS } from '../../../../src/constants/net/http/cookie_constants';
 import {
