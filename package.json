@@ -33,7 +33,8 @@
     "./constants/net/api/gcp/*": "./src/constants/net/api/gcp/*.ts",
     "./constants/net/http/*": "./src/constants/net/http/*.ts",
     "./constants/registers/*": "./src/constants/registers/*.ts",
-    "./constants/security/crypto/*": "./constants/security/crypto/*.ts",
+    "./constants/security/crypto/*": "./src/constants/security/crypto/*.ts",
+    "./constants/ui/*": "./src/constants/ui/*",
     "./constants/validation/*": "./src/constants/validation/*.ts",
 
     "./errors/*": "./src/errors/*.ts",
