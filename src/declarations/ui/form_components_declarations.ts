@@ -1,10 +1,9 @@
 // external imports
+import React from 'react';
 
 // internal imports
 
 // implementation
-
-// general UI declarations
 type UIFormInputProps = {
     name: string;
     label?: string;
@@ -14,11 +13,13 @@ type UIFormInputProps = {
     style?: React.CSSProperties;
 }
 
-type UIFormTextInputProp = UIFormInputProps & {
+type UIFormTextInputProp<EventType> = UIFormInputProps & {
     type?: string;
 
     defaultValue?: string;
     placeholder?: string;
+
+    onChange: (event: EventType) => void;
 };
 
 type UIFormUploadInputProps = UIFormInputProps & {
@@ -28,14 +29,6 @@ type UIFormUploadInputProps = UIFormInputProps & {
     maxCount?: number;
 
     onBeforeUpload: (file: File) => void | boolean;
-}
-
-// Ionic declarations
-type UIIonicTextInput = UIFormTextInputProp & {
-    labelPlacement?: string;
-    fill?: string;
-
-    children?: React.ReactNode;
 }
 
 // exports
