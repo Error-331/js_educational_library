@@ -8,7 +8,7 @@ type ZodIssueWithInputData = ZodIssue & {
     inputName?: string;
 }
 
-type EmailPasswordValidationSchemaInput = { email: string, password: string };
+type EmailPasswordValidationSchemaInput = { email: string, password: string, passwordConfirm: string };
 type EmailPasswordValidatorType =  (data: EmailPasswordValidationSchemaInput) => SafeParseReturnType<EmailPasswordValidationSchemaInput, EmailPasswordValidationSchemaInput>;
 
 // exports

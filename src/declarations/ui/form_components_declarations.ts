@@ -8,6 +8,8 @@ type UIFormInputProps = {
     name: string;
     label?: string;
 
+    required?: boolean;
+
     errorMessage?: string | string[];
 
     style?: React.CSSProperties;
@@ -19,7 +21,7 @@ type UIFormTextInputProp<EventType> = UIFormInputProps & {
     defaultValue?: string;
     placeholder?: string;
 
-    onChange: (event: EventType) => void;
+    onChange?: (event: EventType) => void;
 };
 
 type UIFormUploadInputProps = UIFormInputProps & {
