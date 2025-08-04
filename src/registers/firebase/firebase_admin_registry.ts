@@ -7,6 +7,7 @@ import { Storage, getStorage } from 'firebase-admin/storage';
 import { Auth, getAuth } from 'firebase-admin/auth';
 
 // internal imports
+import { WrappedCredential } from '../../declarations/registers/firebase_admin_registry_declarations';
 import { SimpleTextEncryptor } from '../../declarations/security/crypto/encryptors_declarations';
 
 import { FIREBASE_DEFAULT_ADMIN_APP_NAME } from '../../constants/registers/firebase_registers_constants';
@@ -31,7 +32,15 @@ class FirebaseAdminRegistry {
 
     private constructor() {}
 
-    private static extractFirebaseAdminServiceAccountJSON(): Credential {
+    private static convertServiceKeyToCredential(serviceAccountKey: string | ServiceAccount): ServiceAccount | WrappedCredential {
+        if (isObject(serviceAccountKey) && Object.keys(serviceAccountKey).length === 1 && !isNil(serviceAccountKey?.projectId)) {
+            return serviceAccountKey;
+        } else {
+            return { credential: admin.credential.cert(serviceAccountKey) };
+        }
+    }
+
+    private static extractFirebaseAdminServiceAccountJSON(): ServiceAccount | WrappedCredential {
         if (isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON)) {
             throw new RangeError('Cannot extract service account JSON - "JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON" environment variable is not set');
         }
@@ -42,9 +51,9 @@ class FirebaseAdminRegistry {
             const encryptor = encryptorFactory.createEncryptor(cryptoConfig.encryptorName);
             const serviceAccount = encryptor.decryptJSON<ServiceAccount>(cryptoConfig.key, process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON);
 
-            return admin.credential.cert(serviceAccount);
+            return this.convertServiceKeyToCredential(serviceAccount);
         } else {
-            return admin.credential.cert(JSON.parse(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON));
+            return this.convertServiceKeyToCredential(JSON.parse(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON));
         }
     }
 
@@ -94,21 +103,21 @@ class FirebaseAdminRegistry {
         }
     }
 
-    public static loadServiceAccountKey(path?: string): Credential | undefined {
+    public static loadServiceAccountKey(path?: string): ServiceAccount | WrappedCredential | undefined {
         if (!isNil(path)) {
-            return admin.credential.cert(path);
+            return this.convertServiceKeyToCredential(path);
         }
 
         const savedServiceAccountKey = FirebaseAdminRegistry.getServiceAccountKey();
 
         if (!isNil(savedServiceAccountKey)) {
-            return admin.credential.cert(savedServiceAccountKey);
+            return this.convertServiceKeyToCredential(savedServiceAccountKey);
         } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON)) {
             return FirebaseAdminRegistry.extractFirebaseAdminServiceAccountJSON();
         } else if (!isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
-            return admin.credential.cert(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+            return this.convertServiceKeyToCredential(process.env.GOOGLE_APPLICATION_CREDENTIALS);
         } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {
-            return admin.credential.cert(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH);
+            return this.convertServiceKeyToCredential(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH);
         } else {
             return undefined;
         }
@@ -169,7 +178,7 @@ class FirebaseAdminRegistry {
         } else {
             return {
                 ...appAdditionalConfiguration,
-                credential,
+                ...credential,
             };
         }
     }

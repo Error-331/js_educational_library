@@ -53,6 +53,20 @@ My small JS multipurpose library used for educational purposes.
 
 ```
 
+## Examples
+
+### env.local (shared emulator)
+
+```text
+
+FIRESTORE_EMULATOR_HOST='127.0.0.1:8080'
+
+JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_CRYPTO_CONFIG='{"encryptorName": "PLAIN_TEXT", "key": ""}'
+JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON='{"projectId": "demo-test"}'
+
+
+```
+
 ## TODO
 
 - mergeSortSegmentsByLeftBoundary can be more efficient;

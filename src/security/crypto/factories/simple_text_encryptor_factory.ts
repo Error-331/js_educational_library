@@ -2,10 +2,13 @@
 
 // internal imports
 import {
+    PLAIN_TEXT_ENCRYPTOR_NAME,
     CHA_CHA20_POLY1305_BASE64_ENCRYPTOR_NAME,
 } from '../../../constants/security/crypto/encryptors_constants';
 
+import PlainTextEncryptor from '../encryptors/plain_text_encryptor';
 import ChaCha20Poly1305Base64Encryptor from '../encryptors/cha_cha_20_poly_1305_base64_encryptor';
+
 import { isString } from '../../../utils/misc/logic_utils';
 
 // implementation
@@ -16,6 +19,8 @@ class SimpleTextEncryptorFactory {
         }
 
         switch(encryptorName) {
+            case PLAIN_TEXT_ENCRYPTOR_NAME:
+                return new PlainTextEncryptor();
             case CHA_CHA20_POLY1305_BASE64_ENCRYPTOR_NAME:
                 return new ChaCha20Poly1305Base64Encryptor();
             default:
