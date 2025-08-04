@@ -3,11 +3,7 @@ import { DecodedIdToken } from 'firebase-admin/auth';
 
 // internal imports
 import { CookieStore, SetCookieOptions, JWTCookieStore } from '../../../../../declarations/net/http/cookie_declarations';
-import {
-    AuthenticationVendor,
-    AuthenticationProvider,
-    UserAuthenticationStateInfo
-} from '../../../../../declarations/security/authentication/general_authentication_declarations';
+import { UserAuthenticationStateInfo } from '../../../../../declarations/security/authentication/general_authentication_declarations';
 import { FirebaseAuthTokenType } from '../../../../../declarations/security/authentication/firebase_authentication_declarations';
 import { JWT_COOKIE_DEFAULT_MAX_AGE } from '../../../../../constants/net/http/cookie_constants';
 
@@ -33,7 +29,7 @@ abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends AbstractA
         return convertSecondsToMilliseconds(decodedAuthToken.exp) > Date.now();
     }
 
-    protected runAuthTokenVerificationStrategy(decodedAuthToken: DecodedIdToken) {
+    protected runAuthTokenVerificationStrategy(decodedAuthToken: DecodedIdToken): DecodedIdToken {
         if (!this.verifyDecodedAuthTokenProjectId(decodedAuthToken)) {
             throw new HTTPError('Cannot verify anonymous user access token - wrong project Id', 400);
         }

@@ -5,8 +5,8 @@ import { z } from 'zod';
 import { EmailPasswordValidationSchemaInput } from '../../declarations/validation_declarations';
 
 // implementation
-function emailPasswordValidator(values: EmailPasswordValidationSchemaInput) {
-    const zodSchema = z.object({
+function getEmailPasswordValidationSchema() {
+    return z.object({
         email: z
             .string({
                 required_error: 'Email is required',
@@ -21,7 +21,10 @@ function emailPasswordValidator(values: EmailPasswordValidationSchemaInput) {
             })
             .min(6, 'Password must be at least 6 characters long')
     });
+}
 
+function emailPasswordValidator(values: EmailPasswordValidationSchemaInput) {
+    const zodSchema = getEmailPasswordValidationSchema();
     return zodSchema.safeParse(values);
 }
 

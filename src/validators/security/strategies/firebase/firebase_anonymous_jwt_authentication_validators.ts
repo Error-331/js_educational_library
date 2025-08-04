@@ -5,7 +5,7 @@ import { UIFormValues } from '../../../../declarations/ui/form_utility_declarati
 // internal imports
 
 // implementation
-function getAnonymousValidationSchema() {
+function getAnonymousDisplayNameValidationSchema() {
     return z.object({
         displayName: z
             .string({
@@ -16,12 +16,12 @@ function getAnonymousValidationSchema() {
     });
 }
 
-function anonymousValidator(values: UIFormValues) {
-    return getAnonymousValidationSchema().safeParse(values);
+function anonymousDisplayNameValidator(values: UIFormValues) {
+    return getAnonymousDisplayNameValidationSchema().safeParse(values);
 }
 
 // exports
 export {
-    getAnonymousValidationSchema,
-    anonymousValidator
+    getAnonymousDisplayNameValidationSchema,
+    anonymousDisplayNameValidator
 }
