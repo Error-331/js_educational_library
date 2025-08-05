@@ -10,7 +10,7 @@ abstract class AbstractAuthenticationStrategy {
 
     public abstract signIn(...args: unknown[]): Promise<UserAuthenticationStateInfo>;
     public abstract signOut(): Promise<void>;
-    public abstract signUp(): Promise<UserAuthenticationStateInfo>;
+    public abstract signUp(...args: unknown[]): Promise<unknown>;
 }
 
 // exports

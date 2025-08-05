@@ -25,12 +25,12 @@ interface UserAuthenticationStateInfo extends UserAuthenticationStrategyInfo {
     authenticated: boolean;
 }
 
-interface AuthenticationSignInStrategy<SignInParams = unknown, SignUpParams = void> {
+interface AuthenticationSignInStrategy<SignInParams = unknown, SignUpParams = void, UserData = void> {
     verifyUser(): Promise<boolean>;
     getUserAuthenticationStateInfo(): Promise<UserAuthenticationStateInfo>;
 
     signIn(...args: SignInParams[]): Promise<UserAuthenticationStateInfo>;
-    signUp(...args: SignUpParams[]): Promise<UserAuthenticationStateInfo>;
+    signUp(...args: SignUpParams[]): Promise<UserData>;
 
     signOut(): Promise<void>;
 }

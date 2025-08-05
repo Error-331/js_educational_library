@@ -2,10 +2,13 @@
 import { z, ZodType } from 'zod';
 
 // internal imports
-import { EmailPasswordValidationSchemaInput } from '../../../../declarations/validation_declarations';
+import {
+    EmailPasswordLoginValidationSchemaInput,
+    EmailPasswordRegisterValidationSchemaInput,
+} from '../../../../declarations/validation_declarations';
 
 // implementation
-function getEmailPasswordValidationSchema() {
+function getEmailPasswordLoginValidationSchema() {
     return z.object({
         email: z
             .string({
@@ -20,29 +23,44 @@ function getEmailPasswordValidationSchema() {
                 invalid_type_error: 'Password must be a string',
             })
             .min(6, 'Password must be at least 6 characters long'),
+    });
+}
+
+function getEmailPasswordRegisterValidationSchema() {
+    return z.object({
+        ...getEmailPasswordLoginValidationSchema().shape,
         passwordConfirm: z.string({
             required_error: 'Password (confirm) is required',
             invalid_type_error: 'Password (confirm) must be a string',
         })
             .min(6, 'Password (confirm) must be at least 6 characters long'),
-    })
+    });
 }
 
-function emailPasswordRefinement(zodObject: ZodType) {
+function emailPasswordRegisterRefinement(zodObject: ZodType) {
     return zodObject.refine((data) => data.password === data.passwordConfirm, {
         message: "Passwords don't match",
         path: ['passwordConfirm'],
     });
 }
 
-function emailPasswordValidator(values: EmailPasswordValidationSchemaInput) {
-    const zodSchema = getEmailPasswordValidationSchema()
-    return emailPasswordRefinement(zodSchema).safeParse(values);
+function emailPasswordLoginValidator(values: EmailPasswordLoginValidationSchemaInput) {
+    return getEmailPasswordLoginValidationSchema().safeParse(values);
 }
+
+function emailPasswordRegisterValidator(values: EmailPasswordRegisterValidationSchemaInput) {
+    const zodSchema = getEmailPasswordRegisterValidationSchema()
+    return emailPasswordRegisterRefinement(zodSchema).safeParse(values);
+}
+
 
 // exports
 export {
-    getEmailPasswordValidationSchema,
-    emailPasswordRefinement,
-    emailPasswordValidator,
+    getEmailPasswordLoginValidationSchema,
+    getEmailPasswordRegisterValidationSchema,
+
+    emailPasswordRegisterRefinement,
+
+    emailPasswordLoginValidator,
+    emailPasswordRegisterValidator,
 }

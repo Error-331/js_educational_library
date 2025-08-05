@@ -2,20 +2,21 @@
 import { UserCredential, AuthErrorCodes, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
 // internal imports
+import { GenericObject } from '../../../../../declarations/collection_declarations';
+
 import { UserAuthenticationStateInfo, AuthenticationSignInStrategy } from '../../../../../declarations/security/authentication/general_authentication_declarations';
 import { FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration } from '../../../../../declarations/security/authentication/firebase_authentication_declarations';
-import { EmailPasswordValidatorType } from '../../../../../declarations/validation_declarations';
 
 import AxiosRequestFacade from '../../../../../net/http/request/axios_request_facade';
 import FirebaseClientRegistry from '../../../../../registers/firebase/firebase_client_registry';
 
-import { createAndThrowValidationError, createCustomZodIssueAndThrowValidationError } from '../../../../../utils/misc/validation_utils';
+import { createCustomZodIssueAndThrowValidationError } from '../../../../../utils/misc/validation_utils';
 import { handleHTTPResponseData } from '../../../../../utils/net/http/response_utils';
 
-import { isNil, isString, isObject, isFunction } from '../../../../../utils/misc/logic_utils';
+import { isNil, isBoolean, isString, isObject } from '../../../../../utils/misc/logic_utils';
 
 // implementation
-class FirebaseEmailPasswordJWTAuthenticationStrategy implements AuthenticationSignInStrategy<string, string> {
+class FirebaseEmailPasswordJWTAuthenticationStrategy implements AuthenticationSignInStrategy<string, string | GenericObject, void> {
     private baseURL: string;
 
     private verifyUserURL: string;
@@ -25,7 +26,7 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy implements AuthenticationSi
     private signUpURL: string;
     private signOutURL: string;
 
-    private inputDataValidator: undefined | EmailPasswordValidatorType;
+    private signUpUseServer: boolean = false;
 
     constructor(config: FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration) {
         if (!isString(config.baseURL)) {
@@ -61,7 +62,7 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy implements AuthenticationSi
         this.signUpURL = config.signUpURL;
         this.signOutURL = config.signOutURL;
 
-        this.inputDataValidator = config.inputDataValidator;
+        this.signUpUseServer = isBoolean(config.signUpUseServer) ? config.signUpUseServer : false;
     }
 
     protected transformAndThrowFirebaseAuthError(error: unknown): void {
@@ -96,24 +97,37 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy implements AuthenticationSi
         }
     }
 
-    protected async initSignUp(email: string, password: string): Promise<UserCredential> {
+    protected async signUpClient(email: string, password: string): Promise<void> {
+        let currentUserCredentials: UserCredential;
+
         try {
-            return await createUserWithEmailAndPassword(FirebaseClientRegistry.getInstance().auth, email, password);
+            currentUserCredentials = await createUserWithEmailAndPassword(FirebaseClientRegistry.getInstance().auth, email, password);
         } catch (error: unknown) {
             this.transformAndThrowFirebaseAuthError(error);
         }
+
+        const idToken = await currentUserCredentials.user.getIdToken();
+
+        // TODO: we do not need to stick to Axios - probably need to use some sort of factory
+        const httpClient = new AxiosRequestFacade({
+            baseURL: this.baseURL,
+            url: this.signUpURL,
+            data: { accessToken: idToken }
+        });
+
+        const { statusCode, data } = await httpClient.post();
+        handleHTTPResponseData<void>(statusCode, data);
     }
 
-    protected validatedInputData(email: string, password: string): void {
-        if (!isFunction(this.inputDataValidator)) {
-            return;
-        }
+    protected async signUpServer(email: string, password: string, extraData?: GenericObject): Promise<void> {
+        const httpClient = new AxiosRequestFacade({
+            baseURL: this.baseURL,
+            url: this.signUpURL,
+            data: { email, password, extraData }
+        });
 
-        const validationResult = this.inputDataValidator({email, password});
-
-        if (!validationResult.success) {
-            createAndThrowValidationError(validationResult);
-        }
+        const { statusCode, data } = await httpClient.post();
+        handleHTTPResponseData<UserAuthenticationStateInfo>(statusCode, data);
     }
 
     public async verifyUser(): Promise<boolean> {
@@ -139,8 +153,6 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy implements AuthenticationSi
     }
 
     public async signIn(email: string, password: string): Promise<UserAuthenticationStateInfo> {
-        this.validatedInputData(email, password);
-
         const currentUserCredentials: UserCredential = await this.initSignIn(email, password);
         const idToken = await currentUserCredentials.user.getIdToken();
 
@@ -155,21 +167,8 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy implements AuthenticationSi
         return handleHTTPResponseData<UserAuthenticationStateInfo>(statusCode, data);
     }
 
-    public async signUp(email: string, password: string): Promise<UserAuthenticationStateInfo> {
-        this.validatedInputData(email, password);
-
-        const currentUserCredentials: UserCredential = await this.initSignUp(email, password);
-        const idToken = await currentUserCredentials.user.getIdToken();
-
-        // TODO: we do not need to stick to Axios - probably need to use some sort of factory
-        const httpClient = new AxiosRequestFacade({
-            baseURL: this.baseURL,
-            url: this.signUpURL,
-            data: { accessToken: idToken }
-        });
-
-        const { statusCode, data } = await httpClient.post();
-        return handleHTTPResponseData<UserAuthenticationStateInfo>(statusCode, data);
+    public async signUp(email: string, password: string, extraData?: GenericObject): Promise<void> {
+        return this.signUpUseServer ? this.signUpServer(email, password, extraData) : this.signUpClient(email, password);
     }
 
     public async signOut(): Promise<void> {

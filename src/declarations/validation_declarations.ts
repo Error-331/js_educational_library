@@ -8,13 +8,19 @@ type ZodIssueWithInputData = ZodIssue & {
     inputName?: string;
 }
 
-type EmailPasswordValidationSchemaInput = { email: string, password: string, passwordConfirm: string };
-type EmailPasswordValidatorType =  (data: EmailPasswordValidationSchemaInput) => SafeParseReturnType<EmailPasswordValidationSchemaInput, EmailPasswordValidationSchemaInput>;
+type EmailPasswordLoginValidationSchemaInput = { email: string, password: string };
+type EmailPasswordRegisterValidationSchemaInput = EmailPasswordLoginValidationSchemaInput & { passwordConfirm: string };
+
+type EmailPasswordLoginValidatorType =  (data: EmailPasswordLoginValidationSchemaInput) => SafeParseReturnType<EmailPasswordLoginValidationSchemaInput, EmailPasswordLoginValidationSchemaInput>;
+type EmailPasswordRegisterValidatorType =  (data: EmailPasswordRegisterValidationSchemaInput) => SafeParseReturnType<EmailPasswordRegisterValidationSchemaInput, EmailPasswordRegisterValidationSchemaInput>;
 
 // exports
 export type {
     ZodIssueWithInputData,
 
-    EmailPasswordValidationSchemaInput,
-    EmailPasswordValidatorType,
+    EmailPasswordLoginValidationSchemaInput,
+    EmailPasswordRegisterValidationSchemaInput,
+
+    EmailPasswordLoginValidatorType,
+    EmailPasswordRegisterValidatorType,
 }

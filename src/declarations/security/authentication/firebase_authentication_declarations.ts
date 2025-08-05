@@ -1,12 +1,17 @@
 // external imports
 
 // internal imports
-import { EmailPasswordValidatorType } from '../../validation_declarations';
 
 // implementation
 enum FirebaseAuthTokenType {
     AccessToken = 'AccessToken',
     JWTToken = 'JWTToken',
+}
+
+interface FirebaseEmailPasswordJWTServerSignUpData {
+    email: string;
+    password: string;
+    displayName?: string;
 }
 
 type FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration = {
@@ -19,11 +24,12 @@ type FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration = {
     signUpURL: string;
     signOutURL: string;
 
-    inputDataValidator?: EmailPasswordValidatorType;
+    signUpUseServer?: boolean;
 }
 
 export {
     FirebaseAuthTokenType,
 
+    FirebaseEmailPasswordJWTServerSignUpData,
     FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration,
 }
