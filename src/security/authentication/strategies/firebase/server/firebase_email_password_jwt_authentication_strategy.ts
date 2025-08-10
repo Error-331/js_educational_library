@@ -44,7 +44,11 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractSer
 
     public async signUp(userData: FirebaseEmailPasswordJWTServerSignUpData): Promise<UserRecord> {
         const fbAdminAuth = FirebaseAdminRegistry.getInstance().auth;
-        return fbAdminAuth.createUser(userData);
+        try {
+            return await fbAdminAuth.createUser(userData);
+        } catch (error: unknown) {
+            await this.transformAndThrowFirebaseAuthError(error);
+        }
     }
 }
 
