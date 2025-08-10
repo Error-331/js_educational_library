@@ -7,16 +7,17 @@ import { GenericObject } from '../../../../../declarations/collection_declaratio
 import { UserAuthenticationStateInfo, AuthenticationSignInStrategy } from '../../../../../declarations/security/authentication/general_authentication_declarations';
 import { FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration } from '../../../../../declarations/security/authentication/firebase_authentication_declarations';
 
+import FirebaseAbstractJWTAuthenticationStrategy from '../abstract/firebase_abstract_jwt_authentication_strategy';
+
 import AxiosRequestFacade from '../../../../../net/http/request/axios_request_facade';
 import FirebaseClientRegistry from '../../../../../registers/firebase/firebase_client_registry';
 
-import { createCustomZodIssueAndThrowValidationError } from '../../../../../utils/misc/validation_utils';
 import { handleHTTPResponseData } from '../../../../../utils/net/http/response_utils';
-
-import { isNil, isBoolean, isString, isObject } from '../../../../../utils/misc/logic_utils';
+import { createCustomZodIssueAndThrowValidationError } from '../../../../../utils/misc/validation_utils';
+import { isNil, isBoolean, isObject, isString } from '../../../../../utils/misc/logic_utils';
 
 // implementation
-class FirebaseEmailPasswordJWTAuthenticationStrategy implements AuthenticationSignInStrategy<string, string | GenericObject, void> {
+class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWTAuthenticationStrategy implements AuthenticationSignInStrategy<string, string | GenericObject, void> {
     private baseURL: string;
 
     private verifyUserURL: string;
@@ -29,6 +30,8 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy implements AuthenticationSi
     private signUpUseServer: boolean = false;
 
     constructor(config: FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration) {
+        super();
+
         if (!isString(config.baseURL)) {
             throw new RangeError('Cannot instantiate authentication strategy - base url is not set');
         }
