@@ -1,0 +1,12 @@
+// external imports
+
+// internal imports
+import AbstractAuthenticationStrategy from './abstract_authentication_strategy';
+
+// implementation
+abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthenticationStrategy {
+    protected abstract transformAndThrowFirebaseAuthError(error: unknown): void;
+}
+
+// exports
+export default FirebaseAbstractJWTAuthenticationStrategy;
