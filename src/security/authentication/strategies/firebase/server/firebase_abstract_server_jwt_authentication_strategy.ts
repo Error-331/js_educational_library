@@ -1,23 +1,27 @@
 // external imports
-import { DecodedIdToken } from 'firebase-admin/auth';
+import { DecodedIdToken, AuthClientErrorCode } from 'firebase-admin/auth';
 
 // internal imports
 import { CookieStore, SetCookieOptions, JWTCookieStore } from '../../../../../declarations/net/http/cookie_declarations';
 import { UserAuthenticationStateInfo } from '../../../../../declarations/security/authentication/general_authentication_declarations';
 import { FirebaseAuthTokenType } from '../../../../../declarations/security/authentication/firebase_authentication_declarations';
+
 import { JWT_COOKIE_DEFAULT_MAX_AGE } from '../../../../../constants/net/http/cookie_constants';
 
 import HTTPError from '../../../../../errors/http_error';
 
-import AbstractAuthenticationStrategy from '../../abstract_authentication_strategy';
+import FirebaseAbstractJWTAuthenticationStrategy from '../abstract/firebase_abstract_jwt_authentication_strategy';
 import FirebaseServerJWTAuthenticationUtils from '../../../utils/firebase/firebase_server_jwt_authentication_utils';
 import FirebaseAdminRegistry from '../../../../../registers/firebase/firebase_admin_registry';
 
+import { createCustomZodIssueAndThrowValidationError } from '../../../../../utils/misc/validation_utils';
 import { convertSecondsToMilliseconds } from '../../../../../utils/physics/time_utils';
+import { switchByFunctionList } from '../../../../../utils/functional/conditional_utils';
+import { isAuthError } from '../../../../../utils/vendor/firebase/firebase_admin_utils';
 import { isNil } from '../../../../../utils/misc/logic_utils';
 
 // implementation
-abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends AbstractAuthenticationStrategy {
+abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends FirebaseAbstractJWTAuthenticationStrategy {
     protected cookieStore: CookieStore & JWTCookieStore;
 
     protected verifyDecodedAuthTokenProjectId(decodedAuthToken: DecodedIdToken): boolean {
@@ -54,11 +58,6 @@ abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends AbstractA
         return this.verifyAuthToken(authToken, FirebaseAuthTokenType.JWTToken)
     }
 
-    constructor(cookieStore: CookieStore & JWTCookieStore) {
-        super();
-        this.cookieStore = cookieStore;
-    }
-
     protected async addSessionCookie(idToken: string): Promise<void> {
         const fbAdminAuth = FirebaseAdminRegistry.getInstance().auth;
         const sessionCookie = await fbAdminAuth.createSessionCookie(idToken, { expiresIn: convertSecondsToMilliseconds(JWT_COOKIE_DEFAULT_MAX_AGE) });
@@ -69,6 +68,27 @@ abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends AbstractA
         }
 
         await this.cookieStore.setJWTResponseCookie(sessionCookie, cookieOptions);
+    }
+
+    protected async transformAndThrowFirebaseAuthError(error: unknown): Promise<void> {
+        if (!isAuthError(error)) {
+            throw error;
+        }
+
+        const [checkResult] = await switchByFunctionList<string, void>([
+            [AuthClientErrorCode.EMAIL_ALREADY_EXISTS.code, async () => {
+                return createCustomZodIssueAndThrowValidationError([ 'email' ], undefined, AuthClientErrorCode.EMAIL_ALREADY_EXISTS.message);
+            }]
+        ], async (code: string) => error.hasCode(code));
+
+        if(checkResult === false) {
+            throw error;
+        }
+    }
+
+    constructor(cookieStore: CookieStore & JWTCookieStore) {
+        super();
+        this.cookieStore = cookieStore;
     }
 
     public async verifyUser(): Promise<boolean> {
