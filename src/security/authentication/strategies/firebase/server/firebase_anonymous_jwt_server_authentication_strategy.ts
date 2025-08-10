@@ -13,7 +13,9 @@ import HTTPError from '../../../../../errors/http_error';
 import FirebaseAbstractServerJWTAuthenticationStrategy from './firebase_abstract_server_jwt_authentication_strategy';
 
 // implementation
-class FirebaseAnonymousJWTServerAuthenticationStrategy extends FirebaseAbstractServerJWTAuthenticationStrategy implements AuthenticationSignInStrategy<string> {
+class FirebaseAnonymousJWTServerAuthenticationStrategy extends
+    FirebaseAbstractServerJWTAuthenticationStrategy implements
+    AuthenticationSignInStrategy<string, void, UserAuthenticationStateInfo> {
     protected verifyDecodedAuthTokenProviderId(decodedAuthToken: DecodedIdToken): boolean {
         return decodedAuthToken.firebase.sign_in_provider === 'anonymous';
     }

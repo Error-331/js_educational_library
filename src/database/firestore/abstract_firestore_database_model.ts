@@ -36,6 +36,10 @@ type Filter = {
 abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocument>
     extends AbstractDatabaseModel<WithFieldValue<EntityType>, WithFieldValue<EntityType>> {
 
+    public static getDatabase(): Firestore {
+        return FirebaseAdminRegistry.getInstance().firestore;
+    }
+
     protected prepareLimitOffsetQuery(collectionQuery: Query<EntityType, EntityType>, page = 1, limit = MODEL_PAGINATION_LIMIT): Query<EntityType, EntityType> {
         return collectionQuery
             .limit(limit)
@@ -134,7 +138,7 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
 
     public async deleteCollection(): Promise<void> {
         const query = this.getCollectionReference().orderBy('__name__').limit(MODEL_PAGINATION_LIMIT);
-        const database = FirebaseAdminRegistry.getInstance().firestore;
+        const database = AbstractFirestoreDatabaseModel.getDatabase();
 
         return new Promise((resolve: (value?: void | PromiseLike<void>) => void, reject: (error: Error) => void) => {
             this.deleteQueryBatch(database, query, resolve).catch(reject);
@@ -145,9 +149,9 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
         const snapshot = await this.getCollectionReference();
         let query: Query<EntityType, EntityType>;
 
-        for (const filterField in filter) {
+        /*for (const filterField in filter) {
             const
-        }
+        }*/
 
 
             /*.where('type', '==', assetType)
@@ -159,8 +163,7 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
     protected abstract getCollectionConverter(): FirestoreDataConverter<EntityType, Omit<WithFieldValue<EntityType>, 'id'>>;
 
     protected getCollectionReference(): CollectionReference<EntityType, WithFieldValue<EntityType>> {
-        const collectionRef = FirebaseAdminRegistry.getInstance()
-            .firestore
+        const collectionRef = AbstractFirestoreDatabaseModel.getDatabase()
             .collection(`${this.collectionName}`);
 
         const firestoreDataConverter = this.getCollectionConverter();
@@ -168,7 +171,7 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
     }
 
     protected getDocumentReference(id: string): DocumentReference<EntityType, WithFieldValue<EntityType>> {
-        const database = FirebaseAdminRegistry.getInstance().firestore;
+        const database = AbstractFirestoreDatabaseModel.getDatabase();
         return database.collection(this.collectionName).doc(id) as DocumentReference<EntityType, WithFieldValue<EntityType>>;
     }
 }
