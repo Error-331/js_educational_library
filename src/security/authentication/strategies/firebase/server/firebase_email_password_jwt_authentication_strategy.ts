@@ -33,7 +33,12 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractSer
 
     public async signIn(accessToken: string): Promise<UserAuthenticationStateInfo> {
         await this.verifyAccessToken(accessToken);
-        await this.addSessionCookie(accessToken);
+
+        try {
+            await this.addSessionCookie(accessToken);
+        } catch (error: unknown) {
+            await this.transformAndThrowFirebaseAuthError(error);
+        }
 
         return {
             authenticated: true,

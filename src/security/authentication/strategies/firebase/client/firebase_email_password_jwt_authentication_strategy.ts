@@ -87,6 +87,8 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWT
             case AuthErrorCodes.EMAIL_EXISTS:
                 createCustomZodIssueAndThrowValidationError([ 'email' ], undefined, 'Email is already in use by another user');
                 break;
+            case AuthErrorCodes.INVALID_PASSWORD:
+                createCustomZodIssueAndThrowValidationError([ 'password' ], undefined, 'Invalid password provided');
             default:
                 throw error;
         }
