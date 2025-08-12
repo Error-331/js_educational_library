@@ -163,7 +163,8 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
     protected abstract getCollectionConverter(): FirestoreDataConverter<EntityType, Omit<WithFieldValue<EntityType>, 'id'>>;
 
     protected getCollectionReference(): CollectionReference<EntityType, WithFieldValue<EntityType>> {
-        const collectionRef = AbstractFirestoreDatabaseModel.getDatabase()
+        console.log('ep 1');
+        const collectionRef = FirebaseAdminRegistry.getInstance().firestore
             .collection(`${this.collectionName}`);
 
         const firestoreDataConverter = this.getCollectionConverter();
