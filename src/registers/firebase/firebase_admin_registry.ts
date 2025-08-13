@@ -193,14 +193,12 @@ class FirebaseAdminRegistry {
      */
 
     protected init(): void {
-        console.log('init admin 1');
         if (!isString(this.appName)) {
             throw new RangeError('Application name is not specified - cannot proceed');
         }
-        console.log('init admin 2');
+
         const firebaseApp = getApps().find(firebaseApp => firebaseApp.name === this.appName);
         if (isNil(firebaseApp)) {
-            console.log('init admin 3');
             admin.initializeApp(this.prepareAppOptions(), this.appName !== FIREBASE_DEFAULT_ADMIN_APP_NAME ? this.appName : undefined);
         }
     }

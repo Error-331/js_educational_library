@@ -146,7 +146,7 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
     }
 
     public async loadEntities(filter: Filter, page = 1, limit = MODEL_PAGINATION_LIMIT) {
-        const snapshot = await this.getCollectionReference();
+        const snapshot = this.getCollectionReference();
         let query: Query<EntityType, EntityType>;
 
         /*for (const filterField in filter) {
@@ -163,8 +163,7 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
     protected abstract getCollectionConverter(): FirestoreDataConverter<EntityType, Omit<WithFieldValue<EntityType>, 'id'>>;
 
     protected getCollectionReference(): CollectionReference<EntityType, WithFieldValue<EntityType>> {
-        console.log('ep 1');
-        const collectionRef = FirebaseAdminRegistry.getInstance().firestore
+        const collectionRef = AbstractFirestoreDatabaseModel.getDatabase()
             .collection(`${this.collectionName}`);
 
         const firestoreDataConverter = this.getCollectionConverter();
