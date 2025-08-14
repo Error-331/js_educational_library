@@ -17,10 +17,18 @@ function isError(error: PossibleError): error is Error {
     return error instanceof Error;
 }
 
+function isHTTPError(error: unknown): error is HTTPError {
+    return error instanceof HTTPError;
+}
+
+function isValidationError(error: unknown): error is ValidationError {
+    return error instanceof ValidationError;
+}
+
 function isSerializableError(error: PossibleError): error is SerializableError {
-    if (error instanceof HTTPError) {
+    if (isHTTPError(error)) {
         return true
-    } else if (error instanceof ValidationError) {
+    } else if (isValidationError(error)) {
         return true;
     } else {
         return false;
@@ -92,6 +100,9 @@ function joinValidationErrorIssues(errors: DeserializedError[] | void[]): ZodIss
 // exports
 export {
     isError,
+    isHTTPError,
+    isValidationError,
+
     isSerializableError,
     serializeError,
 
