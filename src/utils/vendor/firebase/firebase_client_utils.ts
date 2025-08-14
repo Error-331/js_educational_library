@@ -1,14 +1,14 @@
 // external imports
 
 // internal imports
-import { isBoolean } from '../misc/logic_utils';
+import { isString } from '../../misc/logic_utils';
 
 // implementation
 function isClientProductionEnvironment(): boolean | null {
-    if (!isBoolean(import.meta.env?.PRODD)) {
+    if (!isString(process.env.NODE_ENV)) {
         return null;
     } else {
-        return import.meta.env?.PROD === true;
+        return process.env.NODE_ENV === 'development';
     }
 }
 
