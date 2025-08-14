@@ -38,19 +38,7 @@
     "./constants/validation/*": "./src/constants/validation/*.ts",
 
     "./errors/*": "./src/errors/*.ts",
-
-    "./utils/browser/*": "./src/utils/browser/*.ts",
-    "./utils/date/*": "./src/utils/date/*.ts",
-    "./utils/file/*": "./src/utils/file/*.ts",
-    "./utils/functional/*": "./src/utils/functional/*.ts",
-    "./utils/math/*": "./src/utils/math/*.ts",
-    "./utils/misc/*": "./src/utils/misc/*.ts",
-    "./utils/net/*": "./src/utils/net/*.ts",
-    "./utils/net/http/*": "./src/utils/net/http/*.ts",
-    "./utils/primitives/*": "./src/utils/primitives/*.ts",
-    "./utils/type/*": "./src/utils/type/*.ts",
-    "./utils/ui/*": "./src/utils/ui/*.ts",
-    "./utils/vendor/*": "./src/utils/vendor/*.ts",
+    "./utils/*": "./src/utils/*.ts",
 
     "./net/api/common/*":  "./src/net/api/common/*.ts",
     "./net/api/facebook/*":  "./src/net/api/facebook/*.ts",
@@ -100,7 +88,8 @@
     "firebase-admin": "^13.2.0",
     "luxon": "^3.6.1",
     "next": "^15.2.2",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "pino": "^9.9.0"
   },
   "peerDependenciesMeta": {
     "@google-cloud/compute": {
@@ -126,6 +115,9 @@
     },
     "luxon": {
       "optional": true
+    },
+    "pino": {
+      "optional": true
     }
   },
   "devDependencies": {
@@ -149,6 +141,7 @@
     "firebase-admin": "^13.2.0",
     "@google-cloud/compute": "^5.2.0",
     "luxon": "^3.6.1",
-    "zod": "^3.24.1"
+    "zod": "^3.24.1",
+    "pino": "^9.9.0"
   }
 }
