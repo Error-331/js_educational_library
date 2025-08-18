@@ -8,7 +8,7 @@ function isClientProductionEnvironment(): boolean | null {
     if (!isString(process.env.NODE_ENV)) {
         return null;
     } else {
-        return process.env.NODE_ENV === 'development';
+        return process.env.NODE_ENV === 'production';
     }
 }
 
