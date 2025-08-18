@@ -5,7 +5,7 @@ import { Auth, getAuth, connectAuthEmulator } from 'firebase/auth';
 // internal imports
 import { FIREBASE_DEFAULT_CLIENT_APP_NAME } from '../../constants/registers/firebase_registers_constants';
 import { isNil, isObject, isString } from '../../utils/misc/logic_utils';
-import {isClientProductionEnvironment} from "../../utils/vendor/common_client_utils";
+import { isClientProductionEnvironment } from '../../utils/vendor/common_client_utils';
 
 // implementation
 /**
@@ -94,7 +94,7 @@ class FirebaseClientRegistry {
         const firebaseApp = FirebaseClientRegistry.findAppByName(this.appName);
         if (isNil(firebaseApp)) {
             initializeApp(this._options, this.appName);
-
+console.log('test 1', isClientProductionEnvironment());
             if (!isClientProductionEnvironment()) {
                 this.connectEmulatorToAuth('http://127.0.0.1:9099');
             }
