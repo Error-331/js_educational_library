@@ -121,6 +121,8 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
         entityClone.updatedTimestamp = isNil(entityClone.updatedTimestamp) ? createCurrentUTCTimestamp() : entityClone.updatedTimestamp;
 
         const entityDocument = this.getDocumentReference(entityClone.id);
+        delete entityClone.id;
+
         await entityDocument.update(entityClone as UpdateData<EntityType>);
     }
 
