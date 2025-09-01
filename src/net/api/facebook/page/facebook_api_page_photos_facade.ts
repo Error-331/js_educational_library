@@ -11,8 +11,8 @@ import FacebookAPIServerAbstractFacade from './../facebook_api_server_abstract_f
 import AxiosRequestFacade from '../../../http/request/axios_request_facade';
 
 import { combineMultipleURLPaths } from '../../../../utils/net/uri_utils';
-import { isObjectOfType } from '../../../../utils/primitives/object_utils';
 import { throwGraphAPIHTTPError } from '../../../../utils/vendor/facebook_utils';
+import { isObjectOfType } from '../../../../utils/primitives/object_utils';
 import { isString } from '../../../../utils/misc/logic_utils';
 
 // implementation

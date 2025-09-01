@@ -94,7 +94,7 @@ class FirebaseClientRegistry {
         const firebaseApp = FirebaseClientRegistry.findAppByName(this.appName);
         if (isNil(firebaseApp)) {
             initializeApp(this._options, this.appName);
-console.log('test 1', isClientProductionEnvironment());
+
             if (!isClientProductionEnvironment()) {
                 this.connectEmulatorToAuth('http://127.0.0.1:9099');
             }
