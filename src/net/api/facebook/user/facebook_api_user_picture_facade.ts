@@ -17,8 +17,8 @@ import { isObjectOfType } from '../../../../utils/primitives/object_utils';
 import { isString, isNumber, isBoolean } from '../../../../utils/misc/logic_utils';
 
 // implementation
-class FacebookAPIPagePictureFacade extends FacebookAPIServerAbstractFacade {
-    public async retrievePagePicture(userAccessToken: string, pageId: string): Promise<FacebookGraphAPIProfilePictureSource> {
+class FacebookAPIUserPictureFacade extends FacebookAPIServerAbstractFacade {
+    public async retrieveUserPicture(userAccessToken: string, uid: string): Promise<FacebookGraphAPIProfilePictureSource> {
         const params = new URLSearchParams();
 
         params.append('access_token', userAccessToken);
@@ -26,23 +26,24 @@ class FacebookAPIPagePictureFacade extends FacebookAPIServerAbstractFacade {
 
         const httpClient = new AxiosRequestFacade<FacebookGraphAPIErrorResponse | FacebookGraphAPIPagePictureResponse>({
             baseURL: FACEBOOK_GRAPH_API_BASE_URL,
-            url: combineMultipleURLPaths([this.getDefaultAPIVersion(), pageId, FACEBOOK_GRAPH_API_PAGE_PICTURE_PATH_PART]),
+            url: combineMultipleURLPaths([this.getDefaultAPIVersion(), uid, FACEBOOK_GRAPH_API_PAGE_PICTURE_PATH_PART]),
             params,
         });
 
         const { statusCode, data } = await httpClient.get();
+
         if (statusCode !== 200) {
-            throwGraphAPIHTTPError('Cannot retrieve page picture: ', 'Unknown reason', data, statusCode);
+            throwGraphAPIHTTPError('Cannot retrieve user picture: ', 'Unknown reason', data, statusCode);
         } else {
             const keysValidators = { width: isNumber, height: isNumber, is_silhouette: isBoolean, url: isString };
             if ('data' in data && isObjectOfType<FacebookGraphAPIProfilePictureSource>(data?.data, keysValidators)) {
                 return data.data;
             } else {
-                throw new Error('Cannot retrieve page picture - wrong response');
+                throw new Error('Cannot retrieve user picture - wrong response');
             }
         }
     }
 }
 
 // exports
-export default FacebookAPIPagePictureFacade;
+export default FacebookAPIUserPictureFacade;

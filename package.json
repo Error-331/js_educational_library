@@ -42,7 +42,6 @@
 
     "./net/api/common/*":  "./src/net/api/common/*.ts",
     "./net/api/facebook/*":  "./src/net/api/facebook/*.ts",
-    "./net/api/facebook/page/*":  "./src/net/api/facebook/page/*.ts",
     "./net/api/firebase/auth/*": "./src/net/api/firebase/auth/*.ts",
     "./net/api/gcp/compute/*":  "./src/net/api/gcp/compute/*.ts",
 
