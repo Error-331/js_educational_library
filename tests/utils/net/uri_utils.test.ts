@@ -188,5 +188,4 @@ describe('URI utils tests...', () => {
     });
 });
 
-
 // exports

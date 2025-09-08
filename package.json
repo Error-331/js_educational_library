@@ -10,33 +10,7 @@
     "./database/firestore/*": "./src/database/firestore/*.ts",
 
     "./declarations/*": "./src/declarations/*.ts",
-    "./declarations/database/*": "./src/declarations/database/*.ts",
-    "./declarations/error/*": "./src/declarations/error/*.ts",
-
-    "./declarations/net/api/gcp/*": "./src/declarations/net/api/gcp/*.ts",
-    "./declarations/net/http/*": "./src/declarations/net/http/*.ts",
-    "./declarations/net/*": "./src/declarations/net/api/*.ts",
-
-    "./declarations/security/*": "./src/declarations/security/*.ts",
-    "./declarations/security/authentication/*": "./src/declarations/security/authentication/*.ts",
-    "./declarations/security/authorization/redirection_policy_map/*": "./src/declarations/security/authorization/redirection_policy_map/*.ts",
-    "./declarations/security/crypto/*": "./src/declarations/security/crypto/*.ts",
-
-    "./declarations/ui/*": "./src/declarations/ui/*.ts",
-    "./declarations/vendor/*": "./src/declarations/vendor/*.ts",
-
-    "./declarations/vendor/facebook/*": "./src/declarations/vendor/facebook/*.ts",
-
     "./constants/*": "./src/constants/*.ts",
-    "./constants/database/*": "./src/database/*.ts",
-    "./constants/net/api/facebook/*": "./src/constants/net/api/facebook/*.ts",
-    "./constants/net/api/gcp/*": "./src/constants/net/api/gcp/*.ts",
-    "./constants/net/http/*": "./src/constants/net/http/*.ts",
-    "./constants/registers/*": "./src/constants/registers/*.ts",
-    "./constants/security/crypto/*": "./src/constants/security/crypto/*.ts",
-    "./constants/ui/*": "./src/constants/ui/*",
-    "./constants/validation/*": "./src/constants/validation/*.ts",
-
     "./errors/*": "./src/errors/*.ts",
     "./utils/*": "./src/utils/*.ts",
 

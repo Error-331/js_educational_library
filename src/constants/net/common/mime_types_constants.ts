@@ -3,9 +3,18 @@
 // internal imports
 
 // implementation
+const META_MIME_TYPE_VIDEO = 'META_MIME_TYPE_VIDEO';
+const META_MIME_TYPE_AUDIO = 'META_MIME_TYPE_AUDIO';
+
 const MIME_TYPE_3DOSTR = 'application/vnd.pg.format';
-const MIME_TYPE_3G2 = 'video/3gpp2';
-const MIME_TYPE_3GP = 'video/3gpp';
+const MIME_TYPE_3G2 = {
+    [META_MIME_TYPE_VIDEO]: 'video/3gpp2',
+    [META_MIME_TYPE_AUDIO]: 'audio/3gpp2',
+};
+const MIME_TYPE_3GP = {
+    [META_MIME_TYPE_VIDEO]: 'video/3gpp',
+    [META_MIME_TYPE_AUDIO]: 'audio/3gpp',
+};
 const MIME_TYPE_4XM = 'audio/x-adpcm';
 const MIME_TYPE_7Z = 'application/x-7z-compressed';
 const MIME_TYPE_A64 = 'application/octet-stream ';
@@ -64,6 +73,7 @@ const MIME_TYPE_IPOD = 'video/mp4';
 const MIME_TYPE_ISMV = 'video/mp4';
 const MIME_TYPE_JACOSUB = 'text/x-jacosub';
 const MIME_TYPE_JAR = 'application/java-archive';
+const MIME_TYPE_JPEG = 'image/jpeg';
 const MIME_TYPE_JPEG_PIPE = 'image/jpeg';
 const MIME_TYPE_JPEGLS_PIPE = 'image/jpeg';
 const MIME_TYPE_JS = 'text/javascript';
@@ -154,6 +164,9 @@ const MIME_TYPE_ZIP = 'application/zip';
 
 // exports
 export {
+    META_MIME_TYPE_VIDEO,
+    META_MIME_TYPE_AUDIO,
+
     MIME_TYPE_3DOSTR,
     MIME_TYPE_3G2,
     MIME_TYPE_3GP,
@@ -215,6 +228,7 @@ export {
     MIME_TYPE_ISMV,
     MIME_TYPE_JACOSUB,
     MIME_TYPE_JAR,
+    MIME_TYPE_JPEG,
     MIME_TYPE_JPEG_PIPE,
     MIME_TYPE_JPEGLS_PIPE,
     MIME_TYPE_JS,

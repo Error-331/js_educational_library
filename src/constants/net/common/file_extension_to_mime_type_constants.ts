@@ -1,6 +1,8 @@
 // external imports
 
 // internal imports
+import { FileExtensionToMimeTypeRecords } from '../../../net/common/mime_type_declarations';
+
 import {
     MIME_TYPE_3DOSTR,
     MIME_TYPE_3G2,
@@ -63,6 +65,7 @@ import {
     MIME_TYPE_ISMV,
     MIME_TYPE_JACOSUB,
     MIME_TYPE_JAR,
+    MIME_TYPE_JPEG,
     MIME_TYPE_JPEG_PIPE,
     MIME_TYPE_JPEGLS_PIPE,
     MIME_TYPE_JS,
@@ -153,7 +156,7 @@ import {
 } from './mime_types_constants';
 
 // implementation
-const FILE_EXTENSION_TO_MIME_TYPE = {
+const FILE_EXTENSION_TO_MIME_TYPE: FileExtensionToMimeTypeRecords = {
     '3g2': MIME_TYPE_3G2,
     '3gp': MIME_TYPE_3GP,
     '7z': MIME_TYPE_7Z,
@@ -183,8 +186,8 @@ const FILE_EXTENSION_TO_MIME_TYPE = {
     'ico': MIME_TYPE_ICO,
     'ics': MIME_TYPE_ICS,
     'jar': MIME_TYPE_JAR,
-    'jpeg': MIME_TYPE_JPEG_PIPE,
-    'jpg': MIME_TYPE_JPEG_PIPE,
+    'jpeg': MIME_TYPE_JPEG,
+    'jpg': MIME_TYPE_JPEG,
     'js': MIME_TYPE_JS,
     'json': MIME_TYPE_JSON,
     'jsonld': MIME_TYPE_JSONLD,
