@@ -50,7 +50,9 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "decrypt_json": "tsx ./tasks/security/crypto/decrypt_json_task.ts",
+    "encrypt_json": "tsx ./tasks/security/crypto/encrypt_json_task.ts"
   },
   "license": "MIT",
   "peerDependencies": {
@@ -108,7 +110,7 @@
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.20.5",
     "typescript": "^5.7.3",
     "firebase": "^11.4.0",
     "firebase-admin": "^13.2.0",
