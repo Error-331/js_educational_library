@@ -1,3 +1,8 @@
+// external imports
+
+// internal imports
+
+// implementation
 type FacebookGraphAPIProfilePictureSource = {
     width: number;
     height: number;
@@ -5,6 +10,7 @@ type FacebookGraphAPIProfilePictureSource = {
     url: string;
 }
 
+// exports
 export {
     FacebookGraphAPIProfilePictureSource,
 }

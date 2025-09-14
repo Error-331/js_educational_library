@@ -1,12 +1,12 @@
 // external imports
 
 // internal imports
-import { FACEBOOK_GRAPH_API_BASE_URL } from '../../../../constants/net/api/facebook/facebook_common_constants';
-import { FACEBOOK_GRAPH_API_PAGE_PICTURE_PATH_PART } from '../../../../constants/net/api/facebook/facebook_page_constants';
-
 import { FacebookGraphAPIErrorResponse } from '../../../../declarations/vendor/facebook/facebook_base_declarations';
 import { FacebookGraphAPIProfilePictureSource } from '../../../../declarations/vendor/facebook/facebook_profile_declarations';
 import { FacebookGraphAPIPagePictureResponse } from '../../../../declarations/vendor/facebook/facebook_page_api_declarations';
+
+import { FACEBOOK_GRAPH_API_BASE_URL } from '../../../../constants/net/api/facebook/facebook_common_constants';
+import { FACEBOOK_GRAPH_API_PAGE_PICTURE_PATH_PART } from '../../../../constants/net/api/facebook/facebook_page_constants';
 
 import FacebookAPIServerAbstractFacade from '../facebook_api_server_abstract_facade';
 import AxiosRequestFacade from '../../../http/request/axios_request_facade';
