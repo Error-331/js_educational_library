@@ -38,8 +38,8 @@
 
     "./security/authorization/redirection_policy_map/*": "./src/security/authorization/redirection_policy_map/*.ts",
 
-    "./security/crypto/*": "./src//security/crypto/*.ts",
-    "./security/crypto/encryptors/*": "./src//security/crypto/encryptors/*.ts",
+    "./security/crypto/*": "./src/security/crypto/*.ts",
+    "./security/crypto/encryptors/*": "./src/security/crypto/encryptors/*.ts",
 
     "./validators/net/http/*": "./src/validators/net/http/*.ts",
     "./validators/net/rest/*": "./src/validators/net/rest/*.ts",
