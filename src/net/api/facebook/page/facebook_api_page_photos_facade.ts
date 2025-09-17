@@ -5,7 +5,7 @@ import { FACEBOOK_GRAPH_API_BASE_URL } from '../../../../constants/net/api/faceb
 import { FACEBOOK_GRAPH_API_PAGE_PHOTOS_PATH_PART } from '../../../../constants/net/api/facebook/facebook_page_constants';
 
 import { FacebookGraphAPIErrorResponse } from '../../../../declarations/vendor/facebook/facebook_base_declarations';
-import { FacebookAPIPagePhotoPublishOptions, FacebookGraphAPIPublishedImageResponse } from '../../../../declarations/vendor/facebook/facebook_page_api_declarations';
+import { FacebookAPIPagePhotoPublishOptions, FacebookGraphAPIPagePublishedImageResponse } from '../../../../declarations/vendor/facebook/facebook_page_api_declarations';
 
 import FacebookAPIServerAbstractFacade from './../facebook_api_server_abstract_facade';
 import AxiosRequestFacade from '../../../http/request/axios_request_facade';
@@ -17,8 +17,8 @@ import { isString } from '../../../../utils/misc/logic_utils';
 
 // implementation
 class FacebookAPIPagePhotosFacade extends FacebookAPIServerAbstractFacade {
-    public async uploadAndPublishImageByURL(pageAccessToken: string, pageId: string, imagePublishOptions: FacebookAPIPagePhotoPublishOptions): Promise<FacebookGraphAPIPublishedImageResponse> {
-        const httpClient = new AxiosRequestFacade<FacebookGraphAPIErrorResponse | FacebookGraphAPIPublishedImageResponse>({
+    public async uploadAndPublishImageByURL(pageAccessToken: string, pageId: string, imagePublishOptions: FacebookAPIPagePhotoPublishOptions): Promise<FacebookGraphAPIPagePublishedImageResponse> {
+        const httpClient = new AxiosRequestFacade<FacebookGraphAPIErrorResponse | FacebookGraphAPIPagePublishedImageResponse>({
             baseURL: FACEBOOK_GRAPH_API_BASE_URL,
             url: combineMultipleURLPaths([this.getDefaultAPIVersion(), pageId, FACEBOOK_GRAPH_API_PAGE_PHOTOS_PATH_PART]),
             headers: {
@@ -37,7 +37,7 @@ class FacebookAPIPagePhotosFacade extends FacebookAPIServerAbstractFacade {
             throwGraphAPIHTTPError('Cannot publish image to the page: ', 'Unknown reason', data, statusCode);
         } else {
             const keysValidators = { id: isString, post_id: isString };
-            if (isObjectOfType<FacebookGraphAPIPublishedImageResponse>(data, keysValidators)) {
+            if (isObjectOfType<FacebookGraphAPIPagePublishedImageResponse>(data, keysValidators)) {
                 return data;
             } else {
                 throw new Error('Cannot publish image to the page - wrong response');

@@ -24,9 +24,32 @@ type FacebookAPIPageVideoPublishOptions = {
     fileUploadOptions?: FacebookGraphAPIAppUploadConfig;
 };
 
-type FacebookGraphAPIPublishedImageResponse = {
+type FacebookGraphAPIPageVideoUploadInitResponse = {
+    video_id: string;
+    upload_url: string;
+};
+
+type FacebookGraphAPIPageVideoUploadFinishResponse = {
+    success: true;
+};
+
+type FacebookGraphAPIPagePublishedImageResponse = {
     id: string;
     post_id: string;
+};
+
+type FacebookGraphAPIPageVideoPublishResponse = {
+    id: string;
+};
+
+type FacebookGraphAPIPageReelPublishResponse = {
+    success: boolean;
+    post_id: string;
+};
+
+type FacebookGraphAPIPageVideoStatusResponse = {
+    id: string;
+    status: object;
 };
 
 type FacebookGraphAPIPagePictureResponse = {
@@ -34,8 +57,11 @@ type FacebookGraphAPIPagePictureResponse = {
     paging: FacebookGraphAPIPagingResponse;
 };
 
-type FacebookGraphAPIPageVideoPublishResponse = {
-    id: string;
+type FacebookPageReelPublishResponse = {
+    publishSuccess: boolean;
+
+    videoId: string;
+    postId: string;
 };
 
 // exports
@@ -43,8 +69,15 @@ export {
     FacebookAPIPagePhotoPublishOptions,
     FacebookAPIPageVideoPublishOptions,
 
-    FacebookGraphAPIPublishedImageResponse,
+    FacebookGraphAPIPageVideoUploadInitResponse,
+    FacebookGraphAPIPageVideoUploadFinishResponse,
+
+    FacebookGraphAPIPagePublishedImageResponse,
+    FacebookGraphAPIPageVideoPublishResponse,
+    FacebookGraphAPIPageReelPublishResponse,
+
+    FacebookGraphAPIPageVideoStatusResponse,
     FacebookGraphAPIPagePictureResponse,
 
-    FacebookGraphAPIPageVideoPublishResponse,
+    FacebookPageReelPublishResponse,
 }

@@ -51,13 +51,13 @@ class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractF
         const { statusCode, data } = await httpClient.post();
 
         if (statusCode !== 200) {
-            throwGraphAPIHTTPError('Cannot initiate video file upload: ', 'Unknown reason', data, statusCode);
+            throwGraphAPIHTTPError('Cannot initiate file upload: ', 'Unknown reason', data, statusCode);
         } else {
             const keysValidators = { id: isString };
             if (isObjectOfType<FacebookGraphAPIAppUploadsResponse>(data, keysValidators)) {
                 return data;
             } else {
-                throw new Error('Cannot initiate video file upload - wrong response');
+                throw new Error('Cannot initiate file upload - wrong response');
             }
         }
     }
@@ -84,17 +84,17 @@ class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractF
             if (isObjectOfType<FacebookGraphAPIAppUploadFinishResponse>(data, keysValidators)) {
                 return data;
             } else {
-                throw new Error('Cannot finalize video file upload - wrong response');
+                throw new Error('Cannot finalize file upload - wrong response');
             }
         } else if (statusCode === 206) {
             const keysValidators = { debug_info: isObject };
             if (isObjectOfType<FacebookGraphAPIAppUploadChunkResponse>(data, keysValidators)) {
                 return data;
             } else {
-                throw new Error('Cannot upload video file chunk - wrong response');
+                throw new Error('Cannot upload file chunk - wrong response');
             }
         } else {
-            throwGraphAPIHTTPError('Cannot upload video file: ', 'Unknown reason', data, statusCode);
+            throwGraphAPIHTTPError('Cannot upload file: ', 'Unknown reason', data, statusCode);
         }
     }
 
@@ -125,7 +125,7 @@ class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractF
         });
     }
 
-    public async uploadFileToFacebook(userAccessToken: string, pathToFile: string, fileUploadOptions?: FacebookGraphAPIAppUploadConfig) {
+    public async uploadFileByPath(userAccessToken: string, pathToFile: string, fileUploadOptions?: FacebookGraphAPIAppUploadConfig) {
         if (!isString(userAccessToken)) {
             throw new RangeError('Cannot upload file to Facebook - user access token must be of type string');
         }
