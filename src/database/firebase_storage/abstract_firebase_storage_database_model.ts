@@ -15,10 +15,28 @@ import FormDataTransformer from '../../net/http/form/form_data_transformer';
 
 import { extractBinaryDataFromFile } from '../../utils/file/general_file_utils';
 import { createDatePlusMinutesFromNow } from '../../utils/date/current_date_utils';
-import { isNil } from '../../utils/misc/logic_utils';
+import { sanitizeURLPathPart } from '../../utils/net/uri_utils';
+import { isNil, isString } from '../../utils/misc/logic_utils';
 
 // implementation
 abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseModel<FirebaseStorageDatabaseEntity, FirebaseStorageDatabaseEntity> {
+
+    /**
+     * Example: AbstractFirebaseStorageDatabaseModel.makeDocumentPublic('converted/sd.mp4');
+     */
+
+    public static async makeDocumentPublic(name: string): Promise<string> {
+        if (!isString(name)) {
+            throw new RangeError('Cannot make public Firebase storage item - name of the item must be of type string');
+        }
+
+        const preparedName = sanitizeURLPathPart(name);
+        const storage = FirebaseAdminRegistry.getInstance().storage;
+
+        await storage.bucket().file(preparedName).makePublic();
+        return storage.bucket().file(preparedName).publicUrl();
+    }
+
     protected getStorageBucket(): Bucket {
         const storage = FirebaseAdminRegistry.getInstance().storage;
         return storage.bucket();

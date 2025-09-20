@@ -15,6 +15,8 @@ function composeURLPath(pathParts: (string | number)[]): string {
 /**
  * Removes all leading slashes from the start of a string.
  *
+ * Example: removeExtraLeadingSlashes('///example/path'); // result: example/path
+ *
  * @param {string} pathPart - the path part to modify.
  *
  * @throws {RangeError} if path part is not a string.
@@ -31,6 +33,8 @@ function removeExtraLeadingSlashes(pathPart: string): string {
 
 /**
  * Removes all trailing slashes from the end of a string.
+ *
+ * Example: removeExtraTrailingSlashes('example/path///'); // result: example/path
  *
  * @param {string} pathPart - the path part to modify.
  *
@@ -91,6 +95,11 @@ function sanitizeURLPathPartFromRoot(urlPathPart: string): string {
     return urlPathPart;
 }
 
+/**
+ *
+ * Example: removeExtraTrailingSlashes('///example/path///'); // result: example/path
+ *
+ */
 function sanitizeURLPathPart(urlPathPart: string): string {
     if (!isString(urlPathPart)) {
         throw new RangeError('Cannot sanitize URL path part - url path part must be of type string');
