@@ -1,4 +1,5 @@
 // external imports
+import { Readable } from 'node:stream';
 import { File as StorageFile, Bucket, DownloadResponse } from '@google-cloud/storage';
 import { posix } from 'node:path'
 
@@ -20,6 +21,13 @@ import { isNil, isString } from '../../utils/misc/logic_utils';
 
 // implementation
 abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseModel<FirebaseStorageDatabaseEntity, FirebaseStorageDatabaseEntity> {
+    /**
+     * Example: AbstractFirebaseStorageDatabaseModel.sanitizeFileName('///converted/sd.mp4///');
+     */
+
+    public static sanitizeFileName(name: string): string {
+        return sanitizeURLPathPart(name);
+    }
 
     /**
      * Example: AbstractFirebaseStorageDatabaseModel.makeDocumentPublic('converted/sd.mp4');
@@ -30,7 +38,7 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
             throw new RangeError('Cannot make public Firebase storage item - name of the item must be of type string');
         }
 
-        const preparedName = sanitizeURLPathPart(name);
+        const preparedName = AbstractFirebaseStorageDatabaseModel.sanitizeFileName(name);
         const storage = FirebaseAdminRegistry.getInstance().storage;
 
         await storage.bucket().file(preparedName).makePublic();
@@ -42,20 +50,20 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
         return storage.bucket();
     }
 
-    protected getFilePath(ID: string | number): string {
-        if (isNil(ID)) {
-            throw new RangeError('ID is not specified - cannot prepare path to file in Firebase storage');
+    protected getFilePath(id: string | number): string {
+        if (isNil(id)) {
+            throw new RangeError('Id is not specified - cannot prepare path to file in Firebase storage');
         }
 
-        return posix.join(`${this.collectionName}`, ID.toString());
+        return posix.join(`${this.collectionName}`, id.toString());
     }
 
-    protected getFileRef(ID: string | number): StorageFile {
-        if (isNil(ID)) {
-            throw new RangeError('ID is not specified - cannot prepare file reference to Firebase storage');
+    protected getFileRef(id: string | number): StorageFile {
+        if (isNil(id)) {
+            throw new RangeError('Id is not specified - cannot prepare file reference to Firebase storage');
         }
 
-        const pathToFile = this.getFilePath(ID);
+        const pathToFile = this.getFilePath(id);
         return this.getStorageBucket().file(pathToFile);
     }
 
@@ -113,7 +121,7 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
 
     public async loadById(id: string | number): Promise<FirebaseStorageDatabaseEntity | null> {
         if (isNil(id)) {
-            throw new RangeError('ID is not specified - cannot load image metadata from Firebase storage');
+            throw new RangeError('Id is not specified - cannot load image metadata from Firebase storage');
         }
 
         const pathToFile = this.getFilePath(id);
@@ -136,21 +144,30 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
         })
     }
 
+    public createFileDownloadStream(id: string | number): Readable {
+        if (isNil(id)) {
+            throw new RangeError('Id is not specified - cannot create file read stream for Firebase storage item');
+        }
+
+        const fileRef = this.getFileRef(id);
+        return fileRef.createReadStream();
+    }
+
     public async downloadDocumentById(id: string | number): Promise<DownloadResponse> {
         if (isNil(id)) {
-            throw new RangeError('id is not specified - cannot download file from Firebase storage');
+            throw new RangeError('Id is not specified - cannot download file from Firebase storage');
         }
 
         const fileRef = this.getFileRef(id);
         return fileRef.download();
     }
 
-    public async loadDocumentDownloadURLByID(ID: string | number): Promise<string> {
-        if (isNil(ID)) {
-            throw new RangeError('ID is not specified - cannot prepare image download URL for Firebase storage');
+    public async loadDocumentDownloadURLByID(id: string | number): Promise<string> {
+        if (isNil(id)) {
+            throw new RangeError('Id is not specified - cannot prepare image download URL for Firebase storage');
         }
 
-        const fileRef = this.getFileRef(ID);
+        const fileRef = this.getFileRef(id);
         const urlResponse = await fileRef.getSignedUrl({
             action: 'read',
             expires: createDatePlusMinutesFromNow(REMOTE_FILE_READ_LINK_TTL_MINUTES),
@@ -159,33 +176,51 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
         return urlResponse[0];
     }
 
-    public async makeDocumentPublic(ID: string | number): Promise<string> {
-        if (isNil(ID)) {
-            throw new RangeError('ID is not specified - cannot make document public at Firebase storage');
+    public async makeDocumentPublic(id: string | number): Promise<string> {
+        if (isNil(id)) {
+            throw new RangeError('Id is not specified - cannot make document public at Firebase storage');
         }
 
-        const fileRef = this.getFileRef(ID);
+        const fileRef = this.getFileRef(id);
         await fileRef.makePublic();
 
-        return this.getDocumentPublicURL(ID);
+        return this.getDocumentPublicURL(id);
     }
 
-    public async makeDocumentPrivate(ID: string | number): Promise<void> {
-        if (isNil(ID)) {
-            throw new RangeError('ID is not specified - cannot make document private at Firebase storage');
+    public async makeDocumentPrivate(id: string | number): Promise<void> {
+        if (isNil(id)) {
+            throw new RangeError('Id is not specified - cannot make document private at Firebase storage');
         }
 
-        const fileRef = this.getFileRef(ID);
+        const fileRef = this.getFileRef(id);
         await fileRef.makePrivate();
     }
 
-    public getDocumentPublicURL(ID: string | number): string {
-        if (isNil(ID)) {
-            throw new RangeError('ID is not specified - cannot get public URL for document at Firebase storage');
+    public getDocumentPublicURL(id: string | number): string {
+        if (isNil(id)) {
+            throw new RangeError('Id is not specified - cannot get public URL for document at Firebase storage');
         }
 
-        const fileRef = this.getFileRef(ID);
+        const fileRef = this.getFileRef(id);
         return fileRef.publicUrl();
+    }
+
+    public async getDocumentMetaData(id: string | number) {
+        if (isNil(id)) {
+            throw new RangeError('Id is not specified - cannot get metadata for document at Firebase storage');
+        }
+
+        const fileRef = this.getFileRef(id);
+        return fileRef.getMetadata();
+    }
+
+    public async getDocumentSize(id: string | number): Promise<string | number> {
+        if (isNil(id)) {
+            throw new RangeError('Id is not specified - cannot get size for document at Firebase storage');
+        }
+
+        const documentMetaData = await this.getDocumentMetaData(id);
+        return documentMetaData[0].size;
     }
 }
 
