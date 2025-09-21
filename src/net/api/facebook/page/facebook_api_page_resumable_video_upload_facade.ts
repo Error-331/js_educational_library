@@ -1,4 +1,5 @@
 // external imports
+import { Readable } from 'node:stream';
 import { createReadStream } from 'node:fs';
 
 // internal imports
@@ -39,6 +40,7 @@ import { throwGraphAPIHTTPError } from '../../../../utils/vendor/facebook_utils'
 import { calcFileSizeInBytesAsync } from '../../../../utils/file/general_file_utils';
 import { defaultTo } from '../../../../utils/misc/functional_utils';
 import { isObjectOfType } from '../../../../utils/primitives/object_utils';
+import { stringToInt } from '../../../../utils/primitives/string/string_to_number_utils';
 import { isString, isObject } from '../../../../utils/misc/logic_utils';
 
 // implementation
@@ -81,7 +83,7 @@ class FacebookAPIPageResumableFileUploadFacade extends FacebookAPIServerAbstract
         }
     }
 
-    protected async uploadChunk(pageAccessToken: string, uploadId: string, chunk: Buffer, fileSize: number, offset = 0): Promise<FacebookGraphAPIAppUploadChunkResponse | FacebookGraphAPIPageVideoUploadFinishResponse> {
+    protected async uploadChunk(pageAccessToken: string, uploadId: string, chunk: Buffer, fileSize: string | number, offset = 0): Promise<FacebookGraphAPIAppUploadChunkResponse | FacebookGraphAPIPageVideoUploadFinishResponse> {
         const httpClient = new AxiosRequestFacade<FacebookGraphAPIErrorResponse |
             FacebookGraphAPIAppUploadChunkResponse |
             FacebookGraphAPIAppUploadFinishResponse
@@ -120,12 +122,15 @@ class FacebookAPIPageResumableFileUploadFacade extends FacebookAPIServerAbstract
         }
     }
 
-    protected async startFileUploadStream(pageAccessToken: string, videoId: string, pathToFile: string, fileSize: number, fileUploadOptions?: FacebookGraphAPIAppUploadConfig): Promise<FacebookGraphAPIPageVideoUploadFinishResponse | null> {
+    protected prepareReadStreamFromFile(pathToFile: string, fileUploadOptions?: FacebookGraphAPIAppUploadConfig) {
         const { readBufferSize = FACEBOOK_GRAPH_API_FILE_UPLOAD_DEFAULT_BUFFER_SIZE } = defaultTo({})(fileUploadOptions);
+        return createReadStream(pathToFile, { highWaterMark: readBufferSize });
+    }
+
+    protected async startFileUploadStream(pageAccessToken: string, videoId: string, fsStream: Readable, fileSize: string | number, fileUploadOptions?: FacebookGraphAPIAppUploadConfig): Promise<FacebookGraphAPIPageVideoUploadFinishResponse | null> {
         let fileOffset = 0;
 
         return new Promise<FacebookGraphAPIPageVideoUploadFinishResponse | null>((resolve, reject) => {
-            const fsStream = createReadStream(pathToFile, { highWaterMark: readBufferSize });
             fsStream.on('data', (fileChunk: Buffer) => {
                 fsStream.pause();
 
@@ -147,6 +152,25 @@ class FacebookAPIPageResumableFileUploadFacade extends FacebookAPIServerAbstract
         });
     }
 
+    public async uploadFileByStream(userAccessToken: string, pageAccessToken: string, pageId: string, fileSize: string | number, readableStream: Readable, contentType: FacebookContentType, fileUploadOptions?: FacebookGraphAPIAppUploadConfig) {
+        if (!isString(userAccessToken)) {
+            throw new RangeError('Cannot upload file to Facebook - user access token must be of type string');
+        }
+
+        if (!isString(pageAccessToken)) {
+            throw new RangeError('Cannot upload file to Facebook - page access token must be of type string');
+        }
+
+        if (stringToInt(fileSize) <= 0) {
+            throw new RangeError('Cannot upload file to Facebook - cannot upload file which size is equal to zero');
+        }
+
+        const fbInitUploadResponse = await this.initFileUpload(pageAccessToken, pageId, contentType);
+
+        await this.startFileUploadStream(pageAccessToken, fbInitUploadResponse.video_id, readableStream, fileSize, fileUploadOptions);
+        return fbInitUploadResponse;
+    }
+
     public async uploadFileByPath(userAccessToken: string, pageAccessToken: string, pageId: string, pathToFile: string, contentType: FacebookContentType, fileUploadOptions?: FacebookGraphAPIAppUploadConfig) {
         if (!isString(userAccessToken)) {
             throw new RangeError('Cannot upload file to Facebook - user access token must be of type string');
@@ -163,8 +187,9 @@ class FacebookAPIPageResumableFileUploadFacade extends FacebookAPIServerAbstract
         }
 
         const fbInitUploadResponse = await this.initFileUpload(pageAccessToken, pageId, contentType);
-        await this.startFileUploadStream(pageAccessToken, fbInitUploadResponse.video_id, pathToFile, fileSize, fileUploadOptions);
+        const readStream = this.prepareReadStreamFromFile(pathToFile, fileUploadOptions);
 
+        await this.startFileUploadStream(pageAccessToken, fbInitUploadResponse.video_id, readStream, fileSize, fileUploadOptions);
         return fbInitUploadResponse;
     }
 }

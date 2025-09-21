@@ -5,7 +5,8 @@ import { FacebookContentType } from '../../../../declarations/vendor/facebook/fa
 import { FacebookGraphAPIErrorResponse } from '../../../../declarations/vendor/facebook/facebook_base_declarations';
 import { FacebookGraphAPIAppUploadsResponse } from '../../../../declarations/vendor/facebook/facebook_app_api_declarations';
 import {
-    FacebookAPIPageVideoPublishOptions,
+    FacebookAPIPageVideoPublishByFilePathOptions,
+    FacebookAPIPageVideoPublishByStreamOptions,
     FacebookGraphAPIPageVideoPublishResponse,
     FacebookGraphAPIPageReelPublishResponse,
     FacebookPageReelPublishResponse,
@@ -26,6 +27,7 @@ import { isObjectOfType } from '../../../../utils/primitives/object_utils';
 import { isBoolean, isString, isObject } from '../../../../utils/misc/logic_utils';
 
 // implementation
+// https://developers.facebook.com/docs/video-api/guides/reels-publishing#requirements
 class FacebookAPIPageVideoFacade extends FacebookAPIServerAbstractFacade {
     public async publishVideo(pageId: string, pageAccessToken: string, fileHandle: string, title = '', description = '') {
         if (!isString(pageId)) {
@@ -116,7 +118,7 @@ class FacebookAPIPageVideoFacade extends FacebookAPIServerAbstractFacade {
         }
     }
 
-    public async uploadAndPublishVideo(uploadOptions: FacebookAPIPageVideoPublishOptions): Promise<FacebookGraphAPIPageVideoPublishResponse> {
+    public async uploadAndPublishVideoByFilePath(uploadOptions: FacebookAPIPageVideoPublishByFilePathOptions): Promise<FacebookGraphAPIPageVideoPublishResponse> {
         const fileUploadFacade = new FacebookAPIAppResumableFileUploadFacade();
         const uploadResult = await fileUploadFacade.uploadFileByPath(
             uploadOptions.userAccessToken,
@@ -133,13 +135,40 @@ class FacebookAPIPageVideoFacade extends FacebookAPIServerAbstractFacade {
         );
     }
 
-    public async uploadAndPublishReel(uploadOptions: FacebookAPIPageVideoPublishOptions): Promise<FacebookPageReelPublishResponse> {
+    public async uploadAndPublishReelByFilePath(uploadOptions: FacebookAPIPageVideoPublishByFilePathOptions): Promise<FacebookPageReelPublishResponse> {
         const fileUploadFacade = new FacebookAPIPageResumableFileUploadFacade();
         const uploadResult = await fileUploadFacade.uploadFileByPath(
             uploadOptions.userAccessToken,
             uploadOptions.pageAccessToken,
             uploadOptions.pageId,
             uploadOptions.pathToFile,
+            FacebookContentType.PageReel,
+            uploadOptions?.fileUploadOptions
+        );
+
+        const publishResult = await this.publishReel(
+            uploadOptions.pageId,
+            uploadOptions.pageAccessToken,
+            uploadResult.video_id,
+            uploadOptions.description,
+        );
+
+        return {
+            publishSuccess: publishResult.success,
+
+            videoId: uploadResult.video_id,
+            postId: publishResult.post_id,
+        }
+    }
+
+    public async uploadAndPublishReelByStream(uploadOptions: FacebookAPIPageVideoPublishByStreamOptions): Promise<FacebookPageReelPublishResponse> {
+        const fileUploadFacade = new FacebookAPIPageResumableFileUploadFacade();
+        const uploadResult = await fileUploadFacade.uploadFileByStream(
+            uploadOptions.userAccessToken,
+            uploadOptions.pageAccessToken,
+            uploadOptions.pageId,
+            uploadOptions.fileSize,
+            uploadOptions.stream,
             FacebookContentType.PageReel,
             uploadOptions?.fileUploadOptions
         );

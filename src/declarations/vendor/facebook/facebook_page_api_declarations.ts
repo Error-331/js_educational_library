@@ -1,4 +1,5 @@
 // external imports
+import { Readable } from 'node:stream';
 
 // internal imports
 import { FacebookGraphAPIAppUploadConfig } from './facebook_app_api_declarations';
@@ -15,13 +16,21 @@ type FacebookAPIPageVideoPublishOptions = {
     userAccessToken: string;
     pageAccessToken: string;
 
-    pathToFile: string;
     pageId: string;
 
     title?: string;
     description?: string;
 
     fileUploadOptions?: FacebookGraphAPIAppUploadConfig;
+};
+
+type FacebookAPIPageVideoPublishByFilePathOptions = FacebookAPIPageVideoPublishOptions & {
+    pathToFile: string;
+}
+
+type FacebookAPIPageVideoPublishByStreamOptions = FacebookAPIPageVideoPublishOptions & {
+    fileSize: string | number;
+    stream: Readable;
 };
 
 type FacebookGraphAPIPageVideoUploadInitResponse = {
@@ -125,7 +134,7 @@ type FacebookGraphAPIPageVideoStatusResponse = {
         publishing_phase: {
             status: FacebookGraphAPIVideoPublishingPhaseStatus;
             publish_status?: FacebookGraphAPIVideoPublishingStatus;
-            publish_time?: number;
+            publish_time?: string; // '2025-09-17T06:32:35+0000'
             error?: FacebookGraphAPIErrorData;
         },
     };
@@ -147,6 +156,8 @@ type FacebookPageReelPublishResponse = {
 export {
     FacebookAPIPagePhotoPublishOptions,
     FacebookAPIPageVideoPublishOptions,
+    FacebookAPIPageVideoPublishByFilePathOptions,
+    FacebookAPIPageVideoPublishByStreamOptions,
 
     FacebookGraphAPIPageVideoUploadInitResponse,
     FacebookGraphAPIPageVideoUploadFinishResponse,
