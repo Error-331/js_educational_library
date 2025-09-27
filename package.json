@@ -57,6 +57,7 @@
   "license": "MIT",
   "peerDependencies": {
     "@google-cloud/compute": "^5.2.0",
+    "@google-cloud/video-transcoder": "^4.4.0",
     "axios": "^1.8.4",
     "express": "^5.1.0",
     "firebase": "^11.4.0",
@@ -68,6 +69,9 @@
   },
   "peerDependenciesMeta": {
     "@google-cloud/compute": {
+      "optional": true
+    },
+    "@google-cloud/video-transcoder": {
       "optional": true
     },
     "zod": {
@@ -115,6 +119,7 @@
     "firebase": "^11.4.0",
     "firebase-admin": "^13.2.0",
     "@google-cloud/compute": "^5.2.0",
+    "@google-cloud/video-transcoder": "^4.4.0",
     "luxon": "^3.6.1",
     "zod": "^3.24.1",
     "pino": "^9.9.0"

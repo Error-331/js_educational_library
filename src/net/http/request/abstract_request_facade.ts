@@ -30,7 +30,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
     protected _method: HTTPRequestMethod = 'get';
     protected _headers: HTTPHeadersCollection = {};
     protected _params: HTTPRequestParams = {};
-    protected _data: GenericObject | FormData;
+    protected _data: GenericObject | FormData | Buffer;
     protected _timeout: number = HTTP_REQUEST_TIMEOUT;
 
     constructor(config: HTTPRequestConfig) {
@@ -87,6 +87,16 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
         return { method: 'get' };
     }
 
+    protected prepareData(data: GenericObject | FormData | Buffer) {
+        if (FormDataTransformer.isFormData(data)) {
+            return FormDataTransformer.clone(data);
+        } else if (Buffer.isBuffer(data)) {
+            return data;
+        } else {
+            return cloneDeep(this._data);
+        }
+    }
+
     protected prepareBaseConfig(): HTTPRequestConfig {
         return {
             baseURL: this._baseURL,
@@ -94,7 +104,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
 
             method: this._method,
             headers: cloneDeep(this._headers),
-            data: FormDataTransformer.isFormData(this._data) ? FormDataTransformer.clone(this._data) : cloneDeep(this._data),
+            data: this.prepareData(this._data),
             params: this._params instanceof URLSearchParams ? this._params : cloneDeep(this._params), // TODO: add something like FormDataTransformer here as well
             timeout: this._timeout,
         }
@@ -186,7 +196,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
         this._params = params;
     }
 
-    set data(data: GenericObject | FormData) {
+    set data(data: GenericObject | FormData | Buffer) {
         //validate
         this._data = data;
     }

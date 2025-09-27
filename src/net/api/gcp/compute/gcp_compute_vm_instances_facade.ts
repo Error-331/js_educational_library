@@ -58,7 +58,7 @@ class GCPComputeVMInstancesFacade {
         return externalIPs;
     }
 
-    public static getInstance(): GCPComputeVMInstancesFacade  {
+    public static getInstance(): GCPComputeVMInstancesFacade {
         if (!GCPComputeVMInstancesFacade.instance) {
             GCPComputeVMInstancesFacade.instance = new GCPComputeVMInstancesFacade();
         }

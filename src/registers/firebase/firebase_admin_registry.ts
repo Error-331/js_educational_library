@@ -95,10 +95,10 @@ class FirebaseAdminRegistry {
         }
 
         return {
-            projectId: serviceAccountKey.projectId ?? FirebaseAdminRegistry.instance?.projectId,
+            projectId: serviceAccountKey.credential.projectId ?? FirebaseAdminRegistry.instance?.projectId,
             credentials: {
-                client_email: serviceAccountKey.clientEmail,
-                private_key: serviceAccountKey.privateKey,
+                client_email: serviceAccountKey.credential.clientEmail,
+                private_key: serviceAccountKey.credential.privateKey,
             },
         }
     }

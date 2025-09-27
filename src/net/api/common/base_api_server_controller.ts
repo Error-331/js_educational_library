@@ -3,7 +3,7 @@
 // internal imports
 import { CommonServerRequest, CommonServerResponse, CommonServerReturn } from '../../../declarations/net/api/common_declarations';
 
-import BaseHTTPServerController from "./base_http_server_controller";
+import BaseHTTPServerController from './base_http_server_controller';
 
 import { GenericObject } from '../../../declarations/collection_declarations';
 import FormDataTransformer from '../../http/form/form_data_transformer';
@@ -31,7 +31,7 @@ class BaseAPIServerController extends BaseHTTPServerController {
 
             return formDataTransformer.toObject();
         } else {
-            return {};
+            return req.body;
         }
     }
 }
