@@ -9,7 +9,7 @@ import { FACEBOOK_GRAPH_API_BASE_URL } from '../../../../constants/net/api/faceb
 import { FACEBOOK_GRAPH_API_PAGE_PICTURE_PATH_PART } from '../../../../constants/net/api/facebook/facebook_page_constants';
 
 import FacebookAPIServerAbstractFacade from '../facebook_api_server_abstract_facade';
-import AxiosRequestFacade from '../../../http/request/axios_request_facade';
+import AxiosRequestFacade from '../../../http/request/axios/axios_server_request_facade';
 
 import { combineMultipleURLPaths } from '../../../../utils/net/uri_utils';
 import { throwGraphAPIHTTPError } from '../../../../utils/vendor/facebook_utils';

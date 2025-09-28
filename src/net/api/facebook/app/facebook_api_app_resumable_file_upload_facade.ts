@@ -20,12 +20,12 @@ import {
 } from '../../../../constants/net/api/facebook/facebook_common_constants';
 
 import FacebookAPIServerAbstractFacade from '../facebook_api_server_abstract_facade';
-import AxiosRequestFacade from '../../../http/request/axios_request_facade';
+import AxiosRequestFacade from '../../../http/request/axios/axios_server_request_facade';
 
 import { combineMultipleURLPaths } from '../../../../utils/net/uri_utils';
 import { throwGraphAPIHTTPError } from '../../../../utils/vendor/facebook_utils';
 import { extractFileExtension } from '../../../../utils/misc/path_utils';
-import { calcFileSizeInBytesAsync } from '../../../../utils/file/general_file_utils';
+import { calcFileSizeInBytesAsync } from '../../../../utils/file/server_file_utils';
 import { findMIMETypeByFileExtensionAndVideoMetaType } from '../../../../utils/net/mime_types_utils';
 import { defaultTo } from '../../../../utils/misc/functional_utils';
 import { isObjectOfType } from '../../../../utils/primitives/object_utils';

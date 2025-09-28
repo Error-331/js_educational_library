@@ -10,6 +10,7 @@ type PartialShallow<ObjectType> = {
 type AtLeast<ObjectType, ObjectKeysType extends keyof ObjectType> = Partial<ObjectType> & Pick<ObjectType, ObjectKeysType>;
 
 type ComparatorType<InputDataType> = (first: InputDataType, second: InputDataType) => number;
+type GenericMixinConstructor<InstanceType = {}> = new (...args: any[]) => InstanceType;
 
 // exports
 export type {
@@ -17,4 +18,5 @@ export type {
     AtLeast,
 
     ComparatorType,
+    GenericMixinConstructor,
 }

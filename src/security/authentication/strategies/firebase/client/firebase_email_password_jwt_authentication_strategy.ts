@@ -9,7 +9,7 @@ import { FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration } fro
 
 import FirebaseAbstractJWTAuthenticationStrategy from '../abstract/firebase_abstract_jwt_authentication_strategy';
 
-import AxiosRequestFacade from '../../../../../net/http/request/axios_request_facade';
+import AxiosRequestFacade from '../../../../../net/http/request/axios/axios_client_request_facade';
 import FirebaseClientRegistry from '../../../../../registers/firebase/firebase_client_registry';
 
 import { handleHTTPResponseData } from '../../../../../utils/net/http/response_utils';

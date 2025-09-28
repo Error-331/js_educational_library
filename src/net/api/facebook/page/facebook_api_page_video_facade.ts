@@ -19,7 +19,7 @@ import { FACEBOOK_GRAPH_API_PAGE_VIDEOS_PATH_PART, FACEBOOK_GRAPH_API_PAGE_VIDEO
 import FacebookAPIServerAbstractFacade from '../facebook_api_server_abstract_facade';
 import FacebookAPIAppResumableFileUploadFacade from '../app/facebook_api_app_resumable_file_upload_facade';
 import FacebookAPIPageResumableFileUploadFacade from './facebook_api_page_resumable_video_upload_facade';
-import AxiosRequestFacade from '../../../http/request/axios_request_facade';
+import AxiosRequestFacade from '../../../http/request/axios/axios_server_request_facade';
 
 import { combineMultipleURLPaths } from '../../../../utils/net/uri_utils';
 import { throwGraphAPIHTTPError } from '../../../../utils/vendor/facebook_utils';

@@ -33,11 +33,11 @@ import {
 import { MIME_TYPE_BIN } from '../../../../constants/net/common/mime_types_constants';
 
 import FacebookAPIServerAbstractFacade from '../facebook_api_server_abstract_facade';
-import AxiosRequestFacade from '../../../http/request/axios_request_facade';
+import AxiosRequestFacade from '../../../http/request/axios/axios_server_request_facade';
 
 import { combineMultipleURLPaths } from '../../../../utils/net/uri_utils';
 import { throwGraphAPIHTTPError } from '../../../../utils/vendor/facebook_utils';
-import { calcFileSizeInBytesAsync } from '../../../../utils/file/general_file_utils';
+import { calcFileSizeInBytesAsync } from '../../../../utils/file/server_file_utils';
 import { defaultTo } from '../../../../utils/misc/functional_utils';
 import { isObjectOfType } from '../../../../utils/primitives/object_utils';
 import { stringToInt } from '../../../../utils/primitives/string/string_to_number_utils';

@@ -1,9 +1,9 @@
 // external imports
 
 // internal imports
-import { FACEBOOK_GRAPH_API_DEFAULT_VERSION } from '../../../constants/net/api/facebook/facebook_common_constants';
-
 import { FacebookServerOptions } from '../../../declarations/vendor/facebook/facebook_base_server_declarations';
+
+import { FACEBOOK_GRAPH_API_DEFAULT_VERSION } from '../../../constants/net/api/facebook/facebook_common_constants';
 import FacebookServerRegistry from '../../../registers/facebook/facebook_server_registry';
 
 import { defaultTo } from '../../../utils/misc/functional_utils';

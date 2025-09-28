@@ -1,36 +1,35 @@
 // external imports
 
 // internal imports
-import { GenericObject } from '../../../declarations/collection_declarations';
+import { GenericObject } from '../../../../declarations/collection_declarations';
 
 import {
     HTTPRequestMethod,
     HTTPRequestParams,
     HTTPRequestConfig,
+    HTTPRequestData,
 
     RequestFacade,
-} from '../../../declarations/net/http/request_declarations';
+} from '../../../../declarations/net/http/request_declarations';
 
-import { HTTP_REQUEST_TIMEOUT } from '../../../constants/net/http/request_constants';
+import { HTTP_REQUEST_TIMEOUT } from '../../../../constants/net/http/request_constants';
 
-import { HTTPResponseSchema } from '../../../declarations/net/http/response_declarations';
-import { HTTPHeadersCollection } from '../../../declarations/net/http/headers_declarations';
+import { HTTPResponseSchema } from '../../../../declarations/net/http/response_declarations';
+import { HTTPHeadersCollection } from '../../../../declarations/net/http/headers_declarations';
 
-import FormDataTransformer from '../form/form_data_transformer';
-
-import { removeLastSpecialSymbolStringFormatter } from '../../../utils/primitives/string/basic_string_formatting_utils';
-import { cloneDeep } from '../../../utils/primitives/object_utils';
-import { isNil } from '../../../utils/misc/logic_utils';
+import { removeLastSpecialSymbolStringFormatter } from '../../../../utils/primitives/string/basic_string_formatting_utils';
+import { cloneDeep } from '../../../../utils/primitives/object_utils';
+import { isNil } from '../../../../utils/misc/logic_utils';
 
 // implementation
-abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<ResponseDataType> {
+abstract class AbstractBaseRequestFacade<ResponseDataType> implements RequestFacade<ResponseDataType> {
     protected _baseURL: string;
     protected _url: string;
 
     protected _method: HTTPRequestMethod = 'get';
     protected _headers: HTTPHeadersCollection = {};
     protected _params: HTTPRequestParams = {};
-    protected _data: GenericObject | FormData | Buffer;
+    protected _data: HTTPRequestData;
     protected _timeout: number = HTTP_REQUEST_TIMEOUT;
 
     constructor(config: HTTPRequestConfig) {
@@ -87,15 +86,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
         return { method: 'get' };
     }
 
-    protected prepareData(data: GenericObject | FormData | Buffer) {
-        if (FormDataTransformer.isFormData(data)) {
-            return FormDataTransformer.clone(data);
-        } else if (Buffer.isBuffer(data)) {
-            return data;
-        } else {
-            return cloneDeep(this._data);
-        }
-    }
+    protected abstract prepareData(data: HTTPRequestData): HTTPRequestData;
 
     protected prepareBaseConfig(): HTTPRequestConfig {
         return {
@@ -115,7 +106,7 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
         return Object.assign({}, baseConfig, newConfig);
     }
 
-    protected mergeCustomConfig(customConfig?: HTTPRequestConfig): HTTPRequestConfig {
+    public mergeCustomConfig(customConfig?: HTTPRequestConfig): HTTPRequestConfig {
         let baseConfig = this.prepareBaseConfig();
 
         if (!isNil(customConfig)) {
@@ -208,4 +199,4 @@ abstract class AbstractRequestFacade<ResponseDataType> implements RequestFacade<
 }
 
 // exports
-export default AbstractRequestFacade;
+export default AbstractBaseRequestFacade;
