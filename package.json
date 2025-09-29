@@ -60,8 +60,9 @@
     "@google-cloud/video-transcoder": "^4.4.0",
     "axios": "^1.8.4",
     "express": "^5.1.0",
-    "firebase": "^11.4.0",
+    "firebase": "^12.3.0",
     "firebase-admin": "^13.2.0",
+    "firebase/functions": "^6.4.0",
     "luxon": "^3.6.1",
     "next": "^15.2.2",
     "zod": "^3.24.1",
@@ -86,10 +87,13 @@
     "express": {
       "optional": true
     },
+    "firebase": {
+      "optional": true
+    },
     "firebase-admin": {
       "optional": true
     },
-    "firebase": {
+    "firebase/functions": {
       "optional": true
     },
     "luxon": {
@@ -116,8 +120,9 @@
     "ts-jest": "^29.2.5",
     "tsx": "^4.20.5",
     "typescript": "^5.7.3",
-    "firebase": "^11.4.0",
+    "firebase": "^12.3.0",
     "firebase-admin": "^13.2.0",
+    "firebase/functions": "^6.4.0",
     "@google-cloud/compute": "^5.2.0",
     "@google-cloud/video-transcoder": "^4.4.0",
     "luxon": "^3.6.1",

@@ -55,7 +55,7 @@ function generateAlmostRandomUUID(): string {
         const newCharNumber = Math.random() * 16 | 0;
         return (currentChar == 'x' ? newCharNumber : (newCharNumber & 0x3 | 0x8)).toString(16);
     });
-};
+}
 
 // exports
 export {

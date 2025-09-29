@@ -116,6 +116,18 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
         return Promise.resolve();
     }
 
+    public async moveTo(fileName: string, newPathToFile: string) {
+        if (!isString(fileName)) {
+            throw new RangeError('Cannot move file to Firebase storage - filename must be of type string');
+        }
+
+        if (!isString(newPathToFile)) {
+            throw new RangeError('Cannot move file to Firebase storage - new path to file must be of type string');
+        }
+
+        return await this.getFileRef(fileName).move(newPathToFile);
+    }
+
     public deleteCollection(): Promise<void> {
         return Promise.resolve();
     }

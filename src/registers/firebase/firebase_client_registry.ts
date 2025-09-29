@@ -1,6 +1,7 @@
 // external imports
 import { FirebaseApp, FirebaseOptions, initializeApp, getApp, getApps } from 'firebase/app';
 import { Auth, getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 
 // internal imports
 import { FIREBASE_DEFAULT_CLIENT_APP_NAME } from '../../constants/registers/firebase_registers_constants';
@@ -79,6 +80,11 @@ class FirebaseClientRegistry {
         connectAuthEmulator(this.auth, url);
     }
 
+    public connectEmulatorToFunctions(): void {
+        const functions = getFunctions(getApp(this.appName));
+        connectFunctionsEmulator(functions, '127.0.0.1', 5001);
+    }
+
     /**
      * Method that initializes current class instance.
      *
@@ -97,6 +103,7 @@ class FirebaseClientRegistry {
 
             if (!isClientProductionEnvironment()) {
                 this.connectEmulatorToAuth('http://127.0.0.1:9099');
+                //this.connectEmulatorToFunctions();
             }
         }
     }
