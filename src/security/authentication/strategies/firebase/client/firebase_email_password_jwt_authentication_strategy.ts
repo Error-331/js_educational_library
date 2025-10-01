@@ -183,10 +183,8 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWT
             url: this.signOutURL,
         });
 
-        const { statusCode, data } = await httpClient.get();
+        const [{ statusCode, data }] = await Promise.all([httpClient.get(), FirebaseClientRegistry.getInstance().auth.signOut()]);
         handleHTTPResponseData<UserAuthenticationStateInfo>(statusCode, data);
-
-        await FirebaseClientRegistry.getInstance().auth.signOut();
     }
 }
 
