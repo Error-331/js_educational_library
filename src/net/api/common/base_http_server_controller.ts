@@ -12,7 +12,6 @@ import CookieStoreFactory from '../../http/cookies/factories/cookies_store_facto
 import { prepareHTTPResponseData } from '../../../utils/net/http/response_utils';
 import { isNil, isString } from '../../../utils/misc/logic_utils';
 
-
 // implementation
 class BaseHTTPServerController {
     static createFrameworkCookieStore(req: CommonServerRequest, res: CommonServerResponse, cookieOptions?: JWTCookieStoreOptions) {

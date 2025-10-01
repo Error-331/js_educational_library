@@ -8,10 +8,14 @@ import {
     AuthenticationVendor,
     UserAuthenticationStateInfo
 } from '../../../../../declarations/security/authentication/general_authentication_declarations';
-import { FirebaseEmailPasswordJWTServerSignUpData } from  '../../../../../declarations/security/authentication/firebase_authentication_declarations';
+import {
+    FirebaseAuthTokenType,
+    FirebaseEmailPasswordJWTServerSignUpData
+} from '../../../../../declarations/security/authentication/firebase_authentication_declarations';
 
 import HTTPError from '../../../../../errors/http_error';
 import FirebaseAbstractServerJWTAuthenticationStrategy from './firebase_abstract_server_jwt_authentication_strategy';
+import FirebaseServerJWTAuthenticationUtils from '../../../utils/firebase/firebase_server_jwt_authentication_utils';
 
 import FirebaseAdminRegistry from '../../../../../registers/firebase/firebase_admin_registry';
 
@@ -54,6 +58,16 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractSer
         } catch (error: unknown) {
             await this.transformAndThrowFirebaseAuthError(error);
         }
+    }
+
+    public async signOut(): Promise<void> {
+        const jwtValue = await this.cookieStore.getJWTResponseCookie();
+        await super.signOut();
+
+        const fbAdminAuth = FirebaseAdminRegistry.getInstance().auth;
+        const decodedClaims = await FirebaseServerJWTAuthenticationUtils.decodeAuthToken(jwtValue, FirebaseAuthTokenType.JWTToken);
+
+        await fbAdminAuth.revokeRefreshTokens(decodedClaims.sub);
     }
 }
 

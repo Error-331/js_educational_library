@@ -77,7 +77,8 @@ class FirebaseClientRegistry {
      */
 
     public connectEmulatorToAuth(url: string): void {
-        connectAuthEmulator(this.auth, url);
+        const app = getApp(this.appName);
+        connectAuthEmulator(getAuth(app), url);
     }
 
     public connectEmulatorToFunctions(): void {

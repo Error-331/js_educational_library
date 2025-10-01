@@ -185,6 +185,8 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWT
 
         const { statusCode, data } = await httpClient.get();
         handleHTTPResponseData<UserAuthenticationStateInfo>(statusCode, data);
+
+        await FirebaseClientRegistry.getInstance().auth.signOut();
     }
 }
 
