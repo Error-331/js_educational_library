@@ -28,7 +28,10 @@ const MIME_TYPE_AIFF = 'audio/aiff';
 const MIME_TYPE_AMR = 'audio/amr';
 const MIME_TYPE_APNG = 'image/png';
 const MIME_TYPE_ARC = 'application/x-freearc';
-const MIME_TYPE_ASF = 'video/x-ms-asf';
+const MIME_TYPE_ASF = {
+    [META_MIME_TYPE_VIDEO]: 'video/x-ms-asf',
+    [META_MIME_TYPE_AUDIO]: 'audio/x-ms-wma',
+};
 const MIME_TYPE_ASF_STREAM = 'video/x-ms-asf';
 const MIME_TYPE_ASS = 'text/x-ass';
 const MIME_TYPE_AU = 'audio/basic';
@@ -46,9 +49,11 @@ const MIME_TYPE_CDA = 'application/x-cdf';
 const MIME_TYPE_CSH = 'application/x-csh';
 const MIME_TYPE_CSS = 'text/css';
 const MIME_TYPE_CSV = 'text/csv';
+const MIME_TYPE_DIVX = 'video/divx';
 const MIME_TYPE_DOC = 'application/msword';
 const MIME_TYPE_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 const MIME_TYPE_DTS = 'audio/x-dca';
+const MIME_TYPE_DV = 'video/x-dv';
 const MIME_TYPE_DVD = 'video/mpeg';
 const MIME_TYPE_EAC3 = 'audio/x-eac3';
 const MIME_TYPE_EOT = 'application/vnd.ms-fontobject';
@@ -73,6 +78,7 @@ const MIME_TYPE_IPOD = 'video/mp4';
 const MIME_TYPE_ISMV = 'video/mp4';
 const MIME_TYPE_JACOSUB = 'text/x-jacosub';
 const MIME_TYPE_JAR = 'application/java-archive';
+const MIME_TYPE_JPG = 'image/jpg'; // "unofficial" MIME type - should not be used
 const MIME_TYPE_JPEG = 'image/jpeg';
 const MIME_TYPE_JPEG_PIPE = 'image/jpeg';
 const MIME_TYPE_JPEGLS_PIPE = 'image/jpeg';
@@ -81,6 +87,7 @@ const MIME_TYPE_JSON = 'application/json';
 const MIME_TYPE_JSONLD = 'application/ld+json';
 const MIME_TYPE_LATM = 'audio/MP4A-LATM';
 const MIME_TYPE_LIVE_FLV = 'video/x-flv';
+const MIME_TYPE_M2TS = 'video/MP2T';
 const MIME_TYPE_M4V = 'video/x-m4v';
 const MIME_TYPE_MATROSKA = 'video/x-matroska';
 const MIME_TYPE_MD = 'text/markdown';
@@ -94,6 +101,7 @@ const MIME_TYPE_MMF = 'application/vnd.smaf';
 const MIME_TYPE_MOV = 'video/mp4';
 const MIME_TYPE_M4A = 'video/mp4';
 const MIME_TYPE_MJ2 = 'video/mp4';
+const MIME_TYPE_MOD = ['audio/mod', 'audio/x-mod'];
 const MIME_TYPE_MP2 = 'audio/mpeg';
 const MIME_TYPE_MP3 = 'audio/mpeg';
 const MIME_TYPE_MP4 = 'video/mp4';
@@ -108,6 +116,7 @@ const MIME_TYPE_MPKG = 'application/vnd.apple.installer+xml';
 const MIME_TYPE_MXF = 'application/mxf';
 const MIME_TYPE_MXF_D10 = 'application/mxf';
 const MIME_TYPE_MXF_OPATOM = 'application/mxf';
+const MIME_TYPE_NSV = ['video/x-nsv', 'application/x-winamp'];
 const MIME_TYPE_NUT = 'video/x-nut';
 const MIME_TYPE_ODP = 'application/vnd.oasis.opendocument.presentation';
 const MIME_TYPE_ODS = 'application/vnd.oasis.opendocument.spreadsheet';
@@ -122,6 +131,7 @@ const MIME_TYPE_OTF = 'font/otf';
 const MIME_TYPE_PNG = 'image/png';
 const MIME_TYPE_PPT = 'application/vnd.ms-powerpoint';
 const MIME_TYPE_PPTX = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+const MIME_TYPE_QUICKTIME = 'video/quicktime';
 const MIME_TYPE_RAR = 'application/vnd.rar';
 const MIME_TYPE_RM = 'application/vnd.rn-realmedia';
 const MIME_TYPE_RTF = 'application/rtf';
@@ -201,9 +211,11 @@ export {
     MIME_TYPE_CSH,
     MIME_TYPE_CSS,
     MIME_TYPE_CSV,
+    MIME_TYPE_DIVX,
     MIME_TYPE_DOC,
     MIME_TYPE_DOCX,
     MIME_TYPE_DTS,
+    MIME_TYPE_DV,
     MIME_TYPE_DVD,
     MIME_TYPE_EAC3,
     MIME_TYPE_EOT,
@@ -228,6 +240,7 @@ export {
     MIME_TYPE_ISMV,
     MIME_TYPE_JACOSUB,
     MIME_TYPE_JAR,
+    MIME_TYPE_JPG,
     MIME_TYPE_JPEG,
     MIME_TYPE_JPEG_PIPE,
     MIME_TYPE_JPEGLS_PIPE,
@@ -236,6 +249,7 @@ export {
     MIME_TYPE_JSONLD,
     MIME_TYPE_LATM,
     MIME_TYPE_LIVE_FLV,
+    MIME_TYPE_M2TS,
     MIME_TYPE_M4V,
     MIME_TYPE_MATROSKA,
     MIME_TYPE_MD,
@@ -249,6 +263,7 @@ export {
     MIME_TYPE_MOV,
     MIME_TYPE_M4A,
     MIME_TYPE_MJ2,
+    MIME_TYPE_MOD,
     MIME_TYPE_MP2,
     MIME_TYPE_MP3,
     MIME_TYPE_MP4,
@@ -263,6 +278,7 @@ export {
     MIME_TYPE_MXF,
     MIME_TYPE_MXF_D10,
     MIME_TYPE_MXF_OPATOM,
+    MIME_TYPE_NSV,
     MIME_TYPE_NUT,
     MIME_TYPE_ODP,
     MIME_TYPE_ODS,
@@ -277,6 +293,7 @@ export {
     MIME_TYPE_PNG,
     MIME_TYPE_PPT,
     MIME_TYPE_PPTX,
+    MIME_TYPE_QUICKTIME,
     MIME_TYPE_RAR,
     MIME_TYPE_RM,
     MIME_TYPE_RTF,

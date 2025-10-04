@@ -8,6 +8,7 @@ import {
     FacebookAPIPageVideoPublishByFilePathOptions,
     FacebookAPIPageVideoPublishByStreamOptions,
     FacebookGraphAPIPageVideoPublishResponse,
+    FacebookAPIPageReelPublishByStreamOptions,
     FacebookGraphAPIPageReelPublishResponse,
     FacebookPageReelPublishResponse,
     FacebookGraphAPIPageVideoStatusResponse,
@@ -161,7 +162,27 @@ class FacebookAPIPageVideoFacade extends FacebookAPIServerAbstractFacade {
         }
     }
 
-    public async uploadAndPublishReelByStream(uploadOptions: FacebookAPIPageVideoPublishByStreamOptions): Promise<FacebookPageReelPublishResponse> {
+    public async uploadAndPublishVideoByStream(uploadOptions: FacebookAPIPageVideoPublishByStreamOptions): Promise<FacebookGraphAPIPageVideoPublishResponse> {
+        const fileUploadFacade = new FacebookAPIAppResumableFileUploadFacade();
+        const uploadResult = await fileUploadFacade.uploadFileByStream(
+            uploadOptions.userAccessToken,
+            uploadOptions.fileMIMEType,
+            uploadOptions.fileName,
+            uploadOptions.fileSize,
+            uploadOptions.stream,
+            uploadOptions?.fileUploadOptions
+        );
+
+        return await this.publishVideo(
+            uploadOptions.pageId,
+            uploadOptions.pageAccessToken,
+            uploadResult.h,
+            uploadOptions.title,
+            uploadOptions.description,
+        );
+    }
+
+    public async uploadAndPublishReelByStream(uploadOptions: FacebookAPIPageReelPublishByStreamOptions): Promise<FacebookPageReelPublishResponse> {
         const fileUploadFacade = new FacebookAPIPageResumableFileUploadFacade();
         const uploadResult = await fileUploadFacade.uploadFileByStream(
             uploadOptions.userAccessToken,

@@ -95,7 +95,7 @@ abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends FirebaseA
         const jwtValue = await this.cookieStore.getJWTResponseCookie();
 
         if (isNil(jwtValue)) {
-            throw new HTTPError('Cannot verify user - JWT token is not set', 401);
+            return false;
         }
 
         try {

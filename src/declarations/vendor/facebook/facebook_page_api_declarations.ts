@@ -29,6 +29,13 @@ type FacebookAPIPageVideoPublishByFilePathOptions = FacebookAPIPageVideoPublishO
 }
 
 type FacebookAPIPageVideoPublishByStreamOptions = FacebookAPIPageVideoPublishOptions & {
+    fileMIMEType: string;
+    fileName: string;
+    fileSize: string | number;
+    stream: Readable;
+};
+
+type FacebookAPIPageReelPublishByStreamOptions = FacebookAPIPageVideoPublishOptions & {
     fileSize: string | number;
     stream: Readable;
 };
@@ -158,6 +165,7 @@ export {
     FacebookAPIPageVideoPublishOptions,
     FacebookAPIPageVideoPublishByFilePathOptions,
     FacebookAPIPageVideoPublishByStreamOptions,
+    FacebookAPIPageReelPublishByStreamOptions,
 
     FacebookGraphAPIPageVideoUploadInitResponse,
     FacebookGraphAPIPageVideoUploadFinishResponse,

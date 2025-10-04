@@ -104,7 +104,7 @@ class FirebaseClientRegistry {
 
             if (!isClientProductionEnvironment()) {
                 this.connectEmulatorToAuth('http://127.0.0.1:9099');
-                //this.connectEmulatorToFunctions();
+                this.connectEmulatorToFunctions();
             }
         }
     }

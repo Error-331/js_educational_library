@@ -127,7 +127,7 @@ class FacebookAPIPageResumableFileUploadFacade extends FacebookAPIServerAbstract
         return createReadStream(pathToFile, { highWaterMark: readBufferSize });
     }
 
-    protected async startFileUploadStream(pageAccessToken: string, videoId: string, fsStream: Readable, fileSize: string | number, fileUploadOptions?: FacebookGraphAPIAppUploadConfig): Promise<FacebookGraphAPIPageVideoUploadFinishResponse | null> {
+    protected async startFileUploadStream(pageAccessToken: string, videoId: string, fsStream: Readable, fileSize: string | number): Promise<FacebookGraphAPIPageVideoUploadFinishResponse | null> {
         let fileOffset = 0;
 
         return new Promise<FacebookGraphAPIPageVideoUploadFinishResponse | null>((resolve, reject) => {
@@ -189,7 +189,7 @@ class FacebookAPIPageResumableFileUploadFacade extends FacebookAPIServerAbstract
         const fbInitUploadResponse = await this.initFileUpload(pageAccessToken, pageId, contentType);
         const readStream = this.prepareReadStreamFromFile(pathToFile, fileUploadOptions);
 
-        await this.startFileUploadStream(pageAccessToken, fbInitUploadResponse.video_id, readStream, fileSize, fileUploadOptions);
+        await this.startFileUploadStream(pageAccessToken, fbInitUploadResponse.video_id, readStream, fileSize);
         return fbInitUploadResponse;
     }
 }
