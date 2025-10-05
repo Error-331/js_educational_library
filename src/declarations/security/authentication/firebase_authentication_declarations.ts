@@ -27,9 +27,17 @@ type FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration = {
     signUpUseServer?: boolean;
 }
 
+type FirebaseEmailPasswordJWTServerUserData = {
+    uid: string;
+    email?: string;
+    emailVerified: boolean;
+    photoURL?: string;
+}
+
 export {
     FirebaseAuthTokenType,
 
     FirebaseEmailPasswordJWTServerSignUpData,
     FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration,
+    FirebaseEmailPasswordJWTServerUserData,
 }

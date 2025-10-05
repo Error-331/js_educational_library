@@ -28,6 +28,7 @@ interface UserAuthenticationStateInfo extends UserAuthenticationStrategyInfo {
 interface AuthenticationSignInStrategy<SignInParams = unknown, SignUpParams = void, UserData = void> {
     verifyUser(): Promise<boolean>;
     getUserAuthenticationStateInfo(): Promise<UserAuthenticationStateInfo>;
+    getUserData(): Promise<UserData>;
 
     signIn(...args: SignInParams[]): Promise<UserAuthenticationStateInfo>;
     signUp(...args: SignUpParams[]): Promise<UserData>;

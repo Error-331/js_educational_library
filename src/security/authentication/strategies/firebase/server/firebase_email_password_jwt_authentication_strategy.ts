@@ -10,7 +10,8 @@ import {
 } from '../../../../../declarations/security/authentication/general_authentication_declarations';
 import {
     FirebaseAuthTokenType,
-    FirebaseEmailPasswordJWTServerSignUpData
+    FirebaseEmailPasswordJWTServerSignUpData,
+    FirebaseEmailPasswordJWTServerUserData,
 } from '../../../../../declarations/security/authentication/firebase_authentication_declarations';
 
 import HTTPError from '../../../../../errors/http_error';
@@ -18,9 +19,13 @@ import FirebaseAbstractServerJWTAuthenticationStrategy from './firebase_abstract
 import FirebaseServerJWTAuthenticationUtils from '../../../utils/firebase/firebase_server_jwt_authentication_utils';
 
 import FirebaseAdminRegistry from '../../../../../registers/firebase/firebase_admin_registry';
+import { pick } from '../../../../../utils/primitives/object_utils';
+import { isNil } from '../../../../../utils/misc/logic_utils';
 
 // implementation
-class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractServerJWTAuthenticationStrategy implements AuthenticationSignInStrategy<string, FirebaseEmailPasswordJWTServerSignUpData, UserRecord> {
+class FirebaseEmailPasswordJWTAuthenticationStrategy extends
+    FirebaseAbstractServerJWTAuthenticationStrategy implements
+    AuthenticationSignInStrategy<string, FirebaseEmailPasswordJWTServerSignUpData, FirebaseEmailPasswordJWTServerUserData> {
     protected verifyDecodedAuthTokenProviderId(decodedAuthToken: DecodedIdToken): boolean {
         return decodedAuthToken.firebase.sign_in_provider === 'password';
     }
@@ -33,6 +38,21 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractSer
         }
 
         return decodedAuthTokenCopy;
+    }
+
+    public async getUserData(): Promise<FirebaseEmailPasswordJWTServerUserData> {
+        const jwtValue = await this.cookieStore.getJWTResponseCookie();
+        if (isNil(jwtValue)) {
+            return null;
+        }
+
+        const { email, email_verified: emailVerified, uid, picture: photoURL } = await FirebaseServerJWTAuthenticationUtils.decodeAuthToken(jwtValue, FirebaseAuthTokenType.JWTToken);
+        return {
+            email,
+            emailVerified,
+            uid,
+            photoURL,
+        };
     }
 
     public async signIn(accessToken: string): Promise<UserAuthenticationStateInfo> {
@@ -51,10 +71,11 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractSer
         };
     }
 
-    public async signUp(userData: FirebaseEmailPasswordJWTServerSignUpData): Promise<UserRecord> {
+    public async signUp(userData: FirebaseEmailPasswordJWTServerSignUpData): Promise<FirebaseEmailPasswordJWTServerUserData> {
         const fbAdminAuth = FirebaseAdminRegistry.getInstance().auth;
         try {
-            return await fbAdminAuth.createUser(userData);
+            const userDataRecord =  await fbAdminAuth.createUser(userData);
+            return pick<UserRecord, 'uid' | 'email' | 'emailVerified' | 'photoURL'>(userDataRecord, ['uid', 'email', 'emailVerified', 'photoURL']);
         } catch (error: unknown) {
             await this.transformAndThrowFirebaseAuthError(error);
         }

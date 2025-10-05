@@ -30,6 +30,10 @@ class FirebaseAnonymousJWTServerAuthenticationStrategy extends
         return decodedAuthTokenCopy;
     }
 
+    public async getUserData(): Promise<UserAuthenticationStateInfo> {
+        return this.getUserAuthenticationStateInfo();
+    }
+
     public async signIn(accessToken: string): Promise<UserAuthenticationStateInfo> {
         await this.verifyAccessToken(accessToken);
         await this.addSessionCookie(accessToken);
