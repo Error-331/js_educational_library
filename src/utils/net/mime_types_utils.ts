@@ -8,7 +8,7 @@ import { META_MIME_TYPE_VIDEO, MIME_TYPE_BIN } from '../../constants/net/common/
 
 import { trimStringFormatter } from '../primitives/string/basic_string_formatting_utils';
 import { curry } from '../misc/functional_utils';
-import { isNil, isString, isObject } from '../misc/logic_utils';
+import {isNil, isString, isArray, isObject } from '../misc/logic_utils';
 
 // implementation
 /**
@@ -38,14 +38,16 @@ function findMIMETypeByFileExtension(fileExtension: string): MimeTypeValue {
     return isNil(mimeType) ? MIME_TYPE_BIN : mimeType;
 }
 
-function findMIMETypeByFileExtensionAndMetaType(metaType: string, fileExtension: string): string {
+function findMIMETypeByFileExtensionAndMetaType(metaType: string, fileExtension: string): string | string[] {
     if (!isString(metaType)) {
         throw new RangeError('Cannot find MIME type by file extension and meta type - meta type must be of type string');
     }
 
     const mimeType = findMIMETypeByFileExtension(fileExtension);
 
-    if (isObject(mimeType)) {
+    if (isArray(mimeType)) {
+        return mimeType;
+    } else if (isObject(mimeType)) {
         const mimeSubType = mimeType[metaType];
 
         if (isNil(mimeSubType)) {

@@ -14,7 +14,7 @@ describe('MIME types utils tests...', () => {
         });
 
         test('Should return "binary" MIME type for an unknown file extension', () => {
-            expect(findMIMETypeByFileExtension('unknownext')).toBe(MIME_TYPE_BIN );
+            expect(findMIMETypeByFileExtension('unknownext')).toBe(MIME_TYPE_BIN);
         });
 
         test('Should handle uppercase file extensions correctly', () => {

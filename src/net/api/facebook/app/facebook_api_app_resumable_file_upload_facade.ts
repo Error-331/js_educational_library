@@ -1,4 +1,6 @@
 // external imports
+import { Readable } from 'node:stream';
+
 import { basename } from 'node:path';
 import { createReadStream } from 'node:fs';
 
@@ -30,7 +32,7 @@ import { findMIMETypeByFileExtensionAndVideoMetaType } from '../../../../utils/n
 import { defaultTo } from '../../../../utils/misc/functional_utils';
 import { isObjectOfType } from '../../../../utils/primitives/object_utils';
 import { stringToInt } from '../../../../utils/primitives/string/string_to_number_utils';
-import { isString, isObject } from '../../../../utils/misc/logic_utils';
+import { isString, isArray, isObject } from '../../../../utils/misc/logic_utils';
 
 // implementation
 class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractFacade {
@@ -165,7 +167,7 @@ class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractF
             throw new RangeError('Cannot upload file to Facebook - cannot upload file which size is equal to zero');
         }
 
-        const fbUploadResponse = await this.initFileUpload(userAccessToken, fileName, fileMIMEType, fileSize);
+        const fbUploadResponse = await this.initFileUpload(userAccessToken, fileName, isArray(fileMIMEType) ? fileMIMEType[0] : fileMIMEType, fileSize);
         const readStream = this.prepareReadStreamFromFile(pathToFile, fileUploadOptions);
 
         return this.startFileUploadStream(userAccessToken, fbUploadResponse.id, readStream);
