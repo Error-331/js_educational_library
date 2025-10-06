@@ -22,19 +22,25 @@ function logWarning(data: unknown, message: string): void {
     pinoInstance.warn(data, message);
 }
 
-function logError(error: unknown, message?: string | unknown, ): void {
+function logError(error: unknown, topic?: string, message?: string | unknown): void {
+    let preparedTopic = 'Unknown topic';
     let preparedMessage = 'Unknown error';
+
+    if (!isNil(topic) && isString(topic)) {
+        preparedTopic = topic;
+    }
 
     if (isObjectOfType<Error>(error, { message: isString })) {
         preparedMessage = error.message;
     }
+
 
     if (!isNil(message) && isString(message)) {
         preparedMessage = message;
     }
 
     const errorData = isSerializableError(error) ? error.serialize() : error;
-    pinoInstance.error(errorData, preparedMessage);
+    pinoInstance.error({ err: errorData, topic: preparedTopic }, preparedMessage);
 }
 
 // exports
