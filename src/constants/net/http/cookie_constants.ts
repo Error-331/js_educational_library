@@ -5,7 +5,7 @@ import { SetCookieOptions } from '../../../declarations/net/http/cookie_declarat
 
 // implementation
 const JWT_COOKIE_DEFAULT_MAX_AGE = 60 * 59; // 59 minutes (in seconds)
-const JWT_COOKIE_DEFAULT_NAME = 'session';
+const JWT_COOKIE_DEFAULT_NAME = '__session';
 
 const SET_COOKIE_DEFAULT_OPTIONS: SetCookieOptions = {
     httpOnly: false,
