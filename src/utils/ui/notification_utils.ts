@@ -5,11 +5,12 @@ import { UINotification, UINotificationType } from '../../declarations/ui/notifi
 import { isNil } from '../misc/logic_utils';
 
 // implementation
-function createNotification(message: string, type: UINotificationType): UINotification {
+function createNotification(type: UINotificationType, message: string, title?: string): UINotification {
     if (isNil(message) || isNil(type)) {
         return {
-          type: UINotificationType.Error,
-          message: 'Something went wrong...'
+            type: UINotificationType.Error,
+            title,
+            message: 'Something went wrong...'
         };
     }
 

@@ -12,6 +12,7 @@ enum UINotificationType {
 
 type UINotification = {
     type: UINotificationType,
+    title?: string;
     message: string;
 }
 
