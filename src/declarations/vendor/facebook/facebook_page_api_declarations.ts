@@ -12,6 +12,11 @@ type FacebookAPIPagePhotoPublishOptions = {
     caption?: string;
 };
 
+type FacebookAPIPagePhotosPublishOptions = {
+    photoIds: string[];
+    caption?: string;
+};
+
 type FacebookAPIPageVideoPublishOptions = {
     userAccessToken: string;
     pageAccessToken: string;
@@ -49,9 +54,17 @@ type FacebookGraphAPIPageVideoUploadFinishResponse = {
     success: true;
 };
 
-type FacebookGraphAPIPagePublishedImageResponse = {
+type FacebookGraphAPIPagePhotoUploadFinishResponse = {
     id: string;
+};
+
+type FacebookGraphAPIPagePhotoPublishResponse = FacebookGraphAPIPagePhotoUploadFinishResponse & {
     post_id: string;
+};
+
+type FacebookGraphAPIPagePhotosPublishResponse = {
+    id: string;
+    post_supports_client_mutation_id?: boolean;
 };
 
 type FacebookGraphAPIPageVideoPublishResponse = {
@@ -162,15 +175,20 @@ type FacebookPageReelPublishResponse = {
 // exports
 export {
     FacebookAPIPagePhotoPublishOptions,
+    FacebookAPIPagePhotosPublishOptions,
+
     FacebookAPIPageVideoPublishOptions,
     FacebookAPIPageVideoPublishByFilePathOptions,
     FacebookAPIPageVideoPublishByStreamOptions,
     FacebookAPIPageReelPublishByStreamOptions,
 
+    FacebookGraphAPIPagePhotoUploadFinishResponse,
+
     FacebookGraphAPIPageVideoUploadInitResponse,
     FacebookGraphAPIPageVideoUploadFinishResponse,
 
-    FacebookGraphAPIPagePublishedImageResponse,
+    FacebookGraphAPIPagePhotoPublishResponse,
+    FacebookGraphAPIPagePhotosPublishResponse,
     FacebookGraphAPIPageVideoPublishResponse,
     FacebookGraphAPIPageReelPublishResponse,
 

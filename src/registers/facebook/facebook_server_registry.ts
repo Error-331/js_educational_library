@@ -6,7 +6,7 @@ import { SimpleTextEncryptor } from '../../declarations/security/crypto/encrypto
 
 import SimpleTextEncryptorFactory from '../../security/crypto/factories/simple_text_encryptor_factory';
 
-import { readJSONFileSync } from '../../utils/misc/file_utils';
+import { readJSONFileSync } from '../../utils/file/server_file_utils';
 import { isObjectOfType, cloneDeep} from '../../utils/primitives/object_utils';
 import { isNil, isUndefined, isString } from '../../utils/misc/logic_utils';
 

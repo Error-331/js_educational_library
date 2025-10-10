@@ -43,13 +43,6 @@ class FacebookAPIPageVideoFacade extends FacebookAPIServerAbstractFacade {
             throw new RangeError('Cannot publish video to Facebook page - uploaded file handle must be of type string');
         }
 
-        const formData = new FormData();
-
-        formData.append('access_token', pageAccessToken);
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('fbuploader_video_file_chunk', fileHandle);
-
         const httpClient = new AxiosRequestFacade<FacebookGraphAPIErrorResponse | FacebookGraphAPIAppUploadsResponse>({
             baseURL: FACEBOOK_GRAPH_VIDEO_API_BASE_URL,
             url: combineMultipleURLPaths([this.getDefaultAPIVersion(), pageId, FACEBOOK_GRAPH_API_PAGE_VIDEOS_PATH_PART]),

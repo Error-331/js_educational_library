@@ -8,7 +8,7 @@ import { META_MIME_TYPE_VIDEO, MIME_TYPE_BIN } from '../../constants/net/common/
 
 import { trimStringFormatter } from '../primitives/string/basic_string_formatting_utils';
 import { curry } from '../misc/functional_utils';
-import {isNil, isString, isArray, isObject } from '../misc/logic_utils';
+import { isNil, isString, isArray, isObject } from '../misc/logic_utils';
 
 // implementation
 /**

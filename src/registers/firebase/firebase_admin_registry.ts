@@ -14,7 +14,7 @@ import { FIREBASE_DEFAULT_ADMIN_APP_NAME } from '../../constants/registers/fireb
 
 import SimpleTextEncryptorFactory from '../../security/crypto/factories/simple_text_encryptor_factory';
 
-import { readJSONFileSync } from '../../utils/misc/file_utils';
+import { readJSONFileSync } from '../../utils/file/server_file_utils';
 import { isNil, isString, isObject } from '../../utils/misc/logic_utils';
 
 // implementation

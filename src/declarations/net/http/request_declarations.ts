@@ -1,5 +1,5 @@
 // external imports
-import { Stream } from 'stream'
+import { Stream } from 'stream';
 
 // internal imports
 import { GenericMixinConstructor } from '../../utility_declarations';
@@ -12,7 +12,7 @@ import { HTTPResponseSchema } from './response_declarations';
 type HTTPRequestMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';
 type HTTPRequestParams = string | object | ArrayBufferView | URLSearchParams | FormData | File | Blob | Stream | Buffer;
 
-type HTTPRequestData = GenericObject | FormData | Buffer;
+type HTTPRequestData = GenericObject | FormData | Stream | Buffer;
 
 type HTTPRequestConfig = {
     baseURL?: string,
