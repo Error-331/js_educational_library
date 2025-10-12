@@ -74,7 +74,7 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
         collectionRef: CollectionReference<EntityType, EntityType> | Query<EntityType, EntityType> | null,
         queryPreparationCB: (collectionRef: CollectionReference<EntityType, EntityType>) => Query<EntityType, EntityType>,
         data: EntityType[]
-    ) {
+    ): Promise<EntityType> {
         let snapshot: QuerySnapshot<EntityType, EntityType>;
         let collectionRefCopy: CollectionReference<EntityType, EntityType> | Query<EntityType, EntityType> | null;
 
@@ -85,7 +85,8 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
             snapshot.forEach((documentSnapshot: QueryDocumentSnapshot<EntityType, EntityType>) => data.push(documentSnapshot.data()));
 
             if (snapshot.docs.length < MODEL_PAGINATION_LIMIT) {
-                return resolve(data)
+                resolve(data);
+                return;
             } else if (snapshot.docs.length > MODEL_PAGINATION_LIMIT) {
                 reject(new RangeError(`Collection snapshot length cannot be greater than: ${MODEL_PAGINATION_LIMIT}`))
                 return;
@@ -145,21 +146,6 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
         return new Promise((resolve: (value?: void | PromiseLike<void>) => void, reject: (error: Error) => void) => {
             this.deleteQueryBatch(database, query, resolve).catch(reject);
         });
-    }
-
-    public async loadEntities(filter: Filter, page = 1, limit = MODEL_PAGINATION_LIMIT) {
-        const snapshot = this.getCollectionReference();
-        let query: Query<EntityType, EntityType>;
-
-        /*for (const filterField in filter) {
-            const
-        }*/
-
-
-            /*.where('type', '==', assetType)
-            .where('userId', '==', userId)
-            .count()
-            .get();*/
     }
 
     protected abstract getCollectionConverter(): FirestoreDataConverter<EntityType, Omit<WithFieldValue<EntityType>, 'id'>>;

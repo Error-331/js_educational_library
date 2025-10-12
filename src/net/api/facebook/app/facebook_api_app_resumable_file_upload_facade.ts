@@ -144,7 +144,9 @@ class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractF
             throw new RangeError('Cannot upload file to Facebook - file name must be of type string');
         }
 
+        console.log('nuhni---', fileSize);
         const preparedFileSize = stringToInt(fileSize);
+        console.log('kusni---', preparedFileSize);
         if (preparedFileSize <= 0) {
             throw new RangeError('Cannot upload file to Facebook - cannot upload file which size is equal to zero');
         }

@@ -68,7 +68,7 @@ class FacebookAPIPagePhotosFacade extends FacebookAPIServerAbstractFacade {
         return;
     }
 
-    public async publishUploadedPhotos(pageAccessToken: string, pageId: string, imagesPublishOptions: FacebookAPIPagePhotosPublishOptions) {
+    public async publishUploadedPhotos(pageAccessToken: string, pageId: string, imagesPublishOptions: FacebookAPIPagePhotosPublishOptions): Promise<FacebookGraphAPIPagePhotosPublishResponse> {
         const formData: GenericObject<string | boolean | object> = {
             access_token: pageAccessToken,
             published: true,
