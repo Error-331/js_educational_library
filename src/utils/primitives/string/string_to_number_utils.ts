@@ -14,6 +14,8 @@ function stringToInt(value: string | number): number {
     if (isNaN(number)) {
         throw new RangeError('Cannot convert value to integer - provided value is not a number');
     }
+
+    return number;
 }
 
 // exports
