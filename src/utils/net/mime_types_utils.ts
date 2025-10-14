@@ -46,15 +46,27 @@ function findMIMETypeByFileExtensionAndMetaType(metaType: string, fileExtension:
     const mimeType = findMIMETypeByFileExtension(fileExtension);
 
     if (isArray(mimeType)) {
-        return mimeType;
+        return mimeType[0];
     } else if (isObject(mimeType)) {
         const mimeSubType = mimeType[metaType];
 
         if (isNil(mimeSubType)) {
-            throw new Error(`Cannot find MIME type by file extension and meta type - MIME type for meta type '${metaType}' is not found`);
+            throw new Error(`Cannot find MIME type by file extension and meta type - MIME type for meta type "${metaType}" is not found`);
         }
 
         return mimeSubType;
+    } else {
+        return mimeType;
+    }
+}
+
+function findMIMETypeByFileExtensionNoneComposite(fileExtension: string) {
+    const mimeType = findMIMETypeByFileExtension(fileExtension);
+
+    if (isArray(mimeType)) {
+        return mimeType[0];
+    } else if (isObject(mimeType)) {
+        throw new Error(`Cannot find none-composite MIME type by file extension - MIME type for file extension "${fileExtension}" is composite`);
     } else {
         return mimeType;
     }
@@ -66,5 +78,6 @@ const findMIMETypeByFileExtensionAndVideoMetaType = curry(findMIMETypeByFileExte
 export {
     findMIMETypeByFileExtension,
     findMIMETypeByFileExtensionAndMetaType,
+    findMIMETypeByFileExtensionNoneComposite,
     findMIMETypeByFileExtensionAndVideoMetaType,
 }

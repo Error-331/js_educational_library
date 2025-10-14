@@ -60,33 +60,33 @@ class BinaryFileToMultipartFormDataStream extends Transform {
         this._boundary = generateRandomString(12);
     }
 
-    protected pushEndBoundary(): void {
-        this.push(`
+    protected pushEndBoundary(): boolean {
+        return this.push(`
 --${this._boundary}--
 `);
     }
 
-    protected pushLineBreak(): void {
-        this.push(`
+    protected pushLineBreak(): boolean {
+        return this.push(`
 `);
     }
 
-    protected pushDataChunk(name: string, value: string): void {
-        this.push(`
+    protected pushDataChunk(name: string, value: string): boolean {
+        return this.push(`
 --${this._boundary}
 Content-Disposition: form-data; name="${name}"
 
 ${value}`);
     }
 
-    protected pushInitialFileChunk(chunk: Buffer): void {
+    protected pushInitialFileChunk(chunk: Buffer): boolean {
         const myBuffer = Buffer.from(`--${this._boundary}
 Content-Disposition: form-data; name="${this.fileFieldName}"; filename="${this.fileName}"
 Content-Type: ${this.fileMIMEType}
 
 `, 'utf8');
 
-        this.push(Buffer.concat([myBuffer, chunk]));
+        return this.push(Buffer.concat([myBuffer, chunk]));
     }
 
     public _transform(chunk: Buffer, encoding: BufferEncoding, callback: TransformCallback): void {

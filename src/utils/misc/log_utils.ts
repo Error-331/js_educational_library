@@ -33,8 +33,7 @@ function logError(error: unknown, topic?: string, message?: string | unknown): v
     if (isObjectOfType<Error>(error, { message: isString })) {
         preparedMessage = error.message;
     }
-
-
+    
     if (!isNil(message) && isString(message)) {
         preparedMessage = message;
     }
