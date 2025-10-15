@@ -2,6 +2,11 @@
 import { TransformCallback, Transform } from 'node:stream';
 
 // internal imports
+import {
+    BinaryFileToMultipartFormDataTransformStreamData,
+    BinaryFileToMultipartFormDataTransformStreamOptions
+} from '../../../../declarations/net/http/streams/transform/binary_file_to_multipart_form_data_transform_stream_declarations';
+
 import { META_MIME_TYPE_VIDEO, MIME_TYPE_BIN } from '../../../../constants/net/common/mime_types_constants';
 
 import { generateRandomString } from '../../../../utils/primitives/string/random_string_generation_utils';
@@ -10,27 +15,17 @@ import { findMIMETypeByFileExtension } from '../../../../utils/net/mime_types_ut
 import { isNullOrEmpty, isArray, isObject } from '../../../../utils/misc/logic_utils';
 
 // implementation
-type BinaryFileToMultipartFormDataStreamData = { [key: string]: string };
-
-type BinaryFileToMultipartFormDataStreamOptions = {
-    fileName: string;
-    fileFieldName?: string;
-    fileMIMEType?: string;
-
-    data?: BinaryFileToMultipartFormDataStreamData
-}
-
-class BinaryFileToMultipartFormDataStream extends Transform {
+class BinaryFileToMultipartFormDataTransformStream extends Transform {
     protected fileName: string;
     protected fileFieldName: string;
     protected fileMIMEType: string;
 
-    protected data: BinaryFileToMultipartFormDataStreamData | null = null;
+    protected data: BinaryFileToMultipartFormDataTransformStreamData | null = null;
 
     protected firstChunkPushed: boolean = false;
     protected _boundary: string;
 
-    constructor(dataConfiguration: BinaryFileToMultipartFormDataStreamOptions, options?: unknown) {
+    constructor(dataConfiguration: BinaryFileToMultipartFormDataTransformStreamOptions, options?: unknown) {
         super(options);
 
         if (isNullOrEmpty(dataConfiguration.fileName)) {
@@ -115,4 +110,4 @@ Content-Type: ${this.fileMIMEType}
 }
 
 // exports
-export default BinaryFileToMultipartFormDataStream;
+export default BinaryFileToMultipartFormDataTransformStream;

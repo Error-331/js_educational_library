@@ -5,6 +5,8 @@
   "exports": {
     ".": "./src/index.ts",
 
+    "./binary/*": "./src/binary/*.ts",
+
     "./database/*": "./src/database/*.ts",
     "./database/firebase_storage/*": "./src/database/firebase_storage/*.ts",
     "./database/firestore/*": "./src/database/firestore/*.ts",
@@ -52,12 +54,14 @@
     "build": "tsc",
     "test": "jest",
     "decrypt_json": "tsx ./tasks/security/crypto/decrypt_json_task.ts",
-    "encrypt_json": "tsx ./tasks/security/crypto/encrypt_json_task.ts"
+    "encrypt_json": "tsx ./tasks/security/crypto/encrypt_json_task.ts",
+    "test_task": "tsx ./tasks/test.ts"
   },
   "license": "MIT",
   "peerDependencies": {
     "@google-cloud/compute": "^5.2.0",
     "@google-cloud/video-transcoder": "^4.4.0",
+    "@ffprobe-installer/ffprobe": "^2.1.2",
     "axios": "^1.8.4",
     "express": "^5.1.0",
     "firebase": "^12.3.0",
@@ -72,6 +76,9 @@
       "optional": true
     },
     "@google-cloud/video-transcoder": {
+      "optional": true
+    },
+    "@ffprobe-installer/ffprobe": {
       "optional": true
     },
     "zod": {
@@ -111,6 +118,7 @@
     "@types/node": "^22.13.10",
     "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",
+    "@ffprobe-installer/ffprobe": "^2.1.2",
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",

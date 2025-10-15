@@ -10,7 +10,7 @@ import HTTPError from '../../errors/http_error';
 import ValidationError from '../../errors/validation_error';
 
 import { isObjectOfType } from '../primitives/object_utils';
-import { isNumber, isArray, isObject } from './logic_utils';
+import { isNil, isNumber, isString, isArray, isObject } from './logic_utils';
 
 // implementation
 function isError(error: PossibleError): error is Error {
@@ -97,6 +97,22 @@ function joinValidationErrorIssues(errors: DeserializedError[] | void[]): ZodIss
     return issues;
 }
 
+function convertUnknownToError(errorData: unknown): Error {
+    if (isNil(errorData)) {
+        return new Error('Unknown error');
+    } else if (isString(errorData)) {
+        return new Error(errorData);
+    } else if (isObject(errorData)) {
+        if (isObjectOfType<{message: string}>(errorData, { message: isString })) {
+            return new Error(errorData.message);
+        } else {
+            return new Error('Unknown error');
+        }
+    } else {
+        return new Error('Unknown error');
+    }
+}
+
 // exports
 export {
     isError,
@@ -110,5 +126,6 @@ export {
     deserializeErrors,
 
     joinValidationErrorIssues,
+    convertUnknownToError,
 }
 

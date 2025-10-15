@@ -19,7 +19,7 @@ import { FACEBOOK_GRAPH_API_PAGE_PHOTOS_PATH_PART } from '../../../../constants/
 import FacebookAPIServerAbstractFacade from './../facebook_api_server_abstract_facade';
 import AxiosRequestFacade from '../../../http/request/axios/axios_server_request_facade';
 
-import BinaryFileToMultipartFormDataStream from '../../../http/streams/transform/binary_file_to_multipart_form_data_stream';
+import BinaryFileToMultipartFormDataTransformStream from '../../../http/streams/transform/binary_file_to_multipart_form_data_transform_stream';
 
 import { combineMultipleURLPaths } from '../../../../utils/net/uri_utils';
 import { throwGraphAPIHTTPError } from '../../../../utils/vendor/facebook_utils';
@@ -33,7 +33,7 @@ class FacebookAPIPagePhotosFacade extends FacebookAPIServerAbstractFacade {
             throw new Error('Cannot upload photo to the page - file stream is not specified');
         }
 
-        const transformStream = new BinaryFileToMultipartFormDataStream({
+        const transformStream = new BinaryFileToMultipartFormDataTransformStream({
             fileName,
             fileFieldName: 'source',
 
