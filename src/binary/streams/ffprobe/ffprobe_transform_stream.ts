@@ -14,7 +14,6 @@ import { isError } from '../../../utils/misc/error_utils';
 import { isNil, isNumber, isString, isFunction } from '../../../utils/misc/logic_utils';
 
 // implementation
-
 class FFProbeTransformStream extends Transform {
     protected ffprobeProcess: ChildProcessWithoutNullStreams;
     protected ffprobeOutput: string = '';
@@ -40,7 +39,7 @@ class FFProbeTransformStream extends Transform {
     }
 
     protected createFFProbeProcess(): void {
-        this.ffprobeProcess = spawn(ffprobe.path, [
+       this.ffprobeProcess = spawn(ffprobe.path, [
             '-v', 'quiet',
             '-print_format', 'json',
             '-show_format',
@@ -61,15 +60,13 @@ class FFProbeTransformStream extends Transform {
     }
 
     protected cleanup(): void {
-        this.removeAllListeners();
-
         this.ffprobeProcess.stdout.removeAllListeners();
         this.ffprobeProcess.stdin.removeAllListeners();
         this.ffprobeProcess.stderr.removeAllListeners();
 
         this.ffprobeProcess.removeAllListeners();
 
-        this.ffprobeProcess.kill();
+        this.ffprobeProcess.kill('SIGKILL');
     }
 
     protected cleanupAndDestroy(error?: Error | unknown): void {
@@ -77,8 +74,6 @@ class FFProbeTransformStream extends Transform {
 
         if (!isNil(error)) {
             this.destroy(isError(error) ? error : convertUnknownToError(error));
-        } else {
-            this.destroy();
         }
     }
 
@@ -95,6 +90,8 @@ class FFProbeTransformStream extends Transform {
                     if (isFunction(this.onDataCallback)) {
                         this.onDataCallback(this.data);
                     }
+
+                    this.cleanup();
                 } catch (error: unknown) {
                     this.cleanupAndDestroy(error);
                 }
@@ -123,8 +120,8 @@ class FFProbeTransformStream extends Transform {
     public _transform(chunk: Buffer, encoding: BufferEncoding, callback: TransformCallback): void {
         try {
             if (this.shouldWriteToFFProbe) {
-                //const stdinWriteResult = this.ffprobeProcess.stdin.write(chunk, encoding);
                 this.ffprobeProcess.stdin.write(chunk, encoding);
+
               /*  if (stdinWriteResult === false) {
                     console.log('stdinWriteResult', stdinWriteResult);
                     this.nextChunk = chunk;
@@ -136,16 +133,16 @@ class FFProbeTransformStream extends Transform {
             }
 
             this.resetNextData();
-            this.push(chunk);
 
+            this.push(chunk, encoding);
             callback();
         } catch(error: unknown) {
             this.cleanupAndDestroy(error);
         }
     }
 
-    _flush(callback: TransformCallback) {
-        this.cleanupAndDestroy();
+    public _flush(callback: TransformCallback) {
+        this.ffprobeProcess.stdin.end();
         callback();
     }
 }
