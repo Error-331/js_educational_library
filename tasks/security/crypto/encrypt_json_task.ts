@@ -10,12 +10,12 @@ import SimpleTextEncryptorFactory from '../../../src/security/crypto/factories/s
 
 // implementation
 const jsonEncrypt = {
-    appId: '1317118642658286',
-    appSecret: '5875a987e72d9fbf7e8a0f0e91f7d042',
-    version: 'v23.0'
+    appId: '',
+    appSecret: '',
+    version: ''
 };
 
-const key = 'mya6wdh29AOx2x6zf70PEiWCYfe08gPRCcqJ/mygbGg=';
+const key = '';
 
 const encryptorFactory = new SimpleTextEncryptorFactory();
 const encryptor = encryptorFactory.createEncryptor(CHA_CHA20_POLY1305_BASE64_ENCRYPTOR_NAME);
