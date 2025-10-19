@@ -31,6 +31,10 @@ My small JS multipurpose library used for educational purposes.
 - **JSEL_FACEBOOK_SERVER_OPTIONS_JSON** - Facebook server options (contains such options as application id, application secret, etc.);
 - **JSEL_FACEBOOK_SERVER_OPTIONS_CRYPTO_CONFIG** - configuration file which is used to decrypt *JSEL_FACEBOOK_SERVER_OPTIONS_JSON* represented as stringified JSON;
 
+### Vite related
+
+- **VITE_JSEL_CLIENT_ENV** - flag which indicates which environment client is running in;
+
 ### 'JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_CRYPTO_CONFIG' structure
 
 ```json
