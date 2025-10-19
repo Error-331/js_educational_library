@@ -192,7 +192,7 @@ class FirebaseAdminRegistry {
      *
      */
 
-    protected init(): void {
+    public init(): void {
         if (!isString(this.appName)) {
             throw new RangeError('Application name is not specified - cannot proceed');
         }
@@ -293,6 +293,14 @@ class FirebaseAdminRegistry {
         }
 
         FirebaseAdminRegistry.serviceAccountKey = serviceAccount;
+    }
+
+    public static setAppAdditionalConfiguration(additionalConfig: AppOptions | null): void {
+        if (!isObject(additionalConfig) && !isNil(additionalConfig)) {
+            throw new RangeError('Cannot set GCP additional config - provided configuration object is not nil and not an object')
+        }
+
+        FirebaseAdminRegistry.appAdditionalConfiguration = additionalConfig;
     }
 }
 
