@@ -18,7 +18,7 @@ import FormDataTransformer from '../../net/http/form/form_data_transformer';
 import { extractBinaryDataFromFile } from '../../utils/file/general_file_utils';
 import { createDatePlusMinutesFromNow } from '../../utils/date/current_date_utils';
 import { sanitizeURLPathPart } from '../../utils/net/uri_utils';
-import { isNil, isString } from '../../utils/misc/logic_utils';
+import { isNil, isString, isNullOrEmpty } from '../../utils/misc/logic_utils';
 
 // implementation
 abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseModel<FirebaseStorageDatabaseEntity, FirebaseStorageDatabaseEntity> {
@@ -216,6 +216,18 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
 
         const fileRef = this.getFileRef(id);
         await fileRef.makePrivate();
+    }
+
+    public getFolderStorageURL(): string {
+        return `${this.getStorageBucket().cloudStorageURI}/${this.collectionName}`;
+    }
+
+    public getFileStorageURLByPath(pathToFile: string): string  {
+        if (isNullOrEmpty(pathToFile)) {
+            throw new RangeError('Path to file is not specified - cannot get Firebase storage file url');
+        }
+
+        return `${this.getStorageBucket().cloudStorageURI}/${sanitizeURLPathPart(pathToFile)}`;
     }
 
     public getDocumentPublicURL(id: string | number): string {
