@@ -7,6 +7,11 @@ import { convertEnumToKeyToStringKeyEnum } from '../../../../utils/type/enum_uti
 // implementation
 import GoogleCloudTranscoderV1Types = protos.google.cloud.video.transcoder.v1;
 
+enum GCPPresetName {
+    FacebookReelHD = 'FacebookReelHD',
+    TikTokHD = 'TikTokHD',
+}
+
 type GCPJobProcessingStateEnumType = { [key in keyof typeof GoogleCloudTranscoderV1Types.Job.ProcessingState]: string };
 
 const GCPInstanceStatusEnum: GCPJobProcessingStateEnumType = convertEnumToKeyToStringKeyEnum<
@@ -14,10 +19,24 @@ const GCPInstanceStatusEnum: GCPJobProcessingStateEnumType = convertEnumToKeyToS
     GCPJobProcessingStateEnumType
 >(GoogleCloudTranscoderV1Types.Job.ProcessingState);
 
+type GCPVideoTranscoderJobConfiguration = {
+    presetName: GCPPresetName;
+    hasSound?: boolean;
+
+    storageSourceFileURL: string;
+    storageDestFolderURL: string;
+
+    duration?: string | number;
+}
+
 // exports
 export {
+    GCPPresetName,
+
     GoogleCloudTranscoderV1Types,
 
     GCPJobProcessingStateEnumType,
     GCPInstanceStatusEnum,
+
+    GCPVideoTranscoderJobConfiguration,
 }

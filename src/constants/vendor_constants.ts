@@ -3,6 +3,11 @@
 // internal imports
 
 // implementation
+enum SocialNetworkVendorName {
+    Facebook = 'Facebook',
+    TikTok = 'TikTok',
+}
+
 enum ServerFrameworkVendorName {
     ExpressJS = 'ExpressJS',
     NextJS = 'NextJS',
@@ -10,5 +15,6 @@ enum ServerFrameworkVendorName {
 
 // exports
 export {
+    SocialNetworkVendorName,
     ServerFrameworkVendorName,
 }
