@@ -20,7 +20,7 @@ function promiseRetry<ResponseType>(
     delay: number | null = null,
     debugFunction: PromiseRetryDebugFunction | undefined,
     ...userFuncArgs: unknown[]
-) {
+): Promise<ResponseType> {
     const debugFunctionCopy = typeof debugFunction === 'function' ? debugFunction : () => {};
     debugFunctionCopy('Promise retry - initialization...', retries, timeout, delay, undefined, undefined, ...userFuncArgs);
 
