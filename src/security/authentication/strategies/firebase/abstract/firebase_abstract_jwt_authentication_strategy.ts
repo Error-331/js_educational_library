@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import AbstractAuthenticationStrategy from './abstract_authentication_strategy';
+import AbstractAuthenticationStrategy from '../../abstract/abstract_authentication_strategy';
 
 // implementation
 abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthenticationStrategy {

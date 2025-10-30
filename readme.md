@@ -15,7 +15,6 @@ My small JS multipurpose library used for educational purposes.
 
 ### Firebase related
 
-- **JSEL_FIREBASE_CLIENT_APP_NAME** - Firebase client app name;
 - **JSEL_FIREBASE_ADMIN_APP_NAME** - Firebase admin app name;
 - **GOOGLE_APPLICATION_CREDENTIALS** - path to GCP service account file (JSON);
 - **JSEL_FIREBASE_CLIENT_APP_CONFIG_JSON_PATH** - path to Firebase app configuration;

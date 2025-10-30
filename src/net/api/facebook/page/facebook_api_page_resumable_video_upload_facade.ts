@@ -131,19 +131,45 @@ class FacebookAPIPageResumableFileUploadFacade extends FacebookAPIServerAbstract
         let fileOffset = 0;
 
         return new Promise<FacebookGraphAPIPageVideoUploadFinishResponse | null>((resolve, reject) => {
+            let totalBufferSize = 0;
+            let bufferArray: Buffer[] = [];
+
             fsStream.on('data', (fileChunk: Buffer) => {
-                fsStream.pause();
+                totalBufferSize += fileChunk.buffer.byteLength;
+                bufferArray.push(fileChunk)
 
-                this.uploadChunk(pageAccessToken, videoId, fileChunk, fileSize, fileOffset)
-                    .then((uploadResult) => {
-                        if ('success' in uploadResult) {
-                            resolve(uploadResult);
-                        }
 
-                        fileOffset += fileChunk.buffer.byteLength;
-                        fsStream.resume();
-                    })
-                    .catch(fsStream.destroy);
+                if (totalBufferSize >= 1048576) {
+                    fsStream.pause();
+
+                    const b = Buffer.concat(bufferArray)
+console.log('b', b);
+                    this.uploadChunk(pageAccessToken, videoId, b, fileSize, fileOffset)
+                        .then((uploadResult) => {
+                            if ('success' in uploadResult) {
+                                resolve(uploadResult);
+                            }
+                            console.log('upload', b.byteLength, fileSize);
+                            fileOffset += totalBufferSize;
+                            totalBufferSize = 0;
+                            bufferArray = [];
+
+                            fsStream.resume();
+                        })
+                        .catch(fsStream.destroy);
+                } else if ((parseInt(fileSize) - fileOffset) <= 1048576) {
+                    const b = Buffer.concat(bufferArray)
+                    console.log('b', b);
+
+                    this.uploadChunk(pageAccessToken, videoId, b, fileSize, fileOffset)
+                        .then((uploadResult) => {
+                            if ('success' in uploadResult) {
+                                resolve(uploadResult);
+                            }
+                            console.log('upload1', b.byteLength, fileSize);
+                        })
+                        .catch(fsStream.destroy);
+                }
             });
 
             fsStream.on('error', (error: Error) => {
@@ -167,7 +193,7 @@ class FacebookAPIPageResumableFileUploadFacade extends FacebookAPIServerAbstract
 
         const fbInitUploadResponse = await this.initFileUpload(pageAccessToken, pageId, contentType);
 
-        await this.startFileUploadStream(pageAccessToken, fbInitUploadResponse.video_id, readableStream, fileSize, fileUploadOptions);
+        await this.startFileUploadStream(pageAccessToken, fbInitUploadResponse.video_id, readableStream, fileSize);
         return fbInitUploadResponse;
     }
 

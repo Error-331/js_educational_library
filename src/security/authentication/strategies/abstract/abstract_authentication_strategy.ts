@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import { UserAuthenticationStateInfo } from '../../../../../declarations/security/authentication/general_authentication_declarations';
+import { UserAuthenticationStateInfo } from '../../../../declarations/security/authentication/general_authentication_declarations';
 
 // implementation
 abstract class AbstractAuthenticationStrategy {

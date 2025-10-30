@@ -2,6 +2,7 @@
 import { FirebaseApp, FirebaseOptions, initializeApp, getApp, getApps } from 'firebase/app';
 import { Auth, getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
+//import { Messaging, getMessaging } from 'firebase/messaging';
 
 // internal imports
 import { FIREBASE_DEFAULT_CLIENT_APP_NAME } from '../../constants/registers/firebase_registers_constants';
@@ -88,9 +89,6 @@ class FirebaseClientRegistry {
 
     /**
      * Method that initializes current class instance.
-     *
-     * @throws {RangeError} if application name is not set (@see {@link process.env.JSEL_FIREBASE_CLIENT_APP_NAME}).
-     *
      */
 
     public init(): void {
@@ -156,6 +154,10 @@ class FirebaseClientRegistry {
         this.init();
         return getAuth(this.app);
     }
+
+    /*get messaging(): Messaging {
+        return getMessaging(this.app);
+    }*/
 
     /**
      * Method that sets current Firebase Client application name.
