@@ -1,6 +1,8 @@
 // external imports
 
 // internal imports
+import { GenericObject } from '../../collection_declarations';
+
 import { DeserializedErrors} from '../../error/general_error_declarations';
 import { SerializedErrors } from '../../error/serializable_error_declarations';
 
@@ -14,7 +16,8 @@ type HTTPResponseDataSchema<Deserialized extends boolean = false, ResponseDataTy
     data: ResponseDataType | undefined | null,
 };
 
-type HTTPResponseSchema<ResponseDataType = HTTPResponseDataSchema> = {
+type HTTPResponseSchema<ResponseDataType = HTTPResponseDataSchema, ResponseHeadersType = GenericObject<string | null>> = {
+    headers: ResponseHeadersType;
     data: ResponseDataType;
     statusCode: number;
     statusText: string;

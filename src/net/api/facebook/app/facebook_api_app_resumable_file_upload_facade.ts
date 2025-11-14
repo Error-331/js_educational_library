@@ -15,6 +15,12 @@ import {
 } from '../../../../declarations/vendor/facebook/facebook_app_api_declarations';
 
 import {
+    HTTP_REQUEST_TIMEOUT,
+    HTTP_REQUEST_TIMEOUT_PADDING,
+    HTTP_REQUEST_TRY_ATTEMPT_MAX
+} from '../../../../constants/net/http/request_constants';
+
+import {
     FACEBOOK_GRAPH_API_FILE_UPLOAD_DEFAULT_BUFFER_SIZE,
 
     FACEBOOK_GRAPH_API_BASE_URL,
@@ -29,10 +35,11 @@ import { throwGraphAPIHTTPError } from '../../../../utils/vendor/facebook_utils'
 import { extractFileExtension } from '../../../../utils/misc/path_utils';
 import { calcFileSizeInBytesAsync } from '../../../../utils/file/server_file_utils';
 import { findMIMETypeByFileExtensionAndVideoMetaType } from '../../../../utils/net/mime_types_utils';
+import { asyncDelay } from '../../../../utils/async/timeout_utils';
 import { defaultTo } from '../../../../utils/misc/functional_utils';
 import { isObjectOfType } from '../../../../utils/primitives/object_utils';
 import { stringToInt } from '../../../../utils/primitives/string/string_to_number_utils';
-import { isString, isArray, isObject } from '../../../../utils/misc/logic_utils';
+import { isNil, isString, isArray, isObject } from '../../../../utils/misc/logic_utils';
 
 // implementation
 class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractFacade {
@@ -65,7 +72,11 @@ class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractF
         }
     }
 
-    protected async uploadChunk(userAccessToken: string, uploadId: string, chunk: Buffer, offset = 0): Promise<FacebookGraphAPIAppUploadChunkResponse | FacebookGraphAPIAppUploadFinishResponse> {
+    protected async uploadChunk(userAccessToken: string, uploadId: string, chunk: Buffer, offset = 0, tryAttempt = 0): Promise<FacebookGraphAPIAppUploadChunkResponse | FacebookGraphAPIAppUploadFinishResponse> {
+        if (tryAttempt >= HTTP_REQUEST_TRY_ATTEMPT_MAX) {
+            throw new Error(`Cannot upload file chunk: the number of attempts has been exhausted (${tryAttempt})`);
+        }
+
         const httpClient = new AxiosRequestFacade<FacebookGraphAPIErrorResponse |
             FacebookGraphAPIAppUploadChunkResponse |
             FacebookGraphAPIAppUploadFinishResponse
@@ -80,7 +91,7 @@ class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractF
             data: chunk,
         });
 
-        const { statusCode, data } = await httpClient.post();
+        const { statusCode, data, headers } = await httpClient.post();
 
         if (statusCode === 200) {
             const keysValidators = { h: isString };
@@ -95,6 +106,16 @@ class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractF
                 return data;
             } else {
                 throw new Error('Cannot upload file chunk - wrong response');
+            }
+        } else if (statusCode === 429) {
+            if (!isNil(headers['retry-after'])) {
+                const retryAfter = stringToInt(headers['retry-after']);
+
+                await asyncDelay((retryAfter * 1000) + HTTP_REQUEST_TIMEOUT_PADDING);
+                return this.uploadChunk(userAccessToken, uploadId, chunk, offset, tryAttempt + 1);
+            } else {
+                await asyncDelay(HTTP_REQUEST_TIMEOUT);
+                return this.uploadChunk(userAccessToken, uploadId, chunk, offset, tryAttempt + 1);
             }
         } else {
             throwGraphAPIHTTPError('Cannot upload file: ', 'Unknown reason', data, statusCode);
@@ -122,7 +143,9 @@ class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractF
                         fileOffset += fileChunk.buffer.byteLength;
                         fsStream.resume();
                     })
-                    .catch(fsStream.destroy);
+                    .catch((error) => {
+                        fsStream.destroy(error)
+                    });
             });
 
             fsStream.on('error', (error: Error) => {
@@ -144,9 +167,7 @@ class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractF
             throw new RangeError('Cannot upload file to Facebook - file name must be of type string');
         }
 
-        console.log('nuhni---', fileSize);
         const preparedFileSize = stringToInt(fileSize);
-        console.log('kusni---', preparedFileSize);
         if (preparedFileSize <= 0) {
             throw new RangeError('Cannot upload file to Facebook - cannot upload file which size is equal to zero');
         }

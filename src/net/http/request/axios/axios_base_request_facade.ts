@@ -1,5 +1,5 @@
 // external imports
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosResponseHeaders, RawAxiosResponseHeaders } from 'axios';
 
 // internal imports
 import { HTTPResponseSchema } from '../../../../declarations/net/http/response_declarations';
@@ -11,11 +11,12 @@ import { isNil } from '../../../../utils/misc/logic_utils';
 // implementation
 function AxiosBaseRequestFacade<ResponseDataType, BaseClass extends HTTPAxiosRequestFacadePartial>(BaseClass: BaseClass) {
     return class AxiosBaseRequestFacade extends BaseClass {
-        protected normalizeAxiosResponse(response: AxiosResponse<ResponseDataType> ): HTTPResponseSchema<ResponseDataType> {
+        protected normalizeAxiosResponse(response: AxiosResponse<ResponseDataType> ): HTTPResponseSchema<ResponseDataType, RawAxiosResponseHeaders | AxiosResponseHeaders> {
             return {
                 data: response.data,
                 statusCode: response.status,
-                statusText: response.statusText
+                statusText: response.statusText,
+                headers: response.headers,
             };
         }
 
@@ -26,7 +27,7 @@ function AxiosBaseRequestFacade<ResponseDataType, BaseClass extends HTTPAxiosReq
             };
         }
 
-        public async request(customConfig?: HTTPRequestConfig): Promise<HTTPResponseSchema<ResponseDataType>> {
+        public async request(customConfig?: HTTPRequestConfig): Promise<HTTPResponseSchema<ResponseDataType, RawAxiosResponseHeaders | AxiosResponseHeaders>> {
             const newConfig = this.mergeCustomConfig(customConfig);
             const axiosConfig = this.prepareAxiosConfig(newConfig);
 

@@ -33,6 +33,20 @@ class BaseHTTPServerController {
         }
     }
 
+    static serveHTMLData(req: CommonServerRequest, res: CommonServerResponse, data: string, status: number = 200): CommonServerReturn {
+        if (isNil(res)) {
+            return new Response(data, {
+                status,
+                headers: {
+                    'Content-Type': 'text/html',
+                }
+            });
+        } else {
+            res.status(status).send(data);
+            return;
+        }
+    }
+
     static serveError(req: CommonServerRequest, res: CommonServerResponse, code: number, error: Error | SerializableError | string): CommonServerReturn {
         if (isString(error)) {
             return BaseHTTPServerController.serveJSONData(req, res, prepareHTTPResponseData<undefined>(null, new HTTPError(error, code)), code);
