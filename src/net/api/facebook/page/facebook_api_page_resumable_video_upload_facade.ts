@@ -18,6 +18,14 @@ import {
 } from '../../../../declarations/vendor/facebook/facebook_page_api_declarations';
 
 import {
+    HTTP_REQUEST_TIMEOUT,
+    HTTP_REQUEST_TIMEOUT_PADDING,
+    HTTP_REQUEST_TRY_ATTEMPT_MAX,
+
+    HTTP_REQUEST_DATA_MAX_CHUNK_SIZE,
+} from '../../../../constants/net/http/request_constants';
+
+import {
     FACEBOOK_GRAPH_API_FILE_UPLOAD_DEFAULT_BUFFER_SIZE,
 
     FACEBOOK_GRAPH_API_BASE_URL,
@@ -136,20 +144,20 @@ class FacebookAPIPageResumableFileUploadFacade extends FacebookAPIServerAbstract
 
             fsStream.on('data', (fileChunk: Buffer) => {
                 totalBufferSize += fileChunk.buffer.byteLength;
-                bufferArray.push(fileChunk)
+                bufferArray.push(fileChunk);
 
+                const uploadLeftSize = (stringToInt(fileSize) - fileOffset);
 
-                if (totalBufferSize >= 1048576) {
+                if (totalBufferSize >= HTTP_REQUEST_DATA_MAX_CHUNK_SIZE) {
                     fsStream.pause();
+                    const dataChunk = Buffer.concat(bufferArray);
 
-                    const b = Buffer.concat(bufferArray)
-console.log('b', b);
-                    this.uploadChunk(pageAccessToken, videoId, b, fileSize, fileOffset)
+                    this.uploadChunk(pageAccessToken, videoId, dataChunk, fileSize, fileOffset)
                         .then((uploadResult) => {
                             if ('success' in uploadResult) {
                                 resolve(uploadResult);
                             }
-                            console.log('upload', b.byteLength, fileSize);
+
                             fileOffset += totalBufferSize;
                             totalBufferSize = 0;
                             bufferArray = [];
@@ -159,16 +167,15 @@ console.log('b', b);
                         .catch((error) => {
                             fsStream.destroy(error);
                         });
-                } else if ((parseInt(fileSize) - fileOffset) <= 1048576) {
-                    const b = Buffer.concat(bufferArray)
-                    console.log('b', b);
+                } else if (uploadLeftSize <= HTTP_REQUEST_DATA_MAX_CHUNK_SIZE && totalBufferSize >= uploadLeftSize) {
+                    const dataChunk = Buffer.concat(bufferArray);
 
-                    this.uploadChunk(pageAccessToken, videoId, b, fileSize, fileOffset)
+                    this.uploadChunk(pageAccessToken, videoId, dataChunk, fileSize, fileOffset)
                         .then((uploadResult) => {
                             if ('success' in uploadResult) {
                                 resolve(uploadResult);
                             }
-                            console.log('upload1', b.byteLength, fileSize);
+
                         })
                         .catch((error) => {
                             fsStream.destroy(error);
@@ -195,9 +202,14 @@ console.log('b', b);
             throw new RangeError('Cannot upload file to Facebook - cannot upload file which size is equal to zero');
         }
 
+        const preparedFileSize = stringToInt(fileSize);
+        if (preparedFileSize <= 0) {
+            throw new RangeError('Cannot upload file to Facebook - cannot upload file which size is equal to zero');
+        }
+
         const fbInitUploadResponse = await this.initFileUpload(pageAccessToken, pageId, contentType);
 
-        await this.startFileUploadStream(pageAccessToken, fbInitUploadResponse.video_id, readableStream, fileSize);
+        await this.startFileUploadStream(pageAccessToken, fbInitUploadResponse.video_id, readableStream, preparedFileSize);
         return fbInitUploadResponse;
     }
 

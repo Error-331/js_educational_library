@@ -17,7 +17,9 @@ import {
 import {
     HTTP_REQUEST_TIMEOUT,
     HTTP_REQUEST_TIMEOUT_PADDING,
-    HTTP_REQUEST_TRY_ATTEMPT_MAX
+    HTTP_REQUEST_TRY_ATTEMPT_MAX,
+
+    HTTP_REQUEST_DATA_MAX_CHUNK_SIZE,
 } from '../../../../constants/net/http/request_constants';
 
 import {
@@ -127,25 +129,51 @@ class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractF
         return createReadStream(pathToFile, { highWaterMark: readBufferSize });
     }
 
-    protected async startFileUploadStream(userAccessToken: string, uploadId: string, fsStream: Readable): Promise<FacebookGraphAPIAppUploadFinishResponse | null> {
+    protected async startFileUploadStream(userAccessToken: string, uploadId: string, fsStream: Readable, fileSize: string | number): Promise<FacebookGraphAPIAppUploadFinishResponse | null> {
         let fileOffset = 0;
 
         return new Promise<FacebookGraphAPIAppUploadFinishResponse | null>((resolve, reject) => {
+            let totalBufferSize = 0;
+            let bufferArray: Buffer[] = [];
+
             fsStream.on('data', (fileChunk: Buffer) => {
-                fsStream.pause();
+                totalBufferSize += fileChunk.buffer.byteLength;
+                bufferArray.push(fileChunk);
 
-                this.uploadChunk(userAccessToken, uploadId, fileChunk, fileOffset)
-                    .then((uploadResult) => {
-                        if ('h' in uploadResult) {
-                            resolve(uploadResult);
-                        }
+                const uploadLeftSize = (stringToInt(fileSize) - fileOffset);
 
-                        fileOffset += fileChunk.buffer.byteLength;
-                        fsStream.resume();
-                    })
-                    .catch((error) => {
-                        fsStream.destroy(error)
-                    });
+                if (totalBufferSize >= HTTP_REQUEST_DATA_MAX_CHUNK_SIZE) {
+                    fsStream.pause();
+                    const dataChunk = Buffer.concat(bufferArray);
+
+                    this.uploadChunk(userAccessToken, uploadId, dataChunk, fileOffset)
+                        .then((uploadResult) => {
+                            if ('h' in uploadResult) {
+                                resolve(uploadResult);
+                            }
+
+                            fileOffset += totalBufferSize;
+                            totalBufferSize = 0;
+                            bufferArray = [];
+
+                            fsStream.resume();
+                        })
+                        .catch((error) => {
+                            fsStream.destroy(error)
+                        });
+                } else if (uploadLeftSize <= HTTP_REQUEST_DATA_MAX_CHUNK_SIZE && totalBufferSize >= uploadLeftSize) {
+                    const dataChunk = Buffer.concat(bufferArray);
+
+                    this.uploadChunk(userAccessToken, uploadId, dataChunk, fileOffset)
+                        .then((uploadResult) => {
+                            if ('h' in uploadResult) {
+                                resolve(uploadResult);
+                            }
+                        })
+                        .catch((error) => {
+                            fsStream.destroy(error)
+                        });
+                }
             });
 
             fsStream.on('error', (error: Error) => {
@@ -173,7 +201,7 @@ class FacebookAPIAppResumableFileUploadFacade extends FacebookAPIServerAbstractF
         }
 
         const fbUploadResponse = await this.initFileUpload(userAccessToken, fileName, fileMIMEType, preparedFileSize);
-        return this.startFileUploadStream(userAccessToken, fbUploadResponse.id, readableStream);
+        return this.startFileUploadStream(userAccessToken, fbUploadResponse.id, readableStream, preparedFileSize);
     }
 
     public async uploadFileByPath(userAccessToken: string, pathToFile: string, fileUploadOptions?: FacebookGraphAPIAppUploadConfig) {
