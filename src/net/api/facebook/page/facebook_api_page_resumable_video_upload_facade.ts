@@ -156,7 +156,9 @@ console.log('b', b);
 
                             fsStream.resume();
                         })
-                        .catch(fsStream.destroy);
+                        .catch((error) => {
+                            fsStream.destroy(error);
+                        });
                 } else if ((parseInt(fileSize) - fileOffset) <= 1048576) {
                     const b = Buffer.concat(bufferArray)
                     console.log('b', b);
@@ -168,7 +170,9 @@ console.log('b', b);
                             }
                             console.log('upload1', b.byteLength, fileSize);
                         })
-                        .catch(fsStream.destroy);
+                        .catch((error) => {
+                            fsStream.destroy(error);
+                        });
                 }
             });
 
