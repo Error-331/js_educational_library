@@ -1,5 +1,5 @@
 // external imports
-import { extname } from 'node:path';
+import { extname, basename } from 'node:path';
 
 // internal imports
 import { isString } from './logic_utils';
@@ -19,7 +19,33 @@ function extractFileExtension(pathToFile: string): string {
     return fileExtension;
 }
 
+/**
+ * Extracts the file name from a given file path.
+ *
+ * @param pathToFile - The full path to the file.
+ *
+ * @throws RangeError if the provided path to file is not a string.
+ * @throws Error if the file name cannot be extracted.
+ *
+ * @returns The name of the file.
+ *
+ */
+function extractFileName(pathToFile: string): string {
+    if (!isString(pathToFile)) {
+        throw new RangeError('Cannot extract file name - provided path to file is not a string');
+    }
+
+    const fileName = basename(pathToFile);
+
+    if (!fileName || fileName.length <= 0) {
+        throw new Error('Cannot extract file name');
+    }
+
+    return fileName;
+}
+
 // exports
 export {
     extractFileExtension,
+    extractFileName,
 }
