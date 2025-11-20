@@ -60,7 +60,7 @@ function findMIMETypeByFileExtensionAndMetaType(metaType: string, fileExtension:
     }
 }
 
-function findMIMETypeByFileExtensionNoneComposite(fileExtension: string) {
+function findMIMETypeByFileExtensionNoneComposite(fileExtension: string): string {
     const mimeType = findMIMETypeByFileExtension(fileExtension);
 
     if (isArray(mimeType)) {

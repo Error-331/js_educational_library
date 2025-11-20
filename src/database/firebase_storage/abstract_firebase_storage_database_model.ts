@@ -1,7 +1,7 @@
 // external imports
 import type { File as StorageFile, Bucket, CreateWriteStreamOptions, DownloadResponse } from '@google-cloud/storage';
 
-import { Readable } from 'node:stream';
+import { Readable, Writable } from 'node:stream';
 import { posix } from 'node:path'
 
 // internal imports
@@ -157,7 +157,7 @@ abstract class AbstractFirebaseStorageDatabaseModel extends AbstractDatabaseMode
         })
     }
 
-    public createFileUploadStream(id: string | number, options?: CreateWriteStreamOptions) {
+    public createFileUploadStream(id: string | number, options?: CreateWriteStreamOptions): Writable {
         if (isNil(id)) {
             throw new RangeError('Id is not specified - cannot create file upload stream for Firebase storage item');
         }

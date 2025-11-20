@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import { isArray, isString } from '../misc/logic_utils';
+import { isArray, isString, isNullOrEmpty } from '../misc/logic_utils';
 
 // implementation
 function composeURLPath(pathParts: (string | number)[]): string {
@@ -121,9 +121,17 @@ function combineURLPaths(pathPart1: string, pathPart2: string): string {
     }
 
     const sanitizedPathPart1 = sanitizeURLPathPart(pathPart1);
-    const sanitizedPathPart2 = sanitizeURLPathPart(pathPart2)
+    const sanitizedPathPart2 = sanitizeURLPathPart(pathPart2);
 
-    return `${sanitizedPathPart1}/${sanitizedPathPart2}`;
+    if (isNullOrEmpty(sanitizedPathPart1) && isNullOrEmpty(sanitizedPathPart2)) {
+        return '';
+    } else if (!isNullOrEmpty(sanitizedPathPart1) && isNullOrEmpty(sanitizedPathPart2)) {
+        return sanitizedPathPart1;
+    } else if (isNullOrEmpty(sanitizedPathPart1) && !isNullOrEmpty(sanitizedPathPart2)) {
+        return sanitizedPathPart2;
+    } else {
+        return `${sanitizedPathPart1}/${sanitizedPathPart2}`;
+    }
 }
 
 function combineMultipleURLPaths(pathParts: string[]): string {

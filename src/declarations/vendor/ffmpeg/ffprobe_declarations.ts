@@ -104,11 +104,14 @@ type FFProbeOutputData = {
 
 // exports
 export type {
-    FFProbeStreamCodecType,
     FFProbeStreamDisposition,
     FFProbeStreamTags,
     FFProbeStreamData,
 
     FFProbeFormatData,
     FFProbeOutputData,
+}
+
+export {
+    FFProbeStreamCodecType
 }
