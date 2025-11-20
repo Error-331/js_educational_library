@@ -5,6 +5,7 @@ import { App, getApp, getApps, AppOptions, ServiceAccount, Credential } from 'fi
 import { Firestore, getFirestore } from 'firebase-admin/firestore';
 import { Storage, getStorage } from 'firebase-admin/storage';
 import { Auth, getAuth } from 'firebase-admin/auth';
+import { Functions, getFunctions } from 'firebase-admin/functions';
 
 // internal imports
 import { WrappedCredential } from '../../declarations/registers/firebase_admin_registry_declarations';
@@ -277,6 +278,19 @@ class FirebaseAdminRegistry {
     get auth(): Auth {
         this.init();
         return getAuth(this.app);
+    }
+
+    /**
+     * Method that returns current Firebase Admin application functions instance.
+     * Method will also try to initialize Firebase Admin application if it was not initialized previously.
+     *
+     * @returns {Functions} Firebase Admin application functions instance.
+     *
+     */
+
+    getFunctions(): Functions {
+        this.init();
+        return getFunctions(this.app);
     }
 
     public static getServiceAccountKey(): ServiceAccount | undefined | null {

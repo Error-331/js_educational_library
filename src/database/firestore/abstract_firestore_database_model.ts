@@ -23,7 +23,7 @@ import FirebaseAdminRegistry from '../../registers/firebase/firebase_admin_regis
 import { createCurrentUTCTimestamp } from '../../utils/date/current_date_utils';
 import { cloneDeep } from '../../utils/primitives/object_utils';
 import { calcElementsOffset } from '../../utils/math/math_count_utils';
-import { isNil } from '../../utils/misc/logic_utils';
+import { isNil, isNullOrEmpty } from '../../utils/misc/logic_utils';
 
 // implementation
 type Filter = {
@@ -125,6 +125,17 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
         delete entityClone.id;
 
         await entityDocument.update(entityClone as UpdateData<EntityType>);
+    }
+
+    public async mergeUpdate(id: string, originalData: EntityType, newData: EntityType): Promise<void> {
+        if (isNullOrEmpty(id)) {
+            throw new RangeError('Can not merge update document data - id is not provided');
+        }
+
+        this.update({
+            id,
+            ...Object.assign({}, originalData, newData),
+        });
     }
 
     public async loadById(id: string | number): Promise<EntityType | null> {
