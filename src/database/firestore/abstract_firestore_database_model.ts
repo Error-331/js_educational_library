@@ -82,7 +82,7 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
             collectionRefCopy = collectionRef ?? queryPreparationCB(this.getCollectionReference());
             snapshot = await collectionRefCopy.get();
 
-            snapshot.forEach((documentSnapshot: QueryDocumentSnapshot<EntityType, EntityType>) => data.push(documentSnapshot.data()));
+            snapshot.forEach((documentSnapshot: QueryDocumentSnapshot<EntityType, EntityType>) => data.push({ id: documentSnapshot.id, ...documentSnapshot.data() }));
 
             if (snapshot.docs.length < MODEL_PAGINATION_LIMIT) {
                 resolve(data);
