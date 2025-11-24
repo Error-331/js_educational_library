@@ -8,7 +8,7 @@ function generateRandomIdNumber(): number {
     return Math.floor((Math.random() * 999) + 1);
 }
 
-function getRandomIntInRange(min: number, max: number): number {
+function generateRandomIntInRange(min: number, max: number): number {
     if (!isNumber(min)) {
         throw new RangeError('Cannot generate random number in range - minimum value should be of type number');
     }
@@ -26,5 +26,5 @@ function getRandomIntInRange(min: number, max: number): number {
 // exports
 export {
     generateRandomIdNumber,
-    getRandomIntInRange,
+    generateRandomIntInRange,
 }
