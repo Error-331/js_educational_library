@@ -25,7 +25,7 @@ class TikTokClientAuthorizationStrategy extends AbstractOAuthStrategy implements
         let url = TIKTOK_DEFAULT_OAUTH_AUTHORIZATION_URL;
         url += `?client_key=${options.clientKey}`;
         url += `&scope=${options.scope.join(',')}`;
-        url += '&response_type=CODE';
+        url += '&response_type=code';
         url += `&redirect_uri=${options.redirectURI}`;
         url += `&state=${options.state}`;
 
