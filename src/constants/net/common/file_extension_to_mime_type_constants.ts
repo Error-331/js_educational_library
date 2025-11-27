@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import { FileExtensionToMimeTypeRecords } from '../../../net/common/mime_type_declarations';
+import { FileExtensionToMimeTypeRecords } from '../../../declarations/net/common/mime_type_declarations';
 
 import {
     META_MIME_TYPE_VIDEO,

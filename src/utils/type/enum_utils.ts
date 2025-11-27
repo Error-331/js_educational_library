@@ -4,7 +4,7 @@
 import { EnumLikeObjectType } from '../../declarations/collection_declarations';
 
 // implementation
-function isEnumContainsValue<EnumType>(enumObject: object, enumValue: any): enumValue is EnumType {
+function isEnumContainsValue<EnumType>(enumObject: object, enumValue: unknown): enumValue is EnumType {
     return Object.values(enumObject).includes(enumValue);
 }
 

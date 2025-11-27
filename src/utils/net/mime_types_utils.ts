@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import { MimeTypeValue } from '../../net/common/mime_type_declarations';
+import { MimeTypeValue } from '../../declarations/net/common/mime_type_declarations';
 
 import FILE_EXTENSION_TO_MIME_TYPE from '../../constants/net/common/file_extension_to_mime_type_constants';
 import { META_MIME_TYPE_VIDEO, MIME_TYPE_BIN } from '../../constants/net/common/mime_types_constants';
