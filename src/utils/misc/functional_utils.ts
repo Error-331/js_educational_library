@@ -142,6 +142,31 @@ const oneTimeMemoizer = (functionToMemoize) => {
     return functionWrapper;
 };
 
+// TODO: recheck this function
+/**
+ * A simple memoization function that caches the results of a function
+ * based on its arguments to improve performance on repeated calls.
+ *
+ * @param fn - The function to be memoized
+ * @returns A memoized version of the input function
+ */
+function memoize<MemoizedFunctionType extends (...args: any[]) => any>(fn: MemoizedFunctionType): MemoizedFunctionType {
+    const cache = new Map<string, ReturnType<MemoizedFunctionType>>();
+
+    return function (...args: Parameters<MemoizedFunctionType>): ReturnType<MemoizedFunctionType> {
+        const key = JSON.stringify(args);
+
+        if (cache.has(key)) {
+            return cache.get(key)!;
+        }
+
+        const result = fn(...args);
+        cache.set(key, result);
+
+        return result;
+    } as MemoizedFunctionType;
+}
+
 // exports
 export {
     curry,
@@ -158,4 +183,5 @@ export {
     set,
 
     oneTimeMemoizer,
+    memoize,
 }
