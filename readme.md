@@ -28,7 +28,12 @@ My small JS multipurpose library used for educational purposes.
 ### Facebook related
 
 - **JSEL_FACEBOOK_SERVER_OPTIONS_JSON** - Facebook server options (contains such options as application id, application secret, etc.);
-- **JSEL_FACEBOOK_SERVER_OPTIONS_CRYPTO_CONFIG** - configuration file which is used to decrypt *JSEL_FACEBOOK_SERVER_OPTIONS_JSON* represented as stringified JSON;
+- **JSEL_FACEBOOK_SERVER_OPTIONS_CRYPTO_CONFIG** - configuration JSON which is used to decrypt *JSEL_FACEBOOK_SERVER_OPTIONS_JSON* represented as stringified JSON;
+
+### TikTok related
+
+- **JSEL_TIKTOK_SERVER_OPTIONS_JSON** - TikTok server options (contains such options as client key, client secret, etc.);
+- **JSEL_TIKTOK_SERVER_OPTIONS_CRYPTO_CONFIG** - configuration JSON which is used to decrypt *JSEL_TIKTOK_SERVER_OPTIONS_JSON* represented as stringified JSON;
 
 ### Vite related
 

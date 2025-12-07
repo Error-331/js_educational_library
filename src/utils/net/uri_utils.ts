@@ -100,13 +100,13 @@ function sanitizeURLPathPartFromRoot(urlPathPart: string): string {
  * Example: removeExtraTrailingSlashes('///example/path///'); // result: example/path
  *
  */
-function sanitizeURLPathPart(urlPathPart: string): string {
+function sanitizeURLPathPart(urlPathPart: string, removeLeadingSlash = true, removeTrailingSlash = true): string {
     if (!isString(urlPathPart)) {
         throw new RangeError('Cannot sanitize URL path part - url path part must be of type string');
     }
 
-    urlPathPart = removeExtraLeadingSlashes(urlPathPart);
-    urlPathPart = removeExtraTrailingSlashes(urlPathPart);
+    urlPathPart = removeLeadingSlash ? removeExtraLeadingSlashes(urlPathPart) : removeExtraLeadingSlashesButOne(urlPathPart);
+    urlPathPart = removeTrailingSlash ? removeExtraTrailingSlashes(urlPathPart) : removeExtraTrailingSlashesButOne(urlPathPart);
 
     return urlPathPart;
 }
@@ -134,12 +134,12 @@ function combineURLPaths(pathPart1: string, pathPart2: string): string {
     }
 }
 
-function combineMultipleURLPaths(pathParts: string[]): string {
+function combineMultipleURLPaths(pathParts: string[], removeLeadingSlash = true, removeTrailingSlash = true): string {
     if (!isArray(pathParts) || pathParts.some(part => !isString(part))) {
         throw new RangeError('Cannot combine multiple URL parts - all path parts must be strings');
     }
 
-    const sanitizedParts = pathParts.map(sanitizeURLPathPart);
+    const sanitizedParts = pathParts.map(pathPart => sanitizeURLPathPart(pathPart, removeLeadingSlash, removeTrailingSlash));
     return sanitizedParts.join('/');
 }
 

@@ -19,7 +19,7 @@ class FacebookServerRegistry {
 
     private static extractFacebookServerOptionsJSON(): FacebookServerOptions {
         if (isNil(process.env.JSEL_FACEBOOK_SERVER_OPTIONS_JSON)) {
-            throw new RangeError('Cannot extract facebook server options JSON - "JSEL_FACEBOOK_SERVER_OPTIONS_JSON" environment variable is not set');
+            throw new RangeError('Cannot extract Facebook server options JSON - "JSEL_FACEBOOK_SERVER_OPTIONS_JSON" environment variable is not set');
         }
 
         if (!isNil(process.env.JSEL_FACEBOOK_SERVER_OPTIONS_CRYPTO_CONFIG)) {

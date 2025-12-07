@@ -18,6 +18,7 @@
 
     "./net/api/common/*":  "./src/net/api/common/*.ts",
     "./net/api/facebook/*":  "./src/net/api/facebook/*.ts",
+    "./net/api/tiktok/*":  "./src/net/api/tiktok/*.ts",
     "./net/api/firebase/auth/*": "./src/net/api/firebase/auth/*.ts",
     "./net/api/gcp/*":  "./src/net/api/gcp/*.ts",
 

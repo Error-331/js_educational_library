@@ -1,13 +1,14 @@
 // external imports
 
 // internal imports
-import { HTTPRequestConfig } from '../../../../declarations/net/http/request_declarations';
-import { HTTPResponseDataSchema, HTTPResponseSchema } from '../../../../declarations/net/http/response_declarations';
 import type { SimpleQueryEntry } from '../../../../declarations/net/url/query/simple_query_to_url_query_converter_declarations';
 
-import { API_REQUEST_ENTITIES_LIMIT, API_REQUEST_SIMULTANEOUS_CONNECTIONS_LIMIT } from '../../../../constants/net/api/api_common_constants';
+import { HTTPRequestConfig } from '../../../../declarations/net/http/request_declarations';
+import { HTTPResponseDataSchema, HTTPResponseSchema } from '../../../../declarations/net/http/response_declarations';
 
+import { API_REQUEST_ENTITIES_LIMIT, API_REQUEST_SIMULTANEOUS_CONNECTIONS_LIMIT } from '../../../../constants/net/api/api_common_constants';
 import AxiosRequestFacade from '../../../../net/http/request/axios/axios_client_request_facade';
+
 import { calcPagesCount } from '../../../math/math_count_utils';
 import { isObject } from '../../../misc/logic_utils';
 
