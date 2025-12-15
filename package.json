@@ -65,6 +65,7 @@
   "peerDependencies": {
     "@google-cloud/compute": "^5.2.0",
     "@google-cloud/video-transcoder": "^4.4.1",
+    "@google-cloud/cloudquotas": "^2.2.1",
     "@ffprobe-installer/ffprobe": "^2.1.2",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "axios": "^1.8.4",
@@ -81,6 +82,9 @@
       "optional": true
     },
     "@google-cloud/video-transcoder": {
+      "optional": true
+    },
+    "@google-cloud/cloudquotas": {
       "optional": true
     },
     "@ffprobe-installer/ffprobe": {
