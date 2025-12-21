@@ -15,12 +15,24 @@ type TikTokOpenAPICreatorInfoData = {
     max_video_post_duration_sec: boolean;
 }
 
+type TikTokOpenAPIPostStatusData = {
+    status: string;
+    fail_reason: string;
+    publicaly_available_post_id: number[];
+    uploaded_bytes?: number;
+    downloaded_bytes: number;
+}
+
 type TikTokOpenAPICreatorInfoResponse = TikTokOpenApiResponse<TikTokOpenAPICreatorInfoData>;
+type TikTokOpenAPIPostStatusResponse = TikTokOpenApiResponse<TikTokOpenAPIPostStatusData>;
 
 // exports
 export type {
     TikTokOpenAPICreatorInfoData,
+    TikTokOpenAPIPostStatusData,
+
     TikTokOpenAPICreatorInfoResponse,
+    TikTokOpenAPIPostStatusResponse,
 }
 
 

@@ -1,7 +1,6 @@
 // external imports
 
 // internal imports
-import { TikTokOpenApiResponse } from '../../../../declarations/vendor/tiktok/tiktok_open_api_declarations';
 import { TikTokOpenAPICreatorInfoData, TikTokOpenAPICreatorInfoResponse } from '../../../../declarations/vendor/tiktok/tiktok_content_api_declarations';
 
 import { TIKTOK_OPEN_API_BASE_URL } from '../../../../constants/net/api/tiktok/tiktok_common_constants';
@@ -18,7 +17,7 @@ import { isObject } from '../../../../utils/misc/logic_utils';
 // implementation
 class TikTokAPICreatorInfoFacade extends TikTokAPIServerAbstractFacade {
     public async queryCreatorInfo(oAuthAccessToken: string): Promise<TikTokOpenAPICreatorInfoData> {
-        const httpClient = new AxiosRequestFacade<TikTokOpenApiResponse<TikTokOpenAPICreatorInfoData>>({
+        const httpClient = new AxiosRequestFacade<TikTokOpenAPICreatorInfoResponse>({
             baseURL: TIKTOK_OPEN_API_BASE_URL,
             url: combineMultipleURLPaths([this.getDefaultAPIVersion(), TIKTOK_OPEN_API_CREATOR_INFO_PATH_PART], true, false),
             headers: {
