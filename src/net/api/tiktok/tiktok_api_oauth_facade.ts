@@ -5,9 +5,7 @@ import { GenericObject } from '../../../declarations/collection_declarations';
 import { TikTokOAuthAPIErrorResponse, TikTokOAuthAPIResponse } from '../../../declarations/vendor/tiktok/tiktok_oauth_api_declarations';
 
 import { TIKTOK_OPEN_API_BASE_URL } from '../../../constants/net/api/tiktok/tiktok_common_constants';
-import {
-    TIKTOK_OPEN_API_OAUTH_ACCESS_TOKEN_PATH_PART,
-} from '../../../constants/net/api/tiktok/tiktok_oauth_constants';
+import { TIKTOK_OPEN_API_OAUTH_ACCESS_TOKEN_PATH_PART } from '../../../constants/net/api/tiktok/tiktok_oauth_constants';
 
 import TikTokAPIServerAbstractFacade from './tiktok_api_server_abstract_facade';
 import AxiosRequestFacade from '../../http/request/axios/axios_server_request_facade';
