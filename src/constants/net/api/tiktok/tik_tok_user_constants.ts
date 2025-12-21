@@ -5,7 +5,7 @@
 // implementation
 const TIKTOK_OPEN_API_USER_INFO_PATH_PART = '/user/info/';
 
-const TIKTOK_OPEN_API_USER_DEFAULT_FIELDS: string[] = ['open_id', 'union_id', 'avatar_url', 'display_name', 'profile_deep_link', 'is_verified'];
+const TIKTOK_OPEN_API_USER_DEFAULT_FIELDS: string[] = ['open_id', 'union_id', 'avatar_url', 'display_name', 'username', 'profile_deep_link', 'is_verified'];
 
 // exports
 export {
