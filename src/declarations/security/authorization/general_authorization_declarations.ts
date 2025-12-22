@@ -3,8 +3,8 @@
 // internal imports
 
 // implementation
-interface AuthorizationOAuthStrategy<AuthorizationCodeRetrievalParams = unknown> {
-    initAuthorizationCodeRetrieval(...args: AuthorizationCodeRetrievalParams[]): Promise<void>;
+interface AuthorizationOAuthStrategy<AuthorizationCodeRetrievalParams, AuthorizationCodeRetrievalData> {
+    initAuthorizationCodeRetrieval(...args: AuthorizationCodeRetrievalParams[]): Promise<AuthorizationCodeRetrievalData>;
 }
 
 // exports
