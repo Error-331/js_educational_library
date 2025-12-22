@@ -6,7 +6,7 @@ import type { AuthorizationOAuthStrategy } from '../../../../../declarations/sec
 import type { TikTokAuthorizationCodeRetrievalOptions } from '../../../../../declarations/security/authorization/tiktok_authorization_declarations';
 
 import AbstractOAuthStrategy from '../../abstract/abstract_oauth_strategy';
-import { HTTPResponseSchema } from '../../../../../declarations/net/http/response_declarations';
+import { HTTPResponseDataSchema } from '../../../../../declarations/net/http/response_declarations';
 
 import { HTTP_REQUEST_TIMEOUT } from '../../../../../constants/net/http/request_constants';
 import {
@@ -19,13 +19,13 @@ import { isNil, isObject, isFunction } from '../../../../../utils/misc/logic_uti
 
 // implementation
 class TikTokClientAuthorizationStrategy<AuthorizationCodeRetrievalData>
-    extends AbstractOAuthStrategy<HTTPResponseSchema<AuthorizationCodeRetrievalData>>
-    implements AuthorizationOAuthStrategy<TikTokAuthorizationCodeRetrievalOptions | string | GenericObject, HTTPResponseSchema<AuthorizationCodeRetrievalData>> {
+    extends AbstractOAuthStrategy<HTTPResponseDataSchema<false, AuthorizationCodeRetrievalData>>
+    implements AuthorizationOAuthStrategy<TikTokAuthorizationCodeRetrievalOptions | string | GenericObject, HTTPResponseDataSchema<false, AuthorizationCodeRetrievalData>> {
 
     private authCodeRetrievalWindow: WindowProxy | null = null;
     private authCodeRetrievalTimeoutId: NodeJS.Timeout | null = null
-    private authCodeRetrievalPromise: Promise<HTTPResponseSchema<AuthorizationCodeRetrievalData>> | null = null;
-    private authCodeRetrievalResolveCB: (data: HTTPResponseSchema<AuthorizationCodeRetrievalData>) => void | null = null;
+    private authCodeRetrievalPromise: Promise<HTTPResponseDataSchema<false, AuthorizationCodeRetrievalData>> | null = null;
+    private authCodeRetrievalResolveCB: (data: HTTPResponseDataSchema<false, AuthorizationCodeRetrievalData>) => void | null = null;
     private authCodeRetrievalRejectCB: (reason?: string) => void | null = null;
 
     protected bindWindowEvents() {
@@ -61,7 +61,7 @@ class TikTokClientAuthorizationStrategy<AuthorizationCodeRetrievalData>
         this.bindWindowEvents()
     }
 
-    public onWindowOAuthResolve(response: HTTPResponseSchema<AuthorizationCodeRetrievalData>): void {
+    public onWindowOAuthResolve(response: HTTPResponseDataSchema<false, AuthorizationCodeRetrievalData>): void {
         if (isFunction(this.authCodeRetrievalResolveCB)) {
             this.authCodeRetrievalResolveCB(response);
         }
@@ -78,12 +78,12 @@ class TikTokClientAuthorizationStrategy<AuthorizationCodeRetrievalData>
     }
 
     // https://developers.tiktok.com/doc/login-kit-web/
-    public async initAuthorizationCodeRetrieval(options: TikTokAuthorizationCodeRetrievalOptions, windowTitle = 'TikTok OAuth Authorization', windowOptions?: GenericObject): Promise<HTTPResponseSchema<AuthorizationCodeRetrievalData>> {
+    public async initAuthorizationCodeRetrieval(options: TikTokAuthorizationCodeRetrievalOptions, windowTitle = 'TikTok OAuth Authorization', windowOptions?: GenericObject): Promise<HTTPResponseDataSchema<false, AuthorizationCodeRetrievalData>> {
         this.authCodeRetrievalTimeoutId = setTimeout(() => {
             this.onWindowOAuthReject('Cannot retrieve OAuth code - timeout');
         }, HTTP_REQUEST_TIMEOUT);
 
-        this.authCodeRetrievalPromise = new Promise((resolve: (data: HTTPResponseSchema<AuthorizationCodeRetrievalData>) => void, reject) => {
+        this.authCodeRetrievalPromise = new Promise((resolve: (data: HTTPResponseDataSchema<false, AuthorizationCodeRetrievalData>) => void, reject) => {
             this.authCodeRetrievalResolveCB = resolve;
             this.authCodeRetrievalRejectCB = reject;
 
