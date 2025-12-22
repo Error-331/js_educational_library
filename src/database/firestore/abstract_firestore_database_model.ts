@@ -117,8 +117,11 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
     }
 
     public async update(entity: AtLeast<EntityType, 'id'>): Promise<void> {
-        const entityClone = cloneDeep(entity);
+        if (isNil(entity.id)) {
+            throw new RangeError('Can not update document data - id is not provided');
+        }
 
+        const entityClone = cloneDeep(entity);
         entityClone.updatedTimestamp = isNil(entityClone.updatedTimestamp) ? createCurrentUTCTimestamp() : entityClone.updatedTimestamp;
 
         const entityDocument = this.getDocumentReference(entityClone.id);
