@@ -40,6 +40,8 @@ type UIFormUploadInputProps = UIFormInputProps & {
     onBeforeUpload: (file: File) => void | boolean;
 }
 
+type UIFormCheckboxInputProp<EventType> = UIFormTextInputProp<EventType> & {};
+
 // exports
 export {
     UIFormInputProps,
@@ -47,4 +49,6 @@ export {
     UIFormTextInputProp,
     UIFormTextAreaInputProp,
     UIFormUploadInputProps,
+
+    UIFormCheckboxInputProp,
 }
