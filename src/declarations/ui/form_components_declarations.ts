@@ -9,6 +9,7 @@ type UIFormInputProps = {
     label?: string;
 
     required?: boolean;
+    disabled?: boolean;
 
     errorMessage?: string | string[];
 
@@ -18,10 +19,16 @@ type UIFormInputProps = {
 type UIFormTextInputProp<EventType> = UIFormInputProps & {
     type?: string;
 
+    maxLength?: number;
+
     defaultValue?: string;
     placeholder?: string;
 
     onChange?: (event: EventType) => void;
+};
+
+type UIFormTextAreaInputProp<EventType> = UIFormTextInputProp<EventType> & {
+    rows?: number;
 };
 
 type UIFormUploadInputProps = UIFormInputProps & {
@@ -38,5 +45,6 @@ export {
     UIFormInputProps,
 
     UIFormTextInputProp,
+    UIFormTextAreaInputProp,
     UIFormUploadInputProps,
 }
