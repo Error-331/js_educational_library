@@ -4,7 +4,7 @@ import React from 'react';
 // internal imports
 
 // implementation
-type UIFormInputProps = {
+interface UIFormInputProps {
     name: string;
     label?: string;
 
@@ -16,7 +16,7 @@ type UIFormInputProps = {
     style?: React.CSSProperties;
 }
 
-type UIFormTextInputProp<EventType> = UIFormInputProps & {
+interface UIFormTextInputProp<EventType> extends UIFormInputProps {
     type?: string;
 
     maxLength?: number;
@@ -25,13 +25,13 @@ type UIFormTextInputProp<EventType> = UIFormInputProps & {
     placeholder?: string;
 
     onChange?: (event: EventType) => void;
-};
+}
 
-type UIFormTextAreaInputProp<EventType> = UIFormTextInputProp<EventType> & {
+interface UIFormTextAreaInputProp<EventType> extends UIFormTextInputProp<EventType> {
     rows?: number;
-};
+}
 
-type UIFormUploadInputProps = UIFormInputProps & {
+interface UIFormUploadInputProps extends UIFormInputProps {
     caption?: string;
 
     multiple?: boolean;
@@ -40,7 +40,22 @@ type UIFormUploadInputProps = UIFormInputProps & {
     onBeforeUpload: (file: File) => void | boolean;
 }
 
-type UIFormCheckboxInputProp<EventType> = UIFormTextInputProp<EventType> & {};
+interface UIFormSelectInputProp<EventType, T> extends UIFormInputProps {
+    mode?: 'single' | 'multiple' | 'tags';
+    placeholder?: string;
+    loading?: boolean;
+
+    options: T[];
+
+    notFoundContent?: React.ReactNode;
+    optionRender?: (option: { data: T }) =>  React.ReactNode;
+
+    onChange?: (event: EventType) => void;
+}
+
+interface UIFormCheckboxInputProp extends UIFormInputProps {
+    checked?: boolean;
+}
 
 // exports
 export {
@@ -50,5 +65,6 @@ export {
     UIFormTextAreaInputProp,
     UIFormUploadInputProps,
 
+    UIFormSelectInputProp,
     UIFormCheckboxInputProp,
 }
