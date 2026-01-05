@@ -81,8 +81,6 @@ class SimpleQueryToURLQueryBaseConverter {
             } else {
                 throw new RangeError('Cannot decode query data from URL query - invalid query part found');
             }
-
-            return decodedQuery;
         }
 
         return decodedQuery;
