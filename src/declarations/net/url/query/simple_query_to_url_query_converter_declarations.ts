@@ -11,18 +11,20 @@ enum SimpleQueryEntryType {
 enum SimpleQueryValueType {
     Number = 'number',
     String = 'string',
+    ArrayString = 'array_string',
 }
 
 enum SimpleQueryEntryOperator {
     GreaterThanOrEqual = 'gte',
     LessThanOrEqual = 'lte',
+    In = 'in',
 }
 
 type SimpleQueryEntry = {
     type: SimpleQueryEntryType;
     field: string;
     valueType: SimpleQueryValueType;
-    value: string;
+    value: string | number | string[];
     operator: SimpleQueryEntryOperator;
 }
 

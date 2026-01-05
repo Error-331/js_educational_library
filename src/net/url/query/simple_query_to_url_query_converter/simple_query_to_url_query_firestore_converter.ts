@@ -17,6 +17,8 @@ class SimpleQueryToURLQueryFirestoreConverter<EntityType extends DatabaseDocumen
                 return '>=';
             case SimpleQueryEntryOperator.LessThanOrEqual:
                 return '<=';
+            case SimpleQueryEntryOperator.In:
+                return 'in';
             default:
                 throw new RangeError(`Cannot convert query operator to Firestore operator - unknown query operator "${operator}"`)
         }
@@ -27,9 +29,9 @@ class SimpleQueryToURLQueryFirestoreConverter<EntityType extends DatabaseDocumen
         let preparedQuery: Query<EntityType, EntityType> = undefined;
 
         for (const decodeQueryPart of decodedQuery) {
-            const value = decodeQueryPart.valueType.toLowerCase() === SimpleQueryValueType.Number ? parseFloat(decodeQueryPart.value) : decodeQueryPart.value;
-            const operator = this.convertQueryOperatorToFirestoreQueryOperator(decodeQueryPart.operator.toLowerCase());
+            const value = decodeQueryPart.value;
 
+            const operator = this.convertQueryOperatorToFirestoreQueryOperator(decodeQueryPart.operator.toLowerCase());
             preparedQuery = isNil(preparedQuery) ? collectionReference.where(decodeQueryPart.field, operator, value) : preparedQuery.where(decodeQueryPart.field, operator, value);
         }
 
