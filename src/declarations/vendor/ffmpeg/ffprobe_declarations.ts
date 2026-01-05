@@ -80,20 +80,20 @@ type FFProbeStreamData = {
 };
 
 type FFProbeFormatData = {
-    "filename"?: string;
-    "nb_streams"?: number;
-    "nb_programs"?: number;
-    "format_name"?: string;
-    "format_long_name"?: string;
-    "start_time"?: string;
-    "duration"?: string;
-    "size"?: string;
-    "probe_score"?: number;
-    "tags"?: {
-        "major_brand"?: string;
-        "minor_version"?: string;
-        "compatible_brands"?: string;
-        "encoder"?: string;
+    filename?: string;
+    nb_streams?: number;
+    nb_programs?: number;
+    format_name?: string;
+    format_long_name?: string;
+    start_time?: string;
+    duration?: string;
+    size?: string;
+    probe_score?: number;
+    tags?: {
+        major_brand?: string;
+        minor_version?: string;
+        compatible_brands?: string;
+        encoder?: string;
     }
 }
 
