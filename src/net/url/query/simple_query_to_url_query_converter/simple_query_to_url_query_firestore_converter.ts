@@ -4,7 +4,7 @@ import { Query, CollectionReference, WithFieldValue } from 'firebase-admin/fires
 // internal imports
 import { DatabaseDocument } from '../../../../declarations/database/general_database_model_declarations';
 
-import { SimpleQueryEntryOperator, SimpleQueryValueType } from '../../../../declarations/net/url/query/simple_query_to_url_query_converter_declarations';
+import { SimpleQueryEntryOperator } from '../../../../declarations/net/url/query/simple_query_to_url_query_converter_declarations';
 import SimpleQueryToURLQueryBaseConverter from './simple_query_to_url_query_base_converter';
 
 import { isNil } from '../../../../utils/misc/logic_utils';

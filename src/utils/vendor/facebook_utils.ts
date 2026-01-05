@@ -19,7 +19,7 @@ function isGraphAPIErrorResponse(response: unknown): response is FacebookGraphAP
 
 function throwGraphAPIHTTPError(prefix: string, postfix: string, response: unknown, statusCode: number): void {
     const message = isGraphAPIErrorResponse(response) ? `${prefix}${response.error.message}` : `${prefix}${postfix}`;
-    throw new HTTPError(message, statusCode);
+    throw new HTTPError(message, statusCode, true);
 }
 
 // exports

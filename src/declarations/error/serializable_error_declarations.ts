@@ -19,6 +19,7 @@ type SerializedValidationError = SerializedCustomError & {
 
 type SerializedHTTPError = SerializedCustomError & {
     httpCode: number;
+    isProxy: boolean;
 }
 
 type SerializedError = SerializedGenericError | SerializedCustomError | SerializedValidationError | SerializedHTTPError;

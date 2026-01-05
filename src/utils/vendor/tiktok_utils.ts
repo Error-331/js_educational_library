@@ -32,7 +32,7 @@ function throwTikTokOAuthAPIHTTPError(prefix: string, postfix: string, response:
 
 function throwTikTokOpenAPIErrorResponse(prefix: string, postfix: string, response: unknown, statusCode: number): void {
     const message = (isTikTokOpenAPIResponse(response) && isTikTokOpenAPIErrorResponse(response)) ? `${prefix}${response.error.code} - ${response.error.message} (${response.error.log_id})` : `${prefix}${postfix}`;
-    throw new HTTPError(message, statusCode);
+    throw new HTTPError(message, statusCode, true);
 }
 
 // exports

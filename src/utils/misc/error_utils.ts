@@ -62,7 +62,7 @@ function deserializeError(serializedError: SerializedError | void): Deserialized
 
         case CustomErrorName.HTTPError:
             return isObjectOfType<HTTPError>(serializedError, { httpCode: isNumber }) ?
-                new HTTPError(serializedError.message, serializedError.httpCode) :
+                new HTTPError(serializedError.message, serializedError.httpCode, serializedError.isProxy) :
                 new Error(serializedError.message);
 
         default: {

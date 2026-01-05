@@ -63,7 +63,7 @@ class FacebookAPIOAuthFacade extends FacebookAPIServerAbstractFacade {
 
         const { statusCode, data } = await httpClient.get();
         if (statusCode !== 200) {
-            throw new HTTPError(`Cannot retrieve long-lived page access token: ${'message' in data ? data?.message : 'Unknown reason'}`, statusCode);
+            throw new HTTPError(`Cannot retrieve long-lived page access token: ${'message' in data ? data?.message : 'Unknown reason'}`, statusCode, true);
         } else {
             const keysValidators = { data: isArray, paging: isObject }; // TODO: better use  Zod here with more comprehensive check
             if (isObjectOfType<FacebookGraphAPIOAuthPageAccessTokenResponse>(data, keysValidators)) {
