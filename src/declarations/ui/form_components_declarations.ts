@@ -40,17 +40,18 @@ interface UIFormUploadInputProps extends UIFormInputProps {
     onBeforeUpload: (file: File) => void | boolean;
 }
 
-interface UIFormSelectInputProp<EventType, T> extends UIFormInputProps {
+interface UIFormSelectInputProp<ValueType, OptionType, OnPopupScrollEventType> extends UIFormInputProps {
     mode?: 'single' | 'multiple' | 'tags';
     placeholder?: string;
     loading?: boolean;
 
-    options: T[];
+    options: OptionType[];
 
     notFoundContent?: React.ReactNode;
-    optionRender?: (option: { data: T }) =>  React.ReactNode;
+    optionRender?: (option: { data: OptionType }) =>  React.ReactNode;
 
-    onChange?: (event: EventType) => void;
+    onChange?: (value: ValueType, option?: OptionType | OptionType[]) => void;
+    onPopupScroll?: OnPopupScrollEventType;
 }
 
 interface UIFormCheckboxInputProp extends UIFormInputProps {
