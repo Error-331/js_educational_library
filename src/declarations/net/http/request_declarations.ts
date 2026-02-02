@@ -24,6 +24,9 @@ type HTTPRequestConfig = {
     timeout?: number, // in milliseconds
 }
 
+type HTTPFetchRequestData = string | FormData | ReadableStream | Buffer;
+type HTTPFetchRequestConfig = Omit<HTTPRequestConfig, 'data'> & { body: HTTPFetchRequestData };
+
 type HTTPAxiosRequestConfig = Omit<HTTPRequestConfig, 'headers'> & { headers: HTTPHeadersObject };
 type HTTPAxiosRequestFacadePartial = GenericMixinConstructor<{ mergeCustomConfig: (customConfig?: HTTPRequestConfig) => HTTPRequestConfig }>;
 
@@ -41,7 +44,11 @@ interface RequestFacade<ResponseDataType> {
 export {
     HTTPRequestMethod,
     HTTPRequestParams,
+
+    HTTPFetchRequestData,
+    HTTPFetchRequestConfig,
     HTTPAxiosRequestConfig,
+
     HTTPRequestData,
     HTTPRequestConfig,
     HTTPAxiosRequestFacadePartial,
