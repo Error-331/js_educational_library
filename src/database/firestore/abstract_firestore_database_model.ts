@@ -130,6 +130,17 @@ abstract class AbstractFirestoreDatabaseModel<EntityType extends DatabaseDocumen
         await entityDocument.update(entityClone as UpdateData<EntityType>);
     }
 
+    public async updateById(id: string, newData: EntityType): Promise<void> {
+        if (isNullOrEmpty(id)) {
+            throw new RangeError('Can not update document data - id is not provided');
+        }
+
+        this.update({
+            id,
+            ...Object.assign({},newData),
+        });
+    }
+
     public async mergeUpdate(id: string, originalData: EntityType, newData: EntityType): Promise<void> {
         if (isNullOrEmpty(id)) {
             throw new RangeError('Can not merge update document data - id is not provided');
