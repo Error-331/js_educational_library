@@ -77,8 +77,16 @@ function intersection(firstArray, secondArray) {
     return firstArray.filter(field => secondArray.includes(field));
 }
 
-function difference(firstArray, secondArray) {
+function difference<ArrayElementType = string>(firstArray: ArrayElementType[], secondArray: ArrayElementType[]): ArrayElementType[] {
     return firstArray.filter(field => !secondArray.includes(field));
+}
+
+function synchronizeArrays<ArrayElementType = string>(firstArray: ArrayElementType[], secondArray: ArrayElementType[]): ArrayElementType[] {
+    const extraElements = difference(firstArray, secondArray);
+    const missingElements = difference(secondArray, firstArray);
+
+    const newElements = firstArray.filter((currentImage: ArrayElementType) => !extraElements.includes(currentImage))
+    return newElements.concat(missingElements)
 }
 
 function pick(obj, keys) {
@@ -293,6 +301,7 @@ export {
 
     intersection,
     difference,
+    synchronizeArrays,
     pick,
     pickTo,
     unique,
