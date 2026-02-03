@@ -115,8 +115,6 @@ class FirebaseAdminRegistry {
             return this.convertServiceKeyToCredential(savedServiceAccountKey);
         } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON)) {
             return FirebaseAdminRegistry.extractFirebaseAdminServiceAccountJSON();
-        } else if (!isNil(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
-            return this.convertServiceKeyToCredential(process.env.GOOGLE_APPLICATION_CREDENTIALS);
         } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {
             return this.convertServiceKeyToCredential(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH);
         } else {
