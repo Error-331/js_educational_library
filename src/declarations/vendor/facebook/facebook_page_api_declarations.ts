@@ -15,6 +15,7 @@ type FacebookAPIPagePhotoPublishOptions = {
 type FacebookAPIPagePhotosPublishOptions = {
     photoIds: string[];
     caption?: string;
+    link?: string;
 };
 
 type FacebookAPIPageVideoPublishOptions = {

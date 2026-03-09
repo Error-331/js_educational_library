@@ -74,6 +74,7 @@ class FacebookAPIPagePhotosFacade extends FacebookAPIServerAbstractFacade {
             published: true,
             caption: imagesPublishOptions.caption,
             message: imagesPublishOptions.caption, // for some reason Facebook still relies on 'message' property (although it is said that it is deprecated) and that in the API calls only 'caption' should be used
+            link: imagesPublishOptions.link,
         }
 
         for (let photoId = 0; photoId < imagesPublishOptions.photoIds.length; photoId++) {
