@@ -13,10 +13,18 @@ My small JS multipurpose library used for educational purposes.
 - **JSEL_DEFAULT_SET_COOKIES_STORE_OPTIONS_TYPE** - type of the cookie configuration;
 - **JSEL_DEFAULT_JWT_SET_COOKIES_STORE_OPTIONS_TYPE** - type of the JWT cookie configuration (possible values: `jwt_unsecure`);
 
+### GCP related
+
+- **GOOGLE_APPLICATION_CREDENTIALS** - path to GCP service account file (JSON);
+
+#### Gen AI related
+
+- **JSEL_GCP_GENAI_ADMIN_OPTIONS_JSON** - GCP Gen AI admin options (contains such options as api key, etc.);
+- **JSEL_GCP_GENAI_ADMIN_OPTIONS_CRYPTO_CONFIG** - configuration JSON which is used to decrypt *JSEL_GCP_GENAI_ADMIN_OPTIONS_JSON* represented as stringified JSON;
+
 ### Firebase related
 
 - **JSEL_FIREBASE_ADMIN_APP_NAME** - Firebase admin app name;
-- **GOOGLE_APPLICATION_CREDENTIALS** - path to GCP service account file (JSON);
 - **JSEL_FIREBASE_CLIENT_APP_CONFIG_JSON_PATH** - path to Firebase app configuration;
 - **JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH** - path to GCP service account file (JSON);
 - **JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON_PATH** - path to JSON file which may contain additional configuration (like Firebase storage bucket) for Firebase application;

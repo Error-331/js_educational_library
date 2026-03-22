@@ -29,9 +29,7 @@
     "./net/http/request/*": "./src/net/http/request/*.ts",
     "./net/url/*": "./src/net/url/*.ts",
 
-    "./registers/facebook/*": "./src/registers/facebook/*.ts",
-    "./registers/firebase/*": "./src/registers/firebase/*.ts",
-    "./registers/tiktok/*": "./src/registers/tiktok/*.ts",
+    "./registers/*": "./src/registers/*.ts",
 
     "./security/authentication/factories/firebase/*": "./src/security/authentication/factories/firebase/*.ts",
 
@@ -59,6 +57,7 @@
     "test": "jest",
     "decrypt_json": "tsx ./tasks/security/crypto/decrypt_json_task.ts",
     "encrypt_json": "tsx ./tasks/security/crypto/encrypt_json_task.ts",
+    "generate_encryption_key": "tsx ./tasks/security/crypto/generate_encryption_key_task.ts",
     "test_task": "tsx ./tasks/test.ts"
   },
   "license": "MIT",
@@ -66,6 +65,8 @@
     "@google-cloud/compute": "^5.2.0",
     "@google-cloud/video-transcoder": "^4.4.1",
     "@google-cloud/cloudquotas": "^2.2.1",
+    "@google-cloud/monitoring": "^5.3.1",
+    "@google/genai": "^1.42.0",
     "@ffprobe-installer/ffprobe": "^2.1.2",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "axios": "^1.8.4",
@@ -85,6 +86,12 @@
       "optional": true
     },
     "@google-cloud/cloudquotas": {
+      "optional": true
+    },
+    "@google-cloud/monitoring": {
+      "optional": true
+    },
+    "@google/genai": {
       "optional": true
     },
     "@ffprobe-installer/ffprobe": {

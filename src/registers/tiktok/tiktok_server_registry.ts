@@ -1,13 +1,13 @@
 // external imports
 
 // internal imports
-import { TikTokServerOptions } from '../../declarations/vendor/tiktok/tiktok_base_server_declarations';
-import { SimpleTextEncryptor } from '../../declarations/security/crypto/encryptors_declarations';
+import type { TikTokServerOptions } from '../../declarations/vendor/tiktok/tiktok_base_server_declarations';
+import type { SimpleTextEncryptor } from '../../declarations/security/crypto/encryptors_declarations';
 
 import SimpleTextEncryptorFactory from '../../security/crypto/factories/simple_text_encryptor_factory';
 
 import { readJSONFileSync } from '../../utils/file/server_file_utils';
-import { isObjectOfType, cloneDeep} from '../../utils/primitives/object_utils';
+import { isObjectOfType, cloneDeep } from '../../utils/primitives/object_utils';
 import { isNil, isUndefined, isString } from '../../utils/misc/logic_utils';
 
 // implementation

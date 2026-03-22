@@ -14,7 +14,7 @@ abstract class TikTokAPIServerAbstractFacade {
         const ttServerRegistry = TikTokServerRegistry.getInstance();
         ttServerRegistry.init();
 
-        return ttServerRegistry.options
+        return ttServerRegistry.options;
     }
 
     protected getDefaultAPIVersion(): string {

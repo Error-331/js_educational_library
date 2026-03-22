@@ -24,7 +24,7 @@ class GCPCloudQuotasFacade {
      */
     protected cloudQuotasClient: GoogleCloudQuotasClient;
 
-    constructor(parent: string) {
+    constructor(parent?: string) {
         this.parent = isNullOrEmpty(parent) ? FirebaseAdminRegistry.getInstance().projectId : parent;
 
         const serviceAccountCredentials = FirebaseAdminRegistry.loadServiceAccountCredentials();
