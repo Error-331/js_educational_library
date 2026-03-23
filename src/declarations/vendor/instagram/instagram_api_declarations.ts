@@ -11,7 +11,7 @@ type InstagramAPIErrorResponse = {
 
 type InstagramAPIOAuthResponse = {
     access_token: string;
-    user_id: string;
+    user_id: number;
     permissions: string[];
 }
 
