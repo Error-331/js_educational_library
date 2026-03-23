@@ -12,9 +12,10 @@ import { INSTAGRAM_GRAPH_API_ACCESS_TOKEN_PATH_PART } from '../../../constants/n
 import InstagramAPIServerAbstractFacade from './instagram_api_server_abstract_facade';
 import AxiosRequestFacade from '../../http/request/axios/axios_server_request_facade';
 
+import { throwGraphAPIHTTPError } from '../../../utils/vendor/facebook_utils';
+import { isInstagramOAuthAPIErrorResponse, throwInstagramOAuthAPIHTTPError } from '../../../utils/vendor/instagram_utils';
 import { combineMultipleURLPaths } from '../../../utils/net/uri_utils';
 import { isObjectOfType } from '../../../utils/primitives/object_utils';
-import { isInstagramOAuthAPIErrorResponse, throwInstagramOAuthAPIHTTPError } from '../../../utils/vendor/instagram_utils';
 import { isNumber, isString, isArray } from '../../../utils/misc/logic_utils';
 
 // implementation
@@ -36,7 +37,7 @@ class InstagramAPIOAuthFacade extends InstagramAPIServerAbstractFacade {
         const { statusCode, data } = await httpClient.get();
 
         if (statusCode !== 200) {
-            throwInstagramOAuthAPIHTTPError('Cannot retrieve OAuth long-lived access token: ', 'Unknown reason', data, statusCode);
+            throwGraphAPIHTTPError('Cannot retrieve OAuth long-lived access token: ', 'Unknown reason', data, statusCode);
         } else {
             const responseKeysValidator = {
                 access_token: isString,
