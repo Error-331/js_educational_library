@@ -9,7 +9,7 @@ import {
 } from '../../../../declarations/vendor/tiktok/tiktok_user_api_declarations';
 
 import { TIKTOK_OPEN_API_BASE_URL } from '../../../../constants/net/api/tiktok/tiktok_common_constants';
-import { TIKTOK_OPEN_API_USER_INFO_PATH_PART, TIKTOK_OPEN_API_USER_DEFAULT_FIELDS } from '../../../../constants/net/api/tiktok/tik_tok_user_constants';
+import { TIKTOK_OPEN_API_USER_INFO_PATH_PART, TIKTOK_OPEN_API_USER_DEFAULT_FIELDS } from '../../../../constants/net/api/tiktok/tiktok_user_constants';
 
 import TikTokAPIServerAbstractFacade from '../tiktok_api_server_abstract_facade';
 import AxiosRequestFacade from '../../../http/request/axios/axios_server_request_facade';

@@ -1,10 +1,7 @@
 // external imports
 
 // internal imports
-import {
-    PLAIN_TEXT_ENCRYPTOR_NAME,
-    CHA_CHA20_POLY1305_BASE64_ENCRYPTOR_NAME,
-} from '../../../src/constants/security/crypto/encryptors_constants';
+import { CHA_CHA20_POLY1305_BASE64_ENCRYPTOR_NAME } from '../../../src/constants/security/crypto/encryptors_constants';
 
 import SimpleTextEncryptorFactory from '../../../src/security/crypto/factories/simple_text_encryptor_factory';
 

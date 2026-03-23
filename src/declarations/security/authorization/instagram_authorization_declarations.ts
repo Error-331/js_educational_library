@@ -5,6 +5,7 @@
 // implementation
 type InstagramAuthorizationCodeRetrievalOptions = {
     clientId: string;
+    enableFBLogin?: boolean;
     forceReauth: boolean;
     redirectURI: string;
     scope: string[];

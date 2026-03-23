@@ -77,6 +77,7 @@ class InstagramClientAuthorizationStrategy<AuthorizationCodeRetrievalData>
         this.cleanupAuthorizationCodeRetrieval();
     }
 
+    // https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/business-login
     public async initAuthorizationCodeRetrieval(options: InstagramAuthorizationCodeRetrievalOptions, windowTitle = 'Instagram OAuth Authorization', windowOptions?: GenericObject): Promise<HTTPResponseDataSchema<false, AuthorizationCodeRetrievalData>> {
         this.authCodeRetrievalTimeoutId = setTimeout(() => {
             this.onWindowOAuthReject('Cannot retrieve OAuth code - timeout');
@@ -89,6 +90,7 @@ class InstagramClientAuthorizationStrategy<AuthorizationCodeRetrievalData>
             let url = INSTAGRAM_DEFAULT_OAUTH_AUTHORIZATION_URL;
 
             url += `?force_reauth=${options.forceReauth === true ? 'true' : 'false'}`;
+            url += `?enable_fb_login=${options.enableFBLogin === true ? 'true' : 'false'}`;
             url += `&client_id=${options.clientId}`;
             url += `&redirect_uri=${options.redirectURI}`
             url += '&response_type=code';
