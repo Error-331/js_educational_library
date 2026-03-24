@@ -39,6 +39,7 @@ class ValidationError extends Error implements Serializable<SerializedValidation
         this.name = CustomErrorName.ValidationError;
         this._issues = issues;
 
+        Error.captureStackTrace(this, this.constructor);
         Object.setPrototypeOf(this, ValidationError.prototype);
     }
 

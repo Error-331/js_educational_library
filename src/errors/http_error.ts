@@ -18,6 +18,7 @@ class HTTPError extends Error implements Serializable<SerializedHTTPError> {
         this._httpCode = httpCode;
         this._isProxy = isProxy;
 
+        Error.captureStackTrace(this, this.constructor);
         Object.setPrototypeOf(this, HTTPError.prototype);
     }
 
