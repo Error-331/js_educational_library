@@ -4,6 +4,7 @@
 import { GenericObject } from '../../../declarations/collection_declarations';
 import { InstagramAPIErrorResponse, InstagramAPIOAuthResponse } from '../../../declarations/vendor/instagram/instagram_api_declarations';
 import { InstagramGraphAPIAccessTokenResponse } from '../../../declarations/vendor/instagram/instagram_graph_api_declarations';
+import { FacebookGraphAPIErrorResponse } from '../../../declarations/vendor/facebook/facebook_base_declarations';
 
 import { INSTAGRAM_GRAPH_API_BASE_URL, INSTAGRAM_API_BASE_URL } from '../../../constants/net/api/instagram/instagram_common_constants';
 import { INSTAGRAM_API_OAUTH_SHORT_LIVED_ACCESS_TOKEN_PATH_PART } from '../../../constants/net/api/instagram/instagram_api_constants';
@@ -28,7 +29,7 @@ class InstagramAPIOAuthFacade extends InstagramAPIServerAbstractFacade {
         params.append('client_secret', serverOptions.clientSecret);
         params.append('grant_type', 'ig_exchange_token');
 
-        const httpClient = new AxiosRequestFacade<InstagramAPIErrorResponse | InstagramGraphAPIAccessTokenResponse>({
+        const httpClient = new AxiosRequestFacade<FacebookGraphAPIErrorResponse | InstagramGraphAPIAccessTokenResponse>({
             baseURL: INSTAGRAM_GRAPH_API_BASE_URL,
             url: combineMultipleURLPaths([INSTAGRAM_GRAPH_API_ACCESS_TOKEN_PATH_PART], true, false),
             params,
