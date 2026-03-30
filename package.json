@@ -22,6 +22,7 @@
     "./net/api/instagram/*":  "./src/net/api/instagram/*.ts",
     "./net/api/firebase/auth/*": "./src/net/api/firebase/auth/*.ts",
     "./net/api/gcp/*":  "./src/net/api/gcp/*.ts",
+    "./net/api/stripe/*":  "./src/net/api/stripe/*.ts",
 
     "./net/gcp/*": "./src/net/gcp/*.ts",
 
@@ -70,6 +71,7 @@
     "@google/genai": "^1.42.0",
     "@ffprobe-installer/ffprobe": "^2.1.2",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "stripe": "^20.4.1",
     "axios": "^1.8.4",
     "express": "^5.1.0",
     "firebase": "^12.3.0",
@@ -99,6 +101,9 @@
       "optional": true
     },
     "@ffmpeg-installer/ffmpeg": {
+      "optional": true
+    },
+    "stripe": {
       "optional": true
     },
     "zod": {

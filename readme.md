@@ -48,6 +48,11 @@ My small JS multipurpose library used for educational purposes.
 - **JSEL_TIKTOK_SERVER_OPTIONS_JSON** - TikTok server options (contains such options as client key, client secret, etc.);
 - **JSEL_TIKTOK_SERVER_OPTIONS_CRYPTO_CONFIG** - configuration JSON which is used to decrypt *JSEL_TIKTOK_SERVER_OPTIONS_JSON* represented as stringified JSON;
 
+### Stripe related
+
+- **JSEL_STRIPE_SERVER_OPTIONS_JSON** - Stripe server options (contains such options as publishable key, secret key, etc.);
+- **JSEL_STRIPE_SERVER_OPTIONS_CRYPTO_CONFIG** - configuration JSON which is used to decrypt *JSEL_STRIPE_SERVER_OPTIONS_JSON* represented as stringified JSON;
+
 ### Vite related
 
 - **VITE_JSEL_CLIENT_ENV** - flag which indicates which environment client is running in;
