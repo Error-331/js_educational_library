@@ -95,7 +95,7 @@ function isNull(value: unknown): boolean {
     return value === null;
 }
 
-function isNil(value: unknown): boolean {
+function isNil(value: unknown): value is (undefined | null) {
     return isUndefined(value) || isNull(value);
 }
 
