@@ -19,12 +19,17 @@ type FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration = {
 
     verifyUserURL: string;
     getUserAuthenticationStateInfoURL: string;
+    getUserDataURL: string;
 
     signInURL: string;
     signUpURL: string;
     signOutURL: string;
 
     signUpUseServer?: boolean;
+}
+
+type FirebaseEmailPasswordJWTServerAuthenticationStrategyConfiguration = {
+    isCustomSessionToken?: boolean;
 }
 
 type FirebaseEmailPasswordJWTServerUserData = {
@@ -39,5 +44,6 @@ export {
 
     FirebaseEmailPasswordJWTServerSignUpData,
     FirebaseEmailPasswordJWTClientAuthenticationStrategyConfiguration,
+    FirebaseEmailPasswordJWTServerAuthenticationStrategyConfiguration,
     FirebaseEmailPasswordJWTServerUserData,
 }

@@ -4,12 +4,16 @@ import { DecodedIdToken, AuthClientErrorCode } from 'firebase-admin/auth';
 // internal imports
 import { CookieStore, SetCookieOptions, JWTCookieStore } from '../../../../../declarations/net/http/cookie_declarations';
 import { UserAuthenticationStateInfo } from '../../../../../declarations/security/authentication/general_authentication_declarations';
-import { FirebaseAuthTokenType } from '../../../../../declarations/security/authentication/firebase_authentication_declarations';
+import {
+    FirebaseAuthTokenType,
+    FirebaseEmailPasswordJWTServerAuthenticationStrategyConfiguration,
+} from '../../../../../declarations/security/authentication/firebase_authentication_declarations';
 
 import { JWT_COOKIE_DEFAULT_MAX_AGE } from '../../../../../constants/net/http/cookie_constants';
 
 import HTTPError from '../../../../../errors/http_error';
 
+import { GenericObject } from '../../../../../declarations/collection_declarations';
 import FirebaseAbstractJWTAuthenticationStrategy from '../abstract/firebase_abstract_jwt_authentication_strategy';
 import FirebaseServerJWTAuthenticationUtils from '../../../utils/firebase/firebase_server_jwt_authentication_utils';
 import FirebaseAdminRegistry from '../../../../../registers/firebase/firebase_admin_registry';
@@ -18,11 +22,20 @@ import { createCustomZodIssueAndThrowValidationError } from '../../../../../util
 import { convertSecondsToMilliseconds } from '../../../../../utils/physics/time_utils';
 import { switchByFunctionList } from '../../../../../utils/functional/conditional_utils';
 import { isAuthError } from '../../../../../utils/vendor/firebase/firebase_admin_utils';
-import { isNil } from '../../../../../utils/misc/logic_utils';
+import { isNil, isBoolean, isString } from '../../../../../utils/misc/logic_utils';
 
 // implementation
-abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends FirebaseAbstractJWTAuthenticationStrategy {
+abstract class FirebaseAbstractServerJWTAuthenticationStrategy<UserData extends GenericObject> extends FirebaseAbstractJWTAuthenticationStrategy<UserData> {
     protected cookieStore: CookieStore & JWTCookieStore;
+
+    protected isCustomSessionToken: boolean = false;
+
+    constructor(cookieStore: CookieStore & JWTCookieStore, config: FirebaseEmailPasswordJWTServerAuthenticationStrategyConfiguration) {
+        super();
+
+        this.cookieStore = cookieStore;
+        this.isCustomSessionToken = isBoolean(config.isCustomSessionToken) ? config.isCustomSessionToken : false;
+    }
 
     protected verifyDecodedAuthTokenProjectId(decodedAuthToken: DecodedIdToken): boolean {
         const fbAdmin = FirebaseAdminRegistry.getInstance();
@@ -86,20 +99,41 @@ abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends FirebaseA
         }
     }
 
-    constructor(cookieStore: CookieStore & JWTCookieStore) {
-        super();
-        this.cookieStore = cookieStore;
+    protected async extractJWTValue(authHeader?: string): Promise<string | null> {
+        // retrieve JWT token from cookie store
+        let jwtValue: null | string = null;
+
+        // if custom session token is not used (cookie) - extract ID token from header
+        if (this.isCustomSessionToken === true) {
+            jwtValue = await this.cookieStore.getJWTResponseCookie();
+        } else {
+            if (!isString(authHeader)) {
+                return null;
+            }
+
+            jwtValue = authHeader.split(' ')?.[1];
+        }
+
+        // return token
+        return jwtValue
     }
 
-    public async verifyUser(): Promise<boolean> {
-        const jwtValue = await this.cookieStore.getJWTResponseCookie();
+    public async verifyUser(authHeader?: string): Promise<boolean> {
+        // retrieve JWT token
+        let jwtValue: null | string = await this.extractJWTValue(authHeader);
 
+        // check if it is not empty
         if (isNil(jwtValue)) {
             return false;
         }
 
         try {
-            await this.verifySessionToken(jwtValue);
+            // we either verify custom session token or access token (id token)
+            if (this.isCustomSessionToken == true) {
+                await this.verifySessionToken(jwtValue);
+            } else {
+                await this.verifyAccessToken(jwtValue);
+            }
         } catch (error) {
             return false;
         }
@@ -107,29 +141,41 @@ abstract class FirebaseAbstractServerJWTAuthenticationStrategy extends FirebaseA
         return true;
     }
 
-    public async getUserAuthenticationStateInfo(): Promise<UserAuthenticationStateInfo> {
+    public async getUserAuthenticationStateInfo(authHeader?: string): Promise<UserAuthenticationStateInfo> {
+        // prepare state info template
         let stateInfo: UserAuthenticationStateInfo = {
             authenticated: false,
             ...FirebaseServerJWTAuthenticationUtils.getDefaultUserAuthenticationStrategyInfo(),
         }
 
-        const jwtValue = await this.cookieStore.getJWTResponseCookie();
+        // if JWT cookie not found - return the result
+        const jwtValue: null | string = await this.extractJWTValue(authHeader);
         if (isNil(jwtValue)) {
             return stateInfo;
         }
 
         try {
-            const decodedAuthToken = await FirebaseServerJWTAuthenticationUtils.decodeAuthToken(jwtValue, FirebaseAuthTokenType.JWTToken);
+            // determine whether token is custom JWT token or ID token
+            const tokenType = this.isCustomSessionToken === true ? FirebaseAuthTokenType.JWTToken : FirebaseAuthTokenType.AccessToken;
+
+            // decode JWT token
+            const decodedAuthToken = await FirebaseServerJWTAuthenticationUtils.decodeAuthToken(jwtValue, tokenType);
+
+            // add authentication strategy info if possible (vendor and provider)
             stateInfo = {
                 ...stateInfo,
                 ...FirebaseServerJWTAuthenticationUtils.getUserAuthenticationStrategyInfoByDecodedToken(decodedAuthToken),
             }
 
+            // verify standard claims
             this.runAuthTokenVerificationStrategy(decodedAuthToken);
+
+            // if standard claims were verified - we can judge that user is authenticated
             stateInfo.authenticated = true;
 
             return stateInfo;
         } catch (error: unknown) {
+            // return "empty" state info if error occurred during JWT token decoding/verification
             return stateInfo;
         }
     }

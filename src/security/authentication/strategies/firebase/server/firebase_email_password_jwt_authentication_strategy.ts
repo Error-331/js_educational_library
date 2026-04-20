@@ -1,5 +1,5 @@
 // external imports
-import { DecodedIdToken, UserRecord } from 'firebase-admin/auth';
+import { DecodedIdToken } from 'firebase-admin/auth';
 
 // internal imports
 import {
@@ -8,6 +8,7 @@ import {
     AuthenticationVendor,
     UserAuthenticationStateInfo
 } from '../../../../../declarations/security/authentication/general_authentication_declarations';
+
 import {
     FirebaseAuthTokenType,
     FirebaseEmailPasswordJWTServerSignUpData,
@@ -23,9 +24,9 @@ import { pick } from '../../../../../utils/primitives/object_utils';
 import { isNil } from '../../../../../utils/misc/logic_utils';
 
 // implementation
-class FirebaseEmailPasswordJWTAuthenticationStrategy extends
-    FirebaseAbstractServerJWTAuthenticationStrategy implements
-    AuthenticationSignInStrategy<string, FirebaseEmailPasswordJWTServerSignUpData, FirebaseEmailPasswordJWTServerUserData> {
+class FirebaseEmailPasswordJWTAuthenticationStrategy<UserData extends FirebaseEmailPasswordJWTServerUserData> extends
+    FirebaseAbstractServerJWTAuthenticationStrategy<UserData> implements
+    AuthenticationSignInStrategy<string, FirebaseEmailPasswordJWTServerSignUpData, UserData> {
     protected verifyDecodedAuthTokenProviderId(decodedAuthToken: DecodedIdToken): boolean {
         return decodedAuthToken.firebase.sign_in_provider === 'password';
     }
@@ -40,28 +41,52 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends
         return decodedAuthTokenCopy;
     }
 
-    public async getUserData(): Promise<FirebaseEmailPasswordJWTServerUserData> {
-        const jwtValue = await this.cookieStore.getJWTResponseCookie();
+    public async getUserData(authHeader?: string): Promise<UserData> {
+        // retrieve JWT token
+        const jwtValue: null | string = await this.extractJWTValue(authHeader);
+
+        // throw an error if necessary token cannot be extracted
         if (isNil(jwtValue)) {
-            return null;
+            throw new HTTPError('Cannot load user data - cannot extract JWT/Id token', 400);
         }
 
-        const { email, email_verified: emailVerified, uid, picture: photoURL } = await FirebaseServerJWTAuthenticationUtils.decodeAuthToken(jwtValue, FirebaseAuthTokenType.JWTToken);
+        // decode the token (either access token - id token, or jwt cookie token)
+        const {
+            email,
+            email_verified: emailVerified,
+            uid,
+            picture: photoURL
+        } = await FirebaseServerJWTAuthenticationUtils.decodeAuthToken(jwtValue, this.isCustomSessionToken == true ? FirebaseAuthTokenType.JWTToken : FirebaseAuthTokenType.AccessToken);
+
+        // get Firebase auth instance and use it to find user record
+        const fbAdminAuth = FirebaseAdminRegistry.getInstance().auth;
+        const currentUser = await fbAdminAuth.getUser(uid);
+
+        // if user is not found - throw an error
+        if (isNil(currentUser)) {
+            throw new HTTPError('Cannot load user data - cannot find user by uid', 400);
+        }
+
+        // return user authentication data along with custom claims
         return {
             email,
             emailVerified,
             uid,
             photoURL,
+
+            ...currentUser.customClaims,
         };
     }
 
-    public async signIn(accessToken: string): Promise<UserAuthenticationStateInfo> {
-        await this.verifyAccessToken(accessToken);
+    public async signIn(idToken: string): Promise<UserAuthenticationStateInfo> {
+        await this.verifyAccessToken(idToken);
 
-        try {
-            await this.addSessionCookie(accessToken);
-        } catch (error: unknown) {
-            await this.transformAndThrowFirebaseAuthError(error);
+        if (this.isCustomSessionToken === true) {
+            try {
+                await this.addSessionCookie(idToken);
+            } catch (error: unknown) {
+                await this.transformAndThrowFirebaseAuthError(error);
+            }
         }
 
         return {
@@ -71,11 +96,11 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends
         };
     }
 
-    public async signUp(userData: FirebaseEmailPasswordJWTServerSignUpData): Promise<FirebaseEmailPasswordJWTServerUserData> {
+    public async signUp(userData: FirebaseEmailPasswordJWTServerSignUpData): Promise<UserData> {
         const fbAdminAuth = FirebaseAdminRegistry.getInstance().auth;
         try {
-            const userDataRecord =  await fbAdminAuth.createUser(userData);
-            return pick<UserRecord, 'uid' | 'email' | 'emailVerified' | 'photoURL'>(userDataRecord, ['uid', 'email', 'emailVerified', 'photoURL']);
+            const userDataRecord = await fbAdminAuth.createUser(userData);
+            return pick<UserData, 'uid' | 'email' | 'emailVerified' | 'photoURL'>(userDataRecord, ['uid', 'email', 'emailVerified', 'photoURL']);
         } catch (error: unknown) {
             await this.transformAndThrowFirebaseAuthError(error);
         }
