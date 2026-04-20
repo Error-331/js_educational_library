@@ -13,7 +13,6 @@ import { JWT_COOKIE_DEFAULT_MAX_AGE } from '../../../../../constants/net/http/co
 
 import HTTPError from '../../../../../errors/http_error';
 
-import { GenericObject } from '../../../../../declarations/collection_declarations';
 import FirebaseAbstractJWTAuthenticationStrategy from '../abstract/firebase_abstract_jwt_authentication_strategy';
 import FirebaseServerJWTAuthenticationUtils from '../../../utils/firebase/firebase_server_jwt_authentication_utils';
 import FirebaseAdminRegistry from '../../../../../registers/firebase/firebase_admin_registry';
@@ -25,16 +24,16 @@ import { isAuthError } from '../../../../../utils/vendor/firebase/firebase_admin
 import { isNil, isBoolean, isString } from '../../../../../utils/misc/logic_utils';
 
 // implementation
-abstract class FirebaseAbstractServerJWTAuthenticationStrategy<UserData extends GenericObject> extends FirebaseAbstractJWTAuthenticationStrategy<UserData> {
+abstract class FirebaseAbstractServerJWTAuthenticationStrategy<UserData extends object> extends FirebaseAbstractJWTAuthenticationStrategy<UserData> {
     protected cookieStore: CookieStore & JWTCookieStore;
 
     protected isCustomSessionToken: boolean = false;
 
-    constructor(cookieStore: CookieStore & JWTCookieStore, config: FirebaseEmailPasswordJWTServerAuthenticationStrategyConfiguration) {
+    constructor(cookieStore: CookieStore & JWTCookieStore, config?: FirebaseEmailPasswordJWTServerAuthenticationStrategyConfiguration) {
         super();
 
         this.cookieStore = cookieStore;
-        this.isCustomSessionToken = isBoolean(config.isCustomSessionToken) ? config.isCustomSessionToken : false;
+        this.isCustomSessionToken = isBoolean(config?.isCustomSessionToken) ? config.isCustomSessionToken : false;
     }
 
     protected verifyDecodedAuthTokenProjectId(decodedAuthToken: DecodedIdToken): boolean {

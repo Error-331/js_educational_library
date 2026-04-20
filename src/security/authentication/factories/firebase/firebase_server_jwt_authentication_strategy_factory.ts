@@ -1,10 +1,16 @@
 // external imports
 
 // internal imports
+import {
+    FirebaseEmailPasswordJWTServerAuthenticationStrategyConfiguration,
+    FirebaseEmailPasswordJWTServerSignUpData,
+} from '../../../../declarations/security/authentication/firebase_authentication_declarations';
+
 import { CookieStore, JWTCookieStore } from '../../../../declarations/net/http/cookie_declarations';
 import {
     AuthenticationProvider,
-    AuthenticationSignInStrategy
+    AuthenticationSignInStrategy,
+    UserAuthenticationStateInfo
 } from '../../../../declarations/security/authentication/general_authentication_declarations';
 
 import FirebaseServerJWTAuthenticationUtils from '../../utils/firebase/firebase_server_jwt_authentication_utils';
@@ -13,21 +19,21 @@ import FirebaseAnonymousJWTServerAuthenticationStrategy from '../../strategies/f
 import FirebaseEmailPasswordJWTAuthenticationStrategy from '../../strategies/firebase/server/firebase_email_password_jwt_authentication_strategy';
 
 // implementation
-class FirebaseServerJWTAuthenticationStrategyFactory {
+class FirebaseServerJWTAuthenticationStrategyFactory<UserData> {
     protected cookieStore: CookieStore & JWTCookieStore;
 
     constructor(cookieStore: CookieStore & JWTCookieStore) {
         this.cookieStore = cookieStore;
     }
 
-    public async create(): Promise<null | AuthenticationSignInStrategy> {
+    public async create(config?: FirebaseEmailPasswordJWTServerAuthenticationStrategyConfiguration): Promise<null | AuthenticationSignInStrategy<string, void, UserAuthenticationStateInfo> | AuthenticationSignInStrategy<string, FirebaseEmailPasswordJWTServerSignUpData, UserData>> {
         const userAuthenticationStrategyInfo = await FirebaseServerJWTAuthenticationUtils.getUserAuthenticationStrategyInfo(this.cookieStore);
 
         switch (userAuthenticationStrategyInfo.provider) {
             case AuthenticationProvider.Anonymous:
-                return new FirebaseAnonymousJWTServerAuthenticationStrategy(this.cookieStore);
+                return new FirebaseAnonymousJWTServerAuthenticationStrategy(this.cookieStore, config);
             case AuthenticationProvider.EmailPassword:
-                return new FirebaseEmailPasswordJWTAuthenticationStrategy(this.cookieStore);
+                return new FirebaseEmailPasswordJWTAuthenticationStrategy<UserData>(this.cookieStore, config);
             default:
                 return null;
         }

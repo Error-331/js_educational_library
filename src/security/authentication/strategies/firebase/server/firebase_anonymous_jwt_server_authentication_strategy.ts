@@ -14,7 +14,7 @@ import FirebaseAbstractServerJWTAuthenticationStrategy from './firebase_abstract
 
 // implementation
 class FirebaseAnonymousJWTServerAuthenticationStrategy extends
-    FirebaseAbstractServerJWTAuthenticationStrategy implements
+    FirebaseAbstractServerJWTAuthenticationStrategy<UserAuthenticationStateInfo> implements
     AuthenticationSignInStrategy<string, void, UserAuthenticationStateInfo> {
     protected verifyDecodedAuthTokenProviderId(decodedAuthToken: DecodedIdToken): boolean {
         return decodedAuthToken.firebase.sign_in_provider === 'anonymous';
@@ -30,13 +30,20 @@ class FirebaseAnonymousJWTServerAuthenticationStrategy extends
         return decodedAuthTokenCopy;
     }
 
-    public async getUserData(): Promise<UserAuthenticationStateInfo> {
-        return this.getUserAuthenticationStateInfo();
+    public async getUserData(authHeader?: string): Promise<UserAuthenticationStateInfo> {
+        return this.getUserAuthenticationStateInfo(authHeader);
     }
 
-    public async signIn(accessToken: string): Promise<UserAuthenticationStateInfo> {
-        await this.verifyAccessToken(accessToken);
-        await this.addSessionCookie(accessToken);
+    public async signIn(idToken: string): Promise<UserAuthenticationStateInfo> {
+        await this.verifyAccessToken(idToken);
+
+        if (this.isCustomSessionToken === true) {
+            try {
+                await this.addSessionCookie(idToken);
+            } catch (error: unknown) {
+                await this.transformAndThrowFirebaseAuthError(error);
+            }
+        }
 
         return {
             authenticated: true,
@@ -46,7 +53,11 @@ class FirebaseAnonymousJWTServerAuthenticationStrategy extends
     }
 
     public async signUp(): Promise<UserAuthenticationStateInfo> {
-        return this.getUserAuthenticationStateInfo();
+        return {
+            authenticated: true,
+            vendor: AuthenticationVendor.Firebase,
+            provider: AuthenticationProvider.Anonymous,
+        };
     }
 }
 
