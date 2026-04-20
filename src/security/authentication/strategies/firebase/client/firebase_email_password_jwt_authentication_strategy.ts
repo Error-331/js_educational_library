@@ -17,11 +17,12 @@ import { createCustomZodIssueAndThrowValidationError } from '../../../../../util
 import { isNil, isBoolean, isObject, isString } from '../../../../../utils/misc/logic_utils';
 
 // implementation
-class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWTAuthenticationStrategy implements AuthenticationSignInStrategy<string, string | GenericObject, void> {
+class FirebaseEmailPasswordJWTAuthenticationStrategy<UserData extends GenericObject> extends FirebaseAbstractJWTAuthenticationStrategy<UserData> implements AuthenticationSignInStrategy<string, string | GenericObject, UserData> {
     private baseURL: string;
 
     private verifyUserURL: string;
     private getUserAuthenticationStateInfoURL: string;
+    private getUserDataURL: string;
 
     private signInURL: string;
     private signUpURL: string;
@@ -44,6 +45,10 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWT
             throw new RangeError('Cannot instantiate authentication strategy - "getUserAuthenticationStateInfoURL" url is not set');
         }
 
+        if (!isString(config.getUserDataURL)) {
+            throw new RangeError('Cannot instantiate authentication strategy - "getUserDataURL" url is not set');
+        }
+
         if (!isString(config.signInURL)) {
             throw new RangeError('Cannot instantiate authentication strategy - "signIn" url is not set');
         }
@@ -60,6 +65,7 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWT
 
         this.verifyUserURL = config.verifyUserURL;
         this.getUserAuthenticationStateInfoURL = config.getUserAuthenticationStateInfoURL;
+        this.getUserDataURL = config.getUserDataURL;
 
         this.signInURL = config.signInURL;
         this.signUpURL = config.signUpURL;
@@ -102,7 +108,7 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWT
         }
     }
 
-    protected async signUpClient(email: string, password: string): Promise<void> {
+    protected async signUpClient(email: string, password: string): Promise<UserData> {
         let currentUserCredentials: UserCredential;
 
         try {
@@ -121,10 +127,10 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWT
         });
 
         const { statusCode, data } = await httpClient.post();
-        handleHTTPResponseData<void>(statusCode, data);
+        return handleHTTPResponseData<UserData>(statusCode, data);
     }
 
-    protected async signUpServer(email: string, password: string, extraData?: GenericObject): Promise<void> {
+    protected async signUpServer(email: string, password: string, extraData?: GenericObject): Promise<UserData> {
         const httpClient = new AxiosRequestFacade({
             baseURL: this.baseURL,
             url: this.signUpURL,
@@ -132,7 +138,7 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWT
         });
 
         const { statusCode, data } = await httpClient.post();
-        handleHTTPResponseData<UserAuthenticationStateInfo>(statusCode, data);
+        return handleHTTPResponseData<UserData>(statusCode, data);
     }
 
     public async verifyUser(): Promise<boolean> {
@@ -157,6 +163,17 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWT
         return handleHTTPResponseData<UserAuthenticationStateInfo>(statusCode, data);
     }
 
+    public async getUserData(): Promise<UserData> {
+        // TODO: we do not need to stick to Axios - probably need to use some sort of factory
+        const httpClient = new AxiosRequestFacade({
+            baseURL: this.baseURL,
+            url: this.getUserDataURL,
+        });
+
+        const { statusCode, data } = await httpClient.get();
+        return handleHTTPResponseData<UserData>(statusCode, data);
+    }
+
     public async signIn(email: string, password: string): Promise<UserAuthenticationStateInfo> {
         const currentUserCredentials: UserCredential = await this.initSignIn(email, password);
         const idToken = await currentUserCredentials.user.getIdToken();
@@ -172,7 +189,7 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy extends FirebaseAbstractJWT
         return handleHTTPResponseData<UserAuthenticationStateInfo>(statusCode, data);
     }
 
-    public async signUp(email: string, password: string, extraData?: GenericObject): Promise<void> {
+    public async signUp(email: string, password: string, extraData?: GenericObject): Promise<UserData> {
         return this.signUpUseServer ? this.signUpServer(email, password, extraData) : this.signUpClient(email, password);
     }
 

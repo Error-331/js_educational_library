@@ -99,7 +99,7 @@ function isNil(value: unknown): value is (undefined | null) {
     return isUndefined(value) || isNull(value);
 }
 
-function isNullOrEmpty(value: unknown): boolean {
+function isNullOrEmpty(value: unknown): value is (undefined | null) {
     if (isNil(value)) {
         return true;
     }
