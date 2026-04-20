@@ -15,7 +15,7 @@ import FacebookClientSDKRegistry from '../../../../../registers/facebook/faceboo
 import { isNil } from '../../../../../utils/misc/logic_utils';
 
 // implementation
-class FacebookClientAuthenticationStrategy extends AbstractAuthenticationStrategy implements AuthenticationSignInStrategy<boolean> {
+class FacebookClientAuthenticationStrategy extends AbstractAuthenticationStrategy<void> implements AuthenticationSignInStrategy<boolean, void, void> {
     protected _options: FacebookClientSDKLoginOptions;
 
     constructor(options?: FacebookClientSDKLoginOptions) {
@@ -49,6 +49,9 @@ class FacebookClientAuthenticationStrategy extends AbstractAuthenticationStrateg
         const authResponse = await FacebookClientSDKRegistry.getInstance().getLoginStatus();
         return this.composeAuthenticationStateInfo(authResponse);
     }
+
+    public async getUserData(): Promise<void> {}
+    public async signUp(): Promise<void> {}
 
     public async signIn(force = false): Promise<FacebookUserAuthenticationStateInfo> {
         let loginResponse;

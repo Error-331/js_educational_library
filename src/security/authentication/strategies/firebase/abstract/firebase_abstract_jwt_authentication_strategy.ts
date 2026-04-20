@@ -4,7 +4,7 @@
 import AbstractAuthenticationStrategy from '../../abstract/abstract_authentication_strategy';
 
 // implementation
-abstract class FirebaseAbstractJWTAuthenticationStrategy extends AbstractAuthenticationStrategy {
+abstract class FirebaseAbstractJWTAuthenticationStrategy<UserData> extends AbstractAuthenticationStrategy<UserData> {
     protected abstract transformAndThrowFirebaseAuthError(error: unknown): void;
 }
 
