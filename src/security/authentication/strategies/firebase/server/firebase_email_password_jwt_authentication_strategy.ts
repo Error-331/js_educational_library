@@ -55,7 +55,8 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy<UserData extends FirebaseEm
             email,
             email_verified: emailVerified,
             uid,
-            picture: photoURL
+            picture: photoURL,
+            name,
         } = await FirebaseServerJWTAuthenticationUtils.decodeAuthToken(jwtValue, this.isCustomSessionToken == true ? FirebaseAuthTokenType.JWTToken : FirebaseAuthTokenType.AccessToken);
 
         // get Firebase auth instance and use it to find user record
@@ -69,6 +70,7 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy<UserData extends FirebaseEm
 
         // return user authentication data along with custom claims
         return {
+            name,
             email,
             emailVerified,
             uid,

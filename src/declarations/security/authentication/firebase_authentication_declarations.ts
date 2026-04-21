@@ -34,6 +34,7 @@ type FirebaseEmailPasswordJWTServerAuthenticationStrategyConfiguration = {
 
 type FirebaseEmailPasswordJWTServerUserData = {
     uid: string;
+    name: string;
     email?: string;
     emailVerified: boolean;
     photoURL?: string;
