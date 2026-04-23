@@ -241,7 +241,7 @@ class FirebaseAdminRegistry {
 
     /**
      * Method that returns current Firebase Admin application Firestore instance.
-     * Method will also try to initialize Firebase Admin application if it was not initialized previously.
+     * Method will also try to initialize Firebase Admin application if it was not initialized previously. If 'JSEL_FIREBASE_FIRESTORE_DB_NAME' (@see {@link process.env.JSEL_FIREBASE_FIRESTORE_DB_NAME}) environment variable is set - this database name will be used to send requests to corresponding database
      *
      * @returns {Firestore} Firebase Admin Firestore instance.
      *
@@ -249,7 +249,12 @@ class FirebaseAdminRegistry {
 
     get firestore(): Firestore {
         this.init();
-        return getFirestore();
+
+        if (!isNil(process.env.JSEL_FIREBASE_FIRESTORE_DB_NAME)) {
+            return getFirestore(process.env.JSEL_FIREBASE_FIRESTORE_DB_NAME);
+        } else {
+            return getFirestore();
+        }
     }
 
     /**

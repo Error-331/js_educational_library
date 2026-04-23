@@ -33,6 +33,10 @@ My small JS multipurpose library used for educational purposes.
 - **JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_CRYPTO_CONFIG** - configuration file which is used to decrypt *JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON* represented as stringified JSON;
 - **JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_CRYPTO_CONFIG** - configuration file which is used to decrypt *JSEL_FIREBASE_ADMIN_APP_ADDITIONAL_CONFIG_JSON* represented as stringified JSON;
 
+#### Firestore
+
+- **JSEL_FIREBASE_FIRESTORE_DB_NAME** - current Firebase Firestore database name (if not set - `(default)` name will be used);
+
 ### Facebook related
 
 - **JSEL_FACEBOOK_SERVER_OPTIONS_JSON** - Facebook server options (contains such options as application id, application secret, etc.);
