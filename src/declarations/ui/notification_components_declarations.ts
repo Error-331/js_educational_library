@@ -10,10 +10,11 @@ enum UINotificationType {
     Warning = 'Warning',
 }
 
-type UINotification = {
+type UINotification<DataType = undefined> = {
     type: UINotificationType,
     title?: string;
     message: string;
+    data?: DataType;
 }
 
 // exports

@@ -5,7 +5,7 @@ import { UINotification, UINotificationType } from '../../declarations/ui/notifi
 import { isNil } from '../misc/logic_utils';
 
 // implementation
-function createNotification(type: UINotificationType, message: string, title?: string): UINotification {
+function createNotification<DataType = undefined>(type: UINotificationType, message: string, title?: string, data?: DataType): UINotification<DataType> {
     if (isNil(message) || isNil(type)) {
         return {
             type: UINotificationType.Error,
@@ -16,7 +16,9 @@ function createNotification(type: UINotificationType, message: string, title?: s
 
     return {
         type,
+        title,
         message,
+        data,
     }
 }
 
