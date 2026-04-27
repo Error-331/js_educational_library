@@ -1,11 +1,12 @@
 // external imports
 import { FirebaseApp, FirebaseOptions, initializeApp, getApp, getApps } from 'firebase/app';
 import { Auth, getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 //import { Messaging, getMessaging } from 'firebase/messaging';
 
 // internal imports
-import { FIREBASE_DEFAULT_CLIENT_APP_NAME } from '../../constants/registers/firebase_registers_constants';
+import { FIREBASE_DEFAULT_CLIENT_APP_NAME, FIREBASE_DEFAULT_FIRESTORE_DB_NAME } from '../../constants/registers/firebase_registers_constants';
 import { isNil, isObject, isString } from '../../utils/misc/logic_utils';
 import { isClientProductionEnvironment } from '../../utils/vendor/common_client_utils';
 
@@ -21,6 +22,7 @@ class FirebaseClientRegistry {
     private static instance: FirebaseClientRegistry;
 
     private _appName: string = FIREBASE_DEFAULT_CLIENT_APP_NAME;
+    private _firestoreDBName: string = FIREBASE_DEFAULT_FIRESTORE_DB_NAME;
     private _options: FirebaseOptions;
 
     private constructor() {}
@@ -82,6 +84,11 @@ class FirebaseClientRegistry {
         connectAuthEmulator(getAuth(app), url);
     }
 
+    public connectEmulatorToFirestore(host: string, port: number): void {
+        const app = getApp(this.appName);
+        connectFirestoreEmulator(getFirestore(app, this._firestoreDBName), host, port);
+    }
+
     public connectEmulatorToFunctions(): void {
         const functions = getFunctions(getApp(this.appName));
         connectFunctionsEmulator(functions, '127.0.0.1', 5001);
@@ -97,11 +104,13 @@ class FirebaseClientRegistry {
         }
 
         const firebaseApp = FirebaseClientRegistry.findAppByName(this.appName);
+
         if (isNil(firebaseApp)) {
             initializeApp(this._options, this.appName);
 
             if (!isClientProductionEnvironment()) {
                 this.connectEmulatorToAuth('http://127.0.0.1:9099');
+                this.connectEmulatorToFirestore('127.0.0.1', 8080);
                 this.connectEmulatorToFunctions();
             }
         }
@@ -155,6 +164,11 @@ class FirebaseClientRegistry {
         return getAuth(this.app);
     }
 
+    get firestore() {
+        this.init();
+        return getFirestore(this.app, this._firestoreDBName);
+    }
+
     /*get messaging(): Messaging {
         return getMessaging(this.app);
     }*/
@@ -174,6 +188,14 @@ class FirebaseClientRegistry {
         }
 
         this._appName = name;
+    }
+
+    set firestoreDBName(name: string) {
+        if (!isString(name)) {
+            throw new RangeError('Cannot set Firebase Firestore database name - value must be of type string');
+        }
+
+        this._firestoreDBName = name;
     }
 
     /**
