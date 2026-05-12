@@ -6,6 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
 
+    "./ai/*": "./src/ai/*.ts",
     "./binary/*": "./src/binary/*.ts",
 
     "./database/*": "./src/database/*.ts",
@@ -69,65 +70,95 @@
     "@google-cloud/cloudquotas": "^2.2.1",
     "@google-cloud/monitoring": "^5.3.1",
     "@google/genai": "^1.42.0",
+    "@genkit-ai/google-genai": "^1.32.0",
     "@ffprobe-installer/ffprobe": "^2.1.2",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "genkit": "^1.34.0",
     "stripe": "^20.4.1",
     "axios": "^1.8.4",
     "express": "^5.1.0",
-    "firebase": "^12.3.0",
+    "firebase": "^12.12.1",
     "firebase-admin": "^13.2.0",
     "luxon": "^3.6.1",
     "next": "^15.2.2",
     "zod": "^3.24.1",
-    "pino": "^9.9.0"
+    "pino": "^9.9.0",
+    "data-urls": "^7.0.0"
   },
   "peerDependenciesMeta": {
     "@google-cloud/compute": {
       "optional": true
     },
+
     "@google-cloud/video-transcoder": {
       "optional": true
     },
+
     "@google-cloud/cloudquotas": {
       "optional": true
     },
+
     "@google-cloud/monitoring": {
       "optional": true
     },
+
     "@google/genai": {
       "optional": true
     },
+
+    "@genkit-ai/google-genai": {
+      "optional": true
+    },
+
     "@ffprobe-installer/ffprobe": {
       "optional": true
     },
+
     "@ffmpeg-installer/ffmpeg": {
       "optional": true
     },
+
+    "genkit": {
+      "optional": true
+    },
+
     "stripe": {
       "optional": true
     },
+
     "zod": {
       "optional": true
     },
+
     "axios": {
       "optional": true
     },
+
     "next": {
       "optional": true
     },
+
     "express": {
       "optional": true
     },
+
     "firebase": {
       "optional": true
     },
+
     "firebase-admin": {
       "optional": true
     },
+
     "luxon": {
       "optional": true
     },
+
     "pino": {
+      "optional": true
+    },
+
+    "data-urls": {
       "optional": true
     }
   },
@@ -138,7 +169,6 @@
     "@types/axios": "^0.14.4",
     "@types/cookie-parser": "^1.4.8",
     "@types/express": "^5.0.1",
-    "@types/firebase": "^3.2.3",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.10",
     "@types/react": "^19.1.5",
@@ -150,13 +180,8 @@
     "tsx": "^4.20.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
-    "firebase": "^12.3.0",
-    "firebase-admin": "^13.2.0",
     "@google-cloud/compute": "^5.2.0",
     "@google-cloud/video-transcoder": "^4.4.0",
-    "luxon": "^3.6.1",
-    "zod": "^3.24.1",
-    "pino": "^9.9.0",
-    "next": "^15.2.2"
+    "luxon": "^3.6.1"
   }
 }
