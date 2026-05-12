@@ -4,8 +4,9 @@ import { stat } from 'node:fs/promises';
 
 // internal imports
 import { generateAlmostRandomUUID } from '../primitives/string/random_string_generation_utils';
+import { findMIMETypeByFileExtensionNoneComposite } from '../net/mime_types_utils';
 import { extractFileExtension } from '../misc/path_utils';
-import { isString } from '../misc/logic_utils';
+import { isNullOrEmpty, isString } from '../misc/logic_utils';
 
 // implementation
 async function calcFileSizeInBytesAsync(pathToFile: string): Promise<number> {
@@ -35,9 +36,19 @@ function readJSONFileSync<JSONObjectType extends object>(path: string): JSONObje
     return JSON.parse(fileContents);
 }
 
+function findMIMETypeByPathToFile(pathToFile: string): string {
+    if (isNullOrEmpty(pathToFile)) {
+        throw new RangeError(`Cannot find MIME type for file - path to file is not provided or empty`);
+    }
+
+    const fileExtension = extractFileExtension(pathToFile);
+    return findMIMETypeByFileExtensionNoneComposite(fileExtension);
+}
+
 // exports
 export {
     calcFileSizeInBytesAsync,
     replaceFileNameWithRandomUUID,
     readJSONFileSync,
+    findMIMETypeByPathToFile,
 }
