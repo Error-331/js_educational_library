@@ -70,10 +70,10 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy<UserData extends FirebaseEm
 
         // return user authentication data along with custom claims
         return {
+            uid,
             name,
             email,
             emailVerified,
-            uid,
             photoURL,
 
             ...currentUser.customClaims,
