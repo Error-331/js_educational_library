@@ -1,7 +1,7 @@
 // external imports
 import type { Genkit, GenkitOptions } from 'genkit';
 
-import { genkit, z } from 'genkit';
+import { genkit } from 'genkit';
 import { googleAI } from '@genkit-ai/google-genai';
 
 // internal imports

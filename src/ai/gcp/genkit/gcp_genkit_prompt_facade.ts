@@ -1,5 +1,5 @@
 // external imports
-import type { PromptGenerateOptions } from 'genkit';
+import type { PromptGenerateOptions, GenkitOptions } from 'genkit';
 
 import { removeExtraTrailingSlashes } from 'js_educational_library/utils/net/uri_utils';
 
@@ -10,7 +10,7 @@ import { writeDataURLToFileAsync } from '../../../utils/file/server_file_url_uti
 import { isNil, isNullOrEmpty } from '../../../utils/misc/logic_utils';
 
 // implementation
-class GCPGenkitPromptFacade<PromptInputSchema extends object> {
+class GCPGenkitPromptFacade<PromptInputSchema extends object, PromptOutputSchema> {
     private promptPath: string;
     private promptName: string;
     private promptInstance;
@@ -31,7 +31,7 @@ class GCPGenkitPromptFacade<PromptInputSchema extends object> {
         this.promptInstance = genKitRegistry.ai.prompt(`${this.promptPath}/${this.promptName}`);
     }
 
-    public async renderPrompt(inputData?: PromptInputSchema) {
+    public async renderPrompt(inputData?: PromptInputSchema): Promise<GenkitOptions<PromptOutputSchema>> {
         return this.promptInstance.render(inputData);
     }
 
