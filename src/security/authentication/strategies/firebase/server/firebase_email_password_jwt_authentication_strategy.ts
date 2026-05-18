@@ -102,7 +102,7 @@ class FirebaseEmailPasswordJWTAuthenticationStrategy<UserData extends FirebaseEm
         const fbAdminAuth = FirebaseAdminRegistry.getInstance().auth;
         try {
             const userDataRecord = await fbAdminAuth.createUser(userData);
-            return pick<UserData, 'uid' | 'email' | 'emailVerified' | 'photoURL'>(userDataRecord, ['uid', 'email', 'emailVerified', 'photoURL']);
+            return pick<UserData, 'email' |  'uid'  | 'emailVerified' | 'photoURL'>(userDataRecord, ['uid', 'email', 'emailVerified', 'photoURL']);
         } catch (error: unknown) {
             await this.transformAndThrowFirebaseAuthError(error);
         }

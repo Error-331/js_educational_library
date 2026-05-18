@@ -7,6 +7,7 @@ My small JS multipurpose library used for educational purposes.
 ### Common options
 
 - **JSEL_SERVER_FRAMEWORK_VENDOR_NAME** - name of the host server framework (like `ExpressJS`, `NextJS`, etc.);
+- **JSEL_COMMON_PRIVATE_KEY** (optional) - key that is used in various places across the project (sort of GCP service account private key, usually created following command: `openssl genrsa -out private.pem 2048`);
 
 ### Cookies related options
 

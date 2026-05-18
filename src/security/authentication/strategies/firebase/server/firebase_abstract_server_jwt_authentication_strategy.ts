@@ -47,11 +47,11 @@ abstract class FirebaseAbstractServerJWTAuthenticationStrategy<UserData extends 
 
     protected runAuthTokenVerificationStrategy(decodedAuthToken: DecodedIdToken): DecodedIdToken {
         if (!this.verifyDecodedAuthTokenProjectId(decodedAuthToken)) {
-            throw new HTTPError('Cannot verify anonymous user access token - wrong project Id', 400);
+            throw new HTTPError('Cannot verify user access token - wrong project Id', 400);
         }
 
         if (!this.verifyDecodedAuthTokenExp(decodedAuthToken)) {
-            throw new HTTPError('Cannot verify anonymous user access token - access token is expired', 401);
+            throw new HTTPError('Cannot verify user access token - access token is expired', 401);
         }
 
         return decodedAuthToken;
@@ -110,7 +110,7 @@ abstract class FirebaseAbstractServerJWTAuthenticationStrategy<UserData extends 
                 return null;
             }
 
-            jwtValue = authHeader.split(' ')?.[1];
+            jwtValue = this.extractJWTTokenFromAuthHeader(authHeader);
         }
 
         // return token
@@ -128,7 +128,7 @@ abstract class FirebaseAbstractServerJWTAuthenticationStrategy<UserData extends 
 
         try {
             // we either verify custom session token or access token (id token)
-            if (this.isCustomSessionToken == true) {
+            if (this.isCustomSessionToken === true) {
                 await this.verifySessionToken(jwtValue);
             } else {
                 await this.verifyAccessToken(jwtValue);
