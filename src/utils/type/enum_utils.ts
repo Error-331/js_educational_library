@@ -27,7 +27,7 @@ function convertEnumToKeyToStringKeyEnum<OriginalEnumType, NewEnumType extends E
     }, {});
 
     if (!checkKeyToStringKeyEnumType<NewEnumType>(newEnum, originalEnumKeys)) {
-        throw new Error('test');
+        throw new Error('Cannot convert enum to string/key enum - converted enum check fail');
     }
 
     return newEnum;
