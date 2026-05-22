@@ -11,6 +11,7 @@ import { HTTPResponseSchema } from './response_declarations';
 // implementation
 type HTTPRequestMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';
 type HTTPRequestParams = string | object | ArrayBufferView | URLSearchParams | FormData | File | Blob | Stream | Buffer;
+type HTTPResponseType = 'arraybuffer' | 'blob' | 'document' | 'json' | 'text' | 'stream';
 
 type HTTPRequestData = GenericObject | FormData | Stream | Buffer;
 
@@ -22,6 +23,7 @@ type HTTPRequestConfig = {
     params?: HTTPRequestParams,
     data?: HTTPRequestData,
     timeout?: number, // in milliseconds
+    responseType?: HTTPResponseType,
 }
 
 type HTTPFetchRequestData = string | FormData | ReadableStream | Buffer;
@@ -44,6 +46,7 @@ interface RequestFacade<ResponseDataType> {
 export {
     HTTPRequestMethod,
     HTTPRequestParams,
+    HTTPResponseType,
 
     HTTPFetchRequestData,
     HTTPFetchRequestConfig,
