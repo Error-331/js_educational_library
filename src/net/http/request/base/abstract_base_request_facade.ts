@@ -6,6 +6,7 @@ import { GenericObject } from '../../../../declarations/collection_declarations'
 import {
     HTTPRequestMethod,
     HTTPRequestParams,
+    HTTPResponseType,
     HTTPRequestConfig,
     HTTPRequestData,
 
@@ -31,6 +32,7 @@ abstract class AbstractBaseRequestFacade<ResponseDataType> implements RequestFac
     protected _params: HTTPRequestParams = {};
     protected _data: HTTPRequestData;
     protected _timeout: number = HTTP_REQUEST_TIMEOUT;
+    protected _responseType: HTTPResponseType | undefined;
 
     constructor(config: HTTPRequestConfig) {
         this.updateConfig(config);
@@ -65,6 +67,10 @@ abstract class AbstractBaseRequestFacade<ResponseDataType> implements RequestFac
         if (!isNil(config.timeout)) {
             this.timeout = config.timeout;
         }
+
+        if (!isNil(config.responseType)) {
+            this.responseType = config.responseType;
+        }
     }
 
     protected prepareRequestURL(): string {
@@ -98,6 +104,7 @@ abstract class AbstractBaseRequestFacade<ResponseDataType> implements RequestFac
             data: this.prepareData(this._data),
             params: this._params instanceof URLSearchParams ? this._params : cloneDeep(this._params), // TODO: add something like FormDataTransformer here as well
             timeout: this._timeout,
+            responseType: this._responseType,
         }
     }
 
@@ -195,6 +202,11 @@ abstract class AbstractBaseRequestFacade<ResponseDataType> implements RequestFac
     set timeout(timeout: number) {
         // validate
         this._timeout = timeout;
+    }
+
+    set responseType(responseType: HTTPResponseType | undefined) {
+        // validate
+        this._responseType = responseType;
     }
 }
 
