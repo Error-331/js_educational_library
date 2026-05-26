@@ -11,7 +11,7 @@ import type { SimpleTextEncryptor } from '../../../declarations/security/crypto/
 import { AI_PROMPT_LIBRARY_PATH } from '../../../constants/ai/common_ai_constants';
 
 import SimpleTextEncryptorFactory from '../../../security/crypto/factories/simple_text_encryptor_factory';
-import { isNil, isString } from '../../../utils/misc/logic_utils';
+import { isNil, isString, isArray } from '../../../utils/misc/logic_utils';
 
 // implementation
 class GCPGenkitAIRegistry {
@@ -21,25 +21,7 @@ class GCPGenkitAIRegistry {
     private _promptDir: string = AI_PROMPT_LIBRARY_PATH;
     private _plugins: GenkitOptions['plugins'] = [];
 
-    private constructor() {}
-
-    private init() {
-        if (isNil(this._ai)) {
-            const genAIEnvConfig = this.parseGenAIEnvConfig();
-
-            this._ai = genkit({
-                promptDir: this._promptDir,
-
-                plugins: [
-                    googleAI(genAIEnvConfig),
-
-                    ...this._plugins,
-                ],
-            });
-        }
-    }
-
-    private parseGenAIEnvConfig(): GCPGenkitAIRegistryOptions {
+    private static parseGenAIEnvConfig(): GCPGenkitAIRegistryOptions {
         if (isNil(process.env.JSEL_GCP_GENAI_ADMIN_OPTIONS_JSON)) {
             throw new RangeError('Cannot extract GCP Gen AI admin options JSON - "JSEL_GCP_GENAI_ADMIN_OPTIONS_JSON" environment variable is not set');
         }
@@ -52,6 +34,25 @@ class GCPGenkitAIRegistry {
             return encryptor.decryptJSON<GCPGenkitAIRegistryOptions>(cryptoConfig.key, process.env.JSEL_GCP_GENAI_ADMIN_OPTIONS_JSON);
         } else {
             return JSON.parse(process.env.JSEL_GCP_GENAI_ADMIN_OPTIONS_JSON);
+        }
+    }
+
+    public static prepareGoogleAIConfig() {
+        const genAIEnvConfig = this.parseGenAIEnvConfig();
+        return googleAI(genAIEnvConfig);
+    }
+
+    private constructor() {}
+
+    private init() {
+        if (isNil(this._ai)) {
+            this._ai = genkit({
+                promptDir: this._promptDir,
+
+                plugins: [
+                    ...this._plugins,
+                ],
+            });
         }
     }
 
@@ -71,6 +72,14 @@ class GCPGenkitAIRegistry {
         }
 
         return this._ai;
+    }
+
+    set plugins(plugins: GenkitOptions['plugins']) {
+        if (!isArray(plugins)) {
+            throw new RangeError('Cannot set Genkit AI plugins - value must be of type array');
+        }
+
+        this._plugins = plugins;
     }
 
     set promptDir(promptDir: string) {
