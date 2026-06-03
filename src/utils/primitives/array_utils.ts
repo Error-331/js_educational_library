@@ -192,6 +192,11 @@ function concatSortedNumbers(...arraysToConcat) {
     return concatSorted(defaultCompare, ...arraysToConcat);
 }
 
+function mergeAndDeDuplicate(array1: string[], array2: string[]): string[] {
+    return [...new Set([...array1, ...array2])];
+}
+
+
 /**
  * Method that checks values in the array on whether at least one of them meet the predicate.
  *
@@ -310,6 +315,8 @@ export {
 
     concatSorted,
     concatSortedNumbers,
+
+    mergeAndDeDuplicate,
 
     arraySome,
 

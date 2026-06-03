@@ -11,7 +11,7 @@ import type { SimpleTextEncryptor } from '../../../declarations/security/crypto/
 import { AI_PROMPT_LIBRARY_PATH } from '../../../constants/ai/common_ai_constants';
 
 import SimpleTextEncryptorFactory from '../../../security/crypto/factories/simple_text_encryptor_factory';
-import { isNil, isString, isArray } from '../../../utils/misc/logic_utils';
+import { isNil, isString, isArray, isFunction } from '../../../utils/misc/logic_utils';
 
 // implementation
 class GCPGenkitAIRegistry {
@@ -62,6 +62,21 @@ class GCPGenkitAIRegistry {
         }
 
         return GCPGenkitAIRegistry.instance;
+    }
+
+    public async listAllPrompts() {
+        const genkitRegistryInstance = GCPGenkitAIRegistry.getInstance();
+        const actions = await genkitRegistryInstance.ai.registry.listActions();
+
+        const promptsList = [];
+
+        for (const actionKey in actions) {
+            if (isFunction(actions[actionKey]) && actions[actionKey]?.__action?.actionType === 'prompt') {
+                promptsList.push(actions[actionKey]);
+            }
+        }
+
+        return promptsList;
     }
 
     get ai(): Genkit {
