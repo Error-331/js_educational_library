@@ -1,6 +1,6 @@
 // external imports
-import { readFileSync } from 'node:fs';
-import { stat } from 'node:fs/promises';
+import {constants, readFileSync, writeFileSync} from 'node:fs';
+import { access, stat } from 'node:fs/promises';
 
 // internal imports
 import { generateAlmostRandomUUID } from '../primitives/string/random_string_generation_utils';
@@ -9,6 +9,19 @@ import { extractFileExtension } from '../misc/path_utils';
 import { isNullOrEmpty, isString } from '../misc/logic_utils';
 
 // implementation
+async function checkFileExists(pathToFile: string) {
+    if (isNullOrEmpty(pathToFile)) {
+        throw new RangeError('Cannot check whether file exists or not - path to file is not provided');
+    }
+
+    try {
+        await access(pathToFile, constants.F_OK);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 async function calcFileSizeInBytesAsync(pathToFile: string): Promise<number> {
     if (!isString(pathToFile)) {
         throw new RangeError('Cannot calculate size of the file in bytes - provided path to file is not a string');
@@ -36,6 +49,14 @@ function readJSONFileSync<JSONObjectType extends object>(path: string): JSONObje
     return JSON.parse(fileContents);
 }
 
+function writeJSONFileSync<JSONObjectType extends object>(path: string, data: JSONObjectType): void {
+    if (!isString(path)) {
+        throw new RangeError('Cannot write JSON file - path to file is not a string');
+    }
+
+    writeFileSync(path, JSON.stringify(data, null, 2));
+}
+
 function findMIMETypeByPathToFile(pathToFile: string): string {
     if (isNullOrEmpty(pathToFile)) {
         throw new RangeError(`Cannot find MIME type for file - path to file is not provided or empty`);
@@ -47,8 +68,10 @@ function findMIMETypeByPathToFile(pathToFile: string): string {
 
 // exports
 export {
+    checkFileExists,
     calcFileSizeInBytesAsync,
     replaceFileNameWithRandomUUID,
     readJSONFileSync,
+    writeJSONFileSync,
     findMIMETypeByPathToFile,
 }
