@@ -1,5 +1,5 @@
 // external imports
-import {constants, readFileSync, writeFileSync} from 'node:fs';
+import { constants, readFileSync, writeFileSync } from 'node:fs';
 import { access, stat } from 'node:fs/promises';
 
 // internal imports

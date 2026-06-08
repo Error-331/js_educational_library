@@ -11,8 +11,9 @@ import { isNil, isNullOrEmpty } from '../../../utils/misc/logic_utils';
 // implementation
 class GCPGenkitPromptFacade<PromptInputSchema extends object, PromptOutputSchema> {
     private promptPath: string;
-    private promptName: string;
-    private promptInstance;
+
+    protected promptName: string;
+    protected promptInstance;
 
     constructor (promptPath: string, promptName: string) {
         if (isNullOrEmpty(promptPath)) {
@@ -30,8 +31,8 @@ class GCPGenkitPromptFacade<PromptInputSchema extends object, PromptOutputSchema
         this.promptInstance = genKitRegistry.ai.prompt(`${this.promptPath}/${this.promptName}`);
     }
 
-    public async renderPrompt(inputData?: PromptInputSchema): Promise<GenkitOptions<PromptOutputSchema>> {
-        return this.promptInstance.render(inputData);
+    public async renderPrompt(inputData?: PromptInputSchema, config?: PromptGenerateOptions): Promise<GenkitOptions<PromptOutputSchema>> {
+        return this.promptInstance.render(inputData, config);
     }
 
     public async generateText(inputData?: PromptInputSchema, config?: PromptGenerateOptions): Promise<string> {
