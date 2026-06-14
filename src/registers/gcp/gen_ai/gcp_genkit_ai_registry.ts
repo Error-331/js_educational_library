@@ -44,8 +44,8 @@ class GCPGenkitAIRegistry {
 
     private constructor() {}
 
-    private init() {
-        if (isNil(this._ai)) {
+    public init(force?: boolean) {
+        if (isNil(this._ai) || force === true) {
             this._ai = genkit({
                 promptDir: this._promptDir,
 

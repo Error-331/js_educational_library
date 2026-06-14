@@ -4,7 +4,8 @@ import { readdirSync } from 'node:fs';
 import { mkdir as mkdirAsync } from 'fs/promises';
 
 // internal imports
-import { isNullOrEmpty } from './../misc/logic_utils'
+import { extractFileExtension } from './../misc/path_utils';
+import { isArray, isNullOrEmpty } from './../misc/logic_utils'
 
 // implementation
 
@@ -12,11 +13,12 @@ import { isNullOrEmpty } from './../misc/logic_utils'
  * Recursively scans a directory and returns a list of all files with their absolute paths.
  *
  * @param {string} dirPath - The absolute path to the directory to scan.
+ * @param {string[]} allowedExtensions - Optional list of file extensions of the files which will be added to final result
  *
  * @returns {string[]} - Array containing absolute paths of all files found.
  *
  */
-function scanDirectoryRecursively(dirPath: string) {
+function scanDirectoryRecursively(dirPath: string, allowedExtensions?: string[]) {
     const fileList: string[] = [];
 
     const scan = (subDirPath: string) => {
@@ -26,9 +28,17 @@ function scanDirectoryRecursively(dirPath: string) {
             const fullPath = join(subDirPath, entry.name);
 
             if (entry.isDirectory()) {
-                scan(fullPath); // Recursively scan subdirectories
+                scan(fullPath);
             } else if (entry.isFile()) {
-                fileList.push(fullPath); // Add the file
+                if (isArray(allowedExtensions)) {
+                    const fileExtension = extractFileExtension(fullPath);
+
+                    if (allowedExtensions.includes(fileExtension)) {
+                        fileList.push(fullPath);
+                    }
+                } else {
+                    fileList.push(fullPath);
+                }
             }
         }
     }
