@@ -19,6 +19,8 @@ class SimpleQueryToURLQueryFirestoreConverter<EntityType extends DatabaseDocumen
                 return '<=';
             case SimpleQueryEntryOperator.In:
                 return 'in';
+            case SimpleQueryEntryOperator.Contains:
+                return 'array-contains';
             default:
                 throw new RangeError(`Cannot convert query operator to Firestore operator - unknown query operator "${operator}"`)
         }

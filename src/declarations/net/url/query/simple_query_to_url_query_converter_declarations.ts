@@ -18,6 +18,7 @@ enum SimpleQueryEntryOperator {
     GreaterThanOrEqual = 'gte',
     LessThanOrEqual = 'lte',
     In = 'in',
+    Contains = 'contains'
 }
 
 type SimpleQueryEntry = {
