@@ -3,7 +3,7 @@
 // internal imports
 import type { ComfyUIAIHistoryData } from '../../declarations/ai/comfyui/comfyui_ai_common_declarations';
 
-import { COMFYUI_HISTORY_ENDPOINT } from '../../constants/ai/comfyui_ai_constants';
+import { COMFYUI_AI_HISTORY_ENDPOINT } from '../../constants/ai/comfyui_ai_constants';
 
 import ComfyUIAIRegistry from '../../registers/comfyuiAI/comfyui_ai_registry';
 import AxiosRequestFacade from '../../net/http/request/axios/axios_client_request_facade';
@@ -24,7 +24,7 @@ class ComfyUIAIHistoryFacade {
 
         const httpClient = new AxiosRequestFacade<ComfyUIAIHistoryData>({
             baseURL: comfyUIAIRegistryInstance.baseAPIURL,
-            url: `/${sanitizeURLPathPart(COMFYUI_HISTORY_ENDPOINT)}/${promptId}`,
+            url: `/${sanitizeURLPathPart(COMFYUI_AI_HISTORY_ENDPOINT)}/${promptId}`,
         });
 
         let response = await httpClient.get();

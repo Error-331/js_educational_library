@@ -2,7 +2,7 @@
 
 // internal imports
 import type { ComfyUIAIFlowConfig, ComfyUIAIPromptResultData } from '../../declarations/ai/comfyui/comfyui_ai_common_declarations';
-import { COMFYUI_PROMPT_ENDPOINT } from '../../constants/ai/comfyui_ai_constants';
+import { COMFYUI_AI_PROMPT_ENDPOINT } from '../../constants/ai/comfyui_ai_constants';
 
 import AxiosRequestFacade from '../../net/http/request/axios/axios_client_request_facade';
 import ComfyUIAIRegistry from '../../registers/comfyuiAI/comfyui_ai_registry';
@@ -20,7 +20,7 @@ class ComfyUIAIPromptFacade {
 
         const httpClient = new AxiosRequestFacade<ComfyUIAIPromptResultData>({
             baseURL: comfyUIAIRegistryInstance.baseAPIURL,
-            url: COMFYUI_PROMPT_ENDPOINT,
+            url: COMFYUI_AI_PROMPT_ENDPOINT,
             data: { 'prompt': flowConfig },
         });
 

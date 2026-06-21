@@ -1,7 +1,10 @@
 // external imports
 
 // internal imports
-import type { ComfyUIAIFlowConfigAdapter } from '../../declarations/ai/comfyui/comfyui_ai_common_declarations';
+import {
+    ComfyUIAIFlowConfig,
+    ComfyUIAIFlowConfigAdapter
+} from '../../declarations/ai/comfyui/comfyui_ai_common_declarations';
 
 import GCPGenkitPromptFacade from '../gcp/genkit/gcp_genkit_prompt_facade';
 import ComfyUIAIGenerateImageFlowFacade from './comfyui_ai_generate_image_flow_facade';
@@ -12,7 +15,7 @@ import { isNullOrEmpty } from '../../utils/misc/logic_utils';
 class ComfyUIAIGCPGenkitPromptFacade<
     PromptInputSchema extends object,
     PromptOutputSchema,
-    FlowConfig extends object,
+    FlowConfig extends ComfyUIAIFlowConfig,
 > extends GCPGenkitPromptFacade<PromptInputSchema, PromptOutputSchema> {
     private pathToFlow: string;
     private flowConfigAdapter: ComfyUIAIFlowConfigAdapter<FlowConfig | {}>;

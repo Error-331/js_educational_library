@@ -49,7 +49,7 @@ type ComfyUIAIFlowConfigAdapterProps = {
     promptText?: string;
 };
 
-type ComfyUIAIFlowConfigAdapter<FlowConfig extends object> = (flowConfig: FlowConfig, props?: ComfyUIAIFlowConfigAdapterProps) => FlowConfig;
+type ComfyUIAIFlowConfigAdapter<FlowConfig extends ComfyUIAIFlowConfig> = (flowConfig: FlowConfig, props?: ComfyUIAIFlowConfigAdapterProps) => FlowConfig;
 
 // exports
 export type {

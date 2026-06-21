@@ -3,7 +3,7 @@ import { writeFile } from 'node:fs/promises';
 
 // internal imports
 import type { ComfyUIAIOutputFile } from '../../declarations/ai/comfyui/comfyui_ai_common_declarations';
-import { COMFYUI_VIEW_ENDPOINT } from '../../constants/ai/comfyui_ai_constants';
+import { COMFYUI_AI_VIEW_ENDPOINT } from '../../constants/ai/comfyui_ai_constants';
 
 import ComfyUIAIRegistry from '../../registers/comfyuiAI/comfyui_ai_registry';
 import AxiosRequestFacade from '../../net/http/request/axios/axios_client_request_facade';
@@ -30,7 +30,7 @@ class ComfyUIAIViewFacade {
 
         const httpClient = new AxiosRequestFacade<ArrayBuffer>({
             baseURL: comfyUIAIRegistryInstance.baseAPIURL,
-            url: COMFYUI_VIEW_ENDPOINT,
+            url: COMFYUI_AI_VIEW_ENDPOINT,
             responseType: 'arraybuffer',
 
             params: {
