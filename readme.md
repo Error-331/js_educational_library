@@ -62,6 +62,11 @@ My small JS multipurpose library used for educational purposes.
 
 - **VITE_JSEL_CLIENT_ENV** - flag which indicates which environment client is running in;
 
+### Civitai related
+
+- **JSEL_CIVITAI_SERVER_OPTIONS_JSON** - CivitAI server options (contains such options as api key, etc.);
+- **JSEL_CIVITAI_SERVER_OPTIONS_CRYPTO_CONFIG** - configuration JSON which is used to decrypt *JSEL_CIVITAI_SERVER_OPTIONS_JSON* represented as stringified JSON;
+
 ### 'JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_CRYPTO_CONFIG' structure
 
 ```json

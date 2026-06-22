@@ -18,6 +18,7 @@
     "./errors/*": "./src/errors/*.ts",
     "./utils/*": "./src/utils/*.ts",
 
+    "./net/api/civitai/*":  "./src/net/api/civitai/*.ts",
     "./net/api/common/*":  "./src/net/api/common/*.ts",
     "./net/api/facebook/*":  "./src/net/api/facebook/*.ts",
     "./net/api/tiktok/*":  "./src/net/api/tiktok/*.ts",

@@ -14,7 +14,7 @@ abstract class FacebookAPIServerAbstractFacade {
         const fbServerRegistry = FacebookServerRegistry.getInstance();
         fbServerRegistry.init();
 
-        return fbServerRegistry.options
+        return fbServerRegistry.options;
     }
 
     protected getDefaultAPIVersion(): string {

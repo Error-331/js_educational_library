@@ -1,0 +1,23 @@
+// external imports
+
+// internal imports
+
+// implementation
+const CIVITAI_API_BASE_URL = 'https://civitai.com/api';
+const CIVITAI_API_IMAGES_ENDPOINT = '/images';
+
+const CIVITAI_API_DEFAULT_VERSION = 'v1';
+
+const CIVITAI_API_IMAGES_REQUEST_AVERAGE_LIMIT = 50;
+const CIVITAI_API_IMAGES_REQUEST_MAX_LIMIT = 200;
+
+// exports
+export {
+    CIVITAI_API_BASE_URL,
+    CIVITAI_API_IMAGES_ENDPOINT,
+
+    CIVITAI_API_DEFAULT_VERSION,
+
+    CIVITAI_API_IMAGES_REQUEST_AVERAGE_LIMIT,
+    CIVITAI_API_IMAGES_REQUEST_MAX_LIMIT,
+}
