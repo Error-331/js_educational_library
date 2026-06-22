@@ -3,6 +3,10 @@
 // internal imports
 
 // implementation
+enum ComfyUIAIModels {
+    Flux1Schnell = 'flux1-schnell'
+}
+
 const COMFYUI_FLUX1_SCHNELL_IMAGE_PREVIEW_FLOW_CONFIG = Object.freeze({
     samplerName: 'dpmpp_2m',
     schedulerName: 'karras',
@@ -12,7 +16,10 @@ const COMFYUI_FLUX1_SCHNELL_IMAGE_PREVIEW_FLOW_CONFIG = Object.freeze({
     },
 });
 
+
+
 // exports
 export {
+    ComfyUIAIModels,
     COMFYUI_FLUX1_SCHNELL_IMAGE_PREVIEW_FLOW_CONFIG,
 }
