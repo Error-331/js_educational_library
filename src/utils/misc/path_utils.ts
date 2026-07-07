@@ -1,5 +1,5 @@
 // external imports
-import { extname, basename } from 'node:path';
+import { extname, basename, sep } from 'node:path';
 
 // internal imports
 import { isNil, isString } from './logic_utils';
@@ -80,9 +80,25 @@ function extractFileNameWithoutExtension(pathToFile: string): string {
     return fileName;
 }
 
+function removeFirstDirectory(fullPath: string): string {
+    if (!isString(fullPath)) {
+        throw new RangeError('Cannot remove first directory from path - provided path is not a string');
+    }
+
+    const fullPathStructure = fullPath.split(sep);
+
+    if (fullPathStructure.length <= 1) {
+        throw new RangeError('Cannot remove first directory from path - provided path length is less than or equal to 1');
+    }
+
+    fullPathStructure.shift();
+    return fullPathStructure.join(sep);
+}
+
 // exports
 export {
     extractFileExtension,
     extractFileName,
     extractFileNameWithoutExtension,
+    removeFirstDirectory,
 }
