@@ -1,6 +1,6 @@
 // external imports
 import { constants, readFileSync, writeFileSync } from 'node:fs';
-import { access, stat, readFile } from 'node:fs/promises';
+import { access, stat, readFile, writeFile } from 'node:fs/promises';
 
 // internal imports
 import { generateAlmostRandomUUID } from '../primitives/string/random_string_generation_utils';
@@ -66,6 +66,14 @@ function writeJSONFileSync<JSONObjectType extends object>(path: string, data: JS
     writeFileSync(path, JSON.stringify(data, null, 2));
 }
 
+async function writeJSONFileAsync<JSONObjectType extends object>(path: string, data: JSONObjectType): Promise<void> {
+    if (!isString(path)) {
+        throw new RangeError('Cannot write JSON file - path to file is not a string');
+    }
+
+    await writeFile(path, JSON.stringify(data, null, 2));
+}
+
 function findMIMETypeByPathToFile(pathToFile: string): string {
     if (isNullOrEmpty(pathToFile)) {
         throw new RangeError(`Cannot find MIME type for file - path to file is not provided or empty`);
@@ -83,5 +91,6 @@ export {
     readJSONFileSync,
     readJSONFileAsync,
     writeJSONFileSync,
+    writeJSONFileAsync,
     findMIMETypeByPathToFile,
 }
