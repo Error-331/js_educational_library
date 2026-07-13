@@ -1,19 +1,19 @@
 // external imports
-import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
-import { cookies } from 'next/headers';
+/*import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+import { cookies } from 'next/headers';*/
 
 // internal imports
-import { SetCookieOptions, CookieStore, JWTCookieStore } from '../../../../declarations/net/http/cookie_declarations';
+/*import { SetCookieOptions, CookieStore, JWTCookieStore } from '../../../../declarations/net/http/cookie_declarations';
 import AbstractJWTCookieStore from './abstract_jwt_cookie_store';
 
 import { JWT_COOKIE_DEFAULT_NAME } from '../../../../constants/net/http/cookie_constants';
 
 import { isNil, isString } from '../../../../utils/misc/logic_utils';
 import { cloneDeep } from '../../../../utils/primitives/object_utils';
-import { prepareFormattedUTCDateFromNow } from '../../../../utils/date/native_date_utils';
+import { prepareFormattedUTCDateFromNow } from '../../../../utils/date/native_date_utils';*/
 
 // implementation
-class NextJSServerCookieStore extends AbstractJWTCookieStore implements CookieStore, JWTCookieStore {
+/*class NextJSServerCookieStore extends AbstractJWTCookieStore implements CookieStore, JWTCookieStore {
     protected parsedCookiesStore: ReadonlyRequestCookies;
 
     protected async parseCookies(): Promise<ReadonlyRequestCookies> {
@@ -32,7 +32,7 @@ class NextJSServerCookieStore extends AbstractJWTCookieStore implements CookieSt
     public async getByName(cookieName: string): Promise<string | undefined> {
         const cookieStore = await this.parseCookies();
         return cookieStore.get(cookieName)?.value;
-    }
+    }*/
 
     /**
      * Method that sets/modifies the cookie (via 'Set-Cookie' headers).
@@ -45,7 +45,7 @@ class NextJSServerCookieStore extends AbstractJWTCookieStore implements CookieSt
      *
      */
 
-    public async setByName(cookieName: string, cookieValue: string, setCookieOptions?: SetCookieOptions): Promise<void> {
+    /*public async setByName(cookieName: string, cookieValue: string, setCookieOptions?: SetCookieOptions): Promise<void> {
         let newSetCookieOptions: SetCookieOptions = cloneDeep(this.options.setCookieOptions);
 
         if (!isString(cookieName)) {
@@ -77,7 +77,7 @@ class NextJSServerCookieStore extends AbstractJWTCookieStore implements CookieSt
 
         await this.setByName(JWT_COOKIE_DEFAULT_NAME, jwtToken, newSetCookieOptions);
     }
-}
+}*/
 
 // exports
-export default NextJSServerCookieStore;
+//export default NextJSServerCookieStore;

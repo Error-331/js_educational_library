@@ -9,7 +9,7 @@ import { CommonServerRequest, CommonServerResponse } from '../../../../declarati
 import { ServerFrameworkVendorName } from '../../../../constants/vendor_constants';
 
 import ExpressJSServerCookieStore from '../stores/express_js_server_cookie_store';
-import NextJSServerCookieStore from '../stores/next_js_server_cookie_store';
+//import NextJSServerCookieStore from '../stores/next_js_server_cookie_store';
 
 import { isEnumContainsValue } from '../../../../utils/type/enum_utils';
 import { isString } from '../../../../utils/misc/logic_utils';
@@ -20,7 +20,9 @@ class CookieStoreFactory {
             case ServerFrameworkVendorName.ExpressJS:
                 return new ExpressJSServerCookieStore(req, res, cookieOptions);
             case ServerFrameworkVendorName.NextJS:
-                return new NextJSServerCookieStore();
+                throw new Error('NextJS cookie store temporary unavailable');
+                break;
+                //return new NextJSServerCookieStore();
             default:
                 throw new RangeError(`Cannot create cookie store - unknown vendor name "${vendorName}"`);
         }
