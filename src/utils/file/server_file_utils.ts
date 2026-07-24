@@ -9,7 +9,7 @@ import { extractFileExtension } from '../misc/path_utils';
 import { isNullOrEmpty, isString } from '../misc/logic_utils';
 
 // implementation
-async function checkFileExists(pathToFile: string) {
+async function checkFileExists(pathToFile: string): Promise<boolean> {
     if (isNullOrEmpty(pathToFile)) {
         throw new RangeError('Cannot check whether file exists or not - path to file is not provided');
     }
