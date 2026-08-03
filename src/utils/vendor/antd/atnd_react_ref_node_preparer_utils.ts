@@ -32,9 +32,18 @@ function antdFormItemInputClosestRowRefNodePreparer(node: unknown): HTMLElement 
     }
 }
 
+function antdFormItemTextAreaClosestRowRefNodePreparer(node: unknown): HTMLElement | null {
+    if (isObjectOfType<{ resizableTextArea: { textArea: HTMLElement } }>(node, { resizableTextArea: (element: unknown) => isObject(element) && 'textArea' in element })) {
+        return node.resizableTextArea.textArea.closest('.ant-row');
+    } else {
+        return null;
+    }
+}
+
 // exports
 export {
     antdParentClosestRowRefNodePreparer,
     antdFormItemClosestRowRefNodePreparer,
     antdFormItemInputClosestRowRefNodePreparer,
+    antdFormItemTextAreaClosestRowRefNodePreparer,
 }
