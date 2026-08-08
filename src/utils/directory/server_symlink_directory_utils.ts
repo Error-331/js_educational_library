@@ -11,6 +11,45 @@ import { isNullOrEmpty } from '../misc/logic_utils';
 /**
  * Creates a symbolic link from a target directory to a project path.
  */
+async function createSymlinkToFile(targetFilePath: string, linkFilePath: string, force = false): Promise<void> {
+    if (isNullOrEmpty(targetFilePath)) {
+        throw new RangeError('Cannot create symlink to a file - target file path is not provided');
+    }
+
+    if (isNullOrEmpty(linkFilePath)) {
+        throw new RangeError('Cannot create symlink to a file - link file path is not provided');
+    }
+
+    const targetFileAbsolutePath = resolve(targetFilePath);
+    const linkFileAbsolutePath = resolve(linkFilePath);
+
+    const [isTargetFileAbsolutePathExists, isLinkFileAbsolutePathExists] = await Promise.all([
+        checkFileExists(targetFileAbsolutePath),
+        checkFileExists(linkFileAbsolutePath),
+    ]);
+
+    if (!isTargetFileAbsolutePathExists) {
+        throw new Error(`Cannot create symlink to a file - source target file does not exist at "${targetFileAbsolutePath}"`);
+    }
+
+    if (isLinkFileAbsolutePathExists) {
+        const linkDirAbsoluteStats = await lstat(linkFileAbsolutePath);
+
+        if (linkDirAbsoluteStats.isSymbolicLink()) {
+            await unlink(linkFileAbsolutePath);
+        } else if (force) {
+            await rm(linkFileAbsolutePath, { recursive: true, force: true });
+        } else {
+            throw new Error(`Cannot create symlink to a file - path "${linkFileAbsolutePath}" already exists, use force to overwrite.`);
+        }
+    }
+
+    await symlink(targetFileAbsolutePath, linkFileAbsolutePath, 'file');
+}
+
+/**
+ * Creates a symbolic link from a target directory to a project path.
+ */
 async function createSymlinkToDirectory(targetDirPath: string, linkDirPath: string, force = false): Promise<void> {
     if (isNullOrEmpty(targetDirPath)) {
         throw new RangeError('Cannot create symlink to a directory - target directory path is not provided');
@@ -75,6 +114,8 @@ async function removeSymlinkFromDirectory(linkDirPath: string): Promise<void> {
 
 // exports
 export {
+    createSymlinkToFile,
     createSymlinkToDirectory,
+
     removeSymlinkFromDirectory,
 };
