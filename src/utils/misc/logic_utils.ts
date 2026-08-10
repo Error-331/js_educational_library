@@ -121,6 +121,14 @@ function isCanBeEmpty(value: unknown): boolean {
     }
 }
 
+function isEmpty(value: unknown): boolean {
+    if (isCanBeEmpty(value)) {
+        return isNullOrEmpty(value)
+    } else {
+        return false;
+    }
+}
+
 function defaultTo<DefaultValueType, ValueType>(defaultValue: DefaultValueType, value: ValueType | null | undefined): ValueType | DefaultValueType {
     if (isNullOrEmpty(value)) {
         return defaultValue;
@@ -143,5 +151,6 @@ export {
     isNil,
     isNullOrEmpty,
     isCanBeEmpty,
+    isEmpty,
     defaultTo,
 }
