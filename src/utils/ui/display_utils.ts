@@ -1,7 +1,7 @@
 // external imports
 
 // internal imports
-import { DisplayOrientation } from '../../declarations/display_declarations';
+import { DisplayOrientation } from '../../declarations/ui/display_declarations';
 
 import { calcGCD } from '../math/math_base_utils';
 import { isNumber } from '../misc/logic_utils';
