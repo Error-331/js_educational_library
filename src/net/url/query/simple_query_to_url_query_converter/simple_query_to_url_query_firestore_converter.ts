@@ -13,6 +13,8 @@ import { isNil } from '../../../../utils/misc/logic_utils';
 class SimpleQueryToURLQueryFirestoreConverter<EntityType extends DatabaseDocument> extends SimpleQueryToURLQueryBaseConverter{
     private convertQueryOperatorToFirestoreQueryOperator(operator: string) {
         switch (operator) {
+            case SimpleQueryEntryOperator.Equal:
+                return '==';
             case SimpleQueryEntryOperator.GreaterThanOrEqual:
                 return '>=';
             case SimpleQueryEntryOperator.LessThanOrEqual:

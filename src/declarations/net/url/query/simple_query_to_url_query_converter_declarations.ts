@@ -15,17 +15,20 @@ enum SimpleQueryValueType {
 }
 
 enum SimpleQueryEntryOperator {
+    Equal = 'eq',
     GreaterThanOrEqual = 'gte',
     LessThanOrEqual = 'lte',
     In = 'in',
     Contains = 'contains'
 }
 
+type SimpleQueryEntryValue = string | number | string[];
+
 type SimpleQueryEntry = {
     type: SimpleQueryEntryType;
     field: string;
     valueType: SimpleQueryValueType;
-    value: string | number | string[];
+    value: SimpleQueryEntryValue;
     operator: SimpleQueryEntryOperator;
 }
 
@@ -37,5 +40,6 @@ export {
 }
 
 export type {
+    SimpleQueryEntryValue,
     SimpleQueryEntry,
 }
