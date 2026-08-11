@@ -18,11 +18,11 @@ function isError(error: PossibleError): error is Error {
 }
 
 function isHTTPError(error: unknown): error is HTTPError {
-    return error instanceof HTTPError;
+    return (error instanceof HTTPError) || ((typeof error === 'object') && ('name' in error) && error?.name === CustomErrorName.HTTPError);
 }
 
 function isValidationError(error: unknown): error is ValidationError {
-    return error instanceof ValidationError;
+    return (error instanceof ValidationError) || ((typeof error === 'object') && ('name' in error) && error?.name === CustomErrorName.ValidationError);
 }
 
 function isSerializableError(error: PossibleError): error is SerializableError {
