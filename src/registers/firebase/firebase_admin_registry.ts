@@ -89,6 +89,24 @@ class FirebaseAdminRegistry {
         return FirebaseAdminRegistry.instance;
     }
 
+    public static canLoadServiceAccountKey(path?: string): boolean {
+        if (!isNil(path)) {
+            return true;
+        }
+
+        const savedServiceAccountKey = FirebaseAdminRegistry.getServiceAccountKey();
+
+        if (!isNil(savedServiceAccountKey)) {
+            return true
+        } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON)) {
+            return true
+        } else if (!isNil(process.env.JSEL_FIREBASE_ADMIN_SERVICE_ACCOUNT_JSON_PATH)) {
+            return true
+        } else {
+            return false;
+        }
+    }
+
     // TODO: proper types
     public static extractServiceAccountCredentials(serviceAccountKey: Credential) {
         if (isNil(serviceAccountKey)) {
