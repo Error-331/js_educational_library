@@ -48,8 +48,11 @@ interface UIFormSelectInputProp<ValueType, OptionType, OnPopupScrollEventType> e
     options: OptionType[];
 
     notFoundContent?: React.ReactNode;
-    optionRender?: (option: { data: OptionType }) =>  React.ReactNode;
+    optionRender?: (option: { data: OptionType }) => React.ReactNode;
 
+    showSearch?: boolean; 
+    filterOption?: (input: ValueType, option: OptionType) => boolean;
+    
     onChange?: (value: ValueType, option?: OptionType | OptionType[]) => void;
     onPopupScroll?: OnPopupScrollEventType;
 }
