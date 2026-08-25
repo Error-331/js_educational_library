@@ -37,7 +37,15 @@ class SimpleQueryToURLQueryBaseConverter {
                 throw new Error('Cannot encode query data into URL query - invalid query part found');
             }
 
-            queryParts.push(`${queryPart.type}:${queryPart.field}:${queryPart.valueType}:${queryPart.operator}=${queryPart.value.toString()}`);
+            let encodedValue = null;
+
+            if (queryPart.valueType === SimpleQueryValueType.Object) {
+                encodedValue = encodeURIComponent(JSON.stringify(queryPart.value));
+            } else {
+                encodedValue = queryPart.value.toString();
+            }
+
+            queryParts.push(`${queryPart.type}:${queryPart.field}:${queryPart.valueType}:${queryPart.operator}=${encodedValue}`);
         }
 
         return queryParts.join(';');
@@ -55,6 +63,8 @@ class SimpleQueryToURLQueryBaseConverter {
                 return value;
             case SimpleQueryValueType.ArrayString:
                 return value.split(',');
+            case SimpleQueryValueType.Object:
+                return JSON.parse(decodeURIComponent(value));
             default:
                 throw new RangeError(`Cannot decode value from URL query - unknown value type "${valueType}"`);
         }

@@ -12,6 +12,7 @@ enum SimpleQueryValueType {
     Number = 'number',
     String = 'string',
     ArrayString = 'array_string',
+    Object = 'object',
 }
 
 enum SimpleQueryEntryOperator {
@@ -22,7 +23,7 @@ enum SimpleQueryEntryOperator {
     Contains = 'contains'
 }
 
-type SimpleQueryEntryValue = string | number | string[];
+type SimpleQueryEntryValue = string | number | string[] | object;
 
 type SimpleQueryEntry = {
     type: SimpleQueryEntryType;
