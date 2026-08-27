@@ -4,7 +4,7 @@
 import { isNil, isArray } from '../../misc/logic_utils';
 
 // implementation
-function formatBytes(bytes: number, decimals = 2, units = ['B', 'KB', 'MB', 'GB', 'TB']): string {
+function formatBytes(bytes: number, decimals = 2, units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB']): string {
     if (isNil(bytes)) {
         throw new RangeError('Cannot format bytes - value is not provided');
     }
