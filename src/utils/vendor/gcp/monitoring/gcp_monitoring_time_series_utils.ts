@@ -2,7 +2,7 @@
 
 // internal imports
 import { convertSecondsToMilliseconds, convertNanosecondsToMilliseconds } from '../../../date/date_conversion_utils';
-import { isNil, isNumber, isString } from '../../../misc/logic_utils';
+import { isNil, isNumber, isString, isObject } from '../../../misc/logic_utils';
 
 // implementation
 // TODO: need to find a way to support 'Long' custom type
@@ -21,7 +21,34 @@ function normalizeAndConvertPointIntervalToMilliseconds(totalSeconds: number | s
     return convertSecondsToMilliseconds(preparedTotalSeconds) + convertNanosecondsToMilliseconds(preparedTotalNanoSeconds);
 }
 
+function parseTimeSeriesPointValue(pointValue?: object | null | unknown): number | null {
+    if (isNil(pointValue)) {
+        return null;
+    }
+
+    if (!isObject(pointValue)) {
+        return null;
+    }
+
+    let preparedValue = null;
+
+    if ('doubleValue' in pointValue) {
+        preparedValue = pointValue.doubleValue;
+    } else if ('int64Value' in pointValue) {
+        preparedValue = pointValue.int64Value;
+    }
+
+    if (isString(preparedValue)) {
+        return parseInt(preparedValue);
+    } else if(isNumber(preparedValue)) {
+        return preparedValue;
+    } else {
+        return null;
+    }
+}
+
 // exports
 export {
     normalizeAndConvertPointIntervalToMilliseconds,
+    parseTimeSeriesPointValue,
 }
