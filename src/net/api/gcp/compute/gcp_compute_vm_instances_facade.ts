@@ -72,7 +72,11 @@ class GCPComputeVMInstancesFacade {
 
     // TODO: refactor
     public async init(): Promise<void> {
-        const serviceAccountCredentials = FirebaseAdminRegistry.loadServiceAccountCredentials();
+        let serviceAccountCredentials;
+
+        if (FirebaseAdminRegistry.canLoadServiceAccountKey()) {
+            serviceAccountCredentials = FirebaseAdminRegistry.loadServiceAccountCredentials();
+        }
 
         if (isNil(this.instancesClient)) {
             this.instancesClient = new InstancesClient(serviceAccountCredentials);
