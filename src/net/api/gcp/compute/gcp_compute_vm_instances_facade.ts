@@ -1,6 +1,5 @@
 // external imports
-import { InstancesClient, ZoneOperationsClient } from '@google-cloud/compute';
-import { protos } from '@google-cloud/compute';
+import { protos, InstancesClient, ZoneOperationsClient } from '@google-cloud/compute';
 
 // internal imports
 import {
