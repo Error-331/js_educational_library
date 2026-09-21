@@ -16,7 +16,7 @@ import { isNil, isNumber } from '../../utils/misc/logic_utils';
 class ComfyUIAIGenerateImageFlowFacade extends ComfyUIAIFlowFacade {
     protected async initImageGeneration(pullInterval: number = ASYNC_FUNC_EXEC_TIMEOUT, pullTimeout: number = Infinity): Promise<ComfyUIAIOutputFile[]> {
         if (!isNumber(pullInterval)) {
-            throw new RangeError('Cannot images to files (ComfyUI) - provided pull interval is not a number');
+            throw new RangeError('Cannot generate images to files (ComfyUI) - provided pull interval is not a number');
         }
 
         const { prompt_id } = await this.executePrompt();

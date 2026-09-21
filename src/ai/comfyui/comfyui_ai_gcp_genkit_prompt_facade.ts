@@ -20,7 +20,7 @@ class ComfyUIAIGCPGenkitPromptFacade<
     private pathToFlow: string;
     private flowConfigAdapter: ComfyUIAIFlowConfigAdapter<FlowConfig | {}>;
 
-    constructor(promptPath: string, promptName: string, pathToFlow: string, flowConfigAdapter: ComfyUIFlowConfigAdapter<FlowConfig | {}>) {
+    constructor(promptPath: string, promptName: string, pathToFlow: string, flowConfigAdapter: ComfyUIAIFlowConfigAdapter<FlowConfig | {}>) {
         super(promptPath, promptName);
 
         this.pathToFlow = pathToFlow;
