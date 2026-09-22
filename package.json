@@ -54,6 +54,8 @@
     "./validators/net/rest/*": "./src/validators/net/rest/*.ts",
     "./validators/security/*": "./src/validators/security/*.ts",
 
+    "./ui/*": "./src/ui/*.ts",
+
     "./package.json": "./package.json"
   },
   "scripts": {
